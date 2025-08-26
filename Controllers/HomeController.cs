@@ -2,6 +2,8 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using FarewellMyBeloved.Models;
 using FarewellMyBeloved.ViewModels;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace FarewellMyBeloved.Controllers;
 
@@ -31,5 +33,26 @@ public class HomeController : Controller
     public IActionResult Error()
     {
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+    }
+
+    [HttpGet("/{slug:minlength(1)}")]
+    public async Task<IActionResult> Index(string slug)
+    {
+        if (slug == "index")
+        {
+            return RedirectToAction("Index");
+        }
+
+        // Find the slug
+        var farewellPerson = await _context.FarewellPeople
+            .Include(p => p.Messages)
+            .FirstOrDefaultAsync(m => m.Slug == slug && m.IsPublic);
+
+        if (farewellPerson == null)
+        {
+            return NotFound();
+        }
+
+        return View("Slug", farewellPerson);
     }
 }

@@ -31,5 +31,10 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
 
+app.MapControllerRoute(
+    name: "slug",
+    pattern: "{slug:minlength(1)}",
+    defaults: new { controller = "Home", action = "Index" }
+);
 
 app.Run();

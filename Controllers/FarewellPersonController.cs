@@ -54,7 +54,7 @@ public class FarewellPersonController : Controller
 
         var farewellPerson = await _context.FarewellPeople
             .Include(p => p.Messages)
-            .FirstOrDefaultAsync(m => m.Id == id);
+            .FirstOrDefaultAsync(p => p.Id == id);
             
         if (farewellPerson == null)
         {
