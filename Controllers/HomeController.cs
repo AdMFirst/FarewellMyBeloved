@@ -35,8 +35,26 @@ public class HomeController : Controller
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 
+    public async Task<IActionResult> Search(string searchTerm)
+    {
+        if (string.IsNullOrWhiteSpace(searchTerm))
+        {
+            return RedirectToAction("Index");
+        }
+
+        var searchResults = await _context.FarewellPeople
+            .Where(p => p.IsPublic &&
+                       (p.Name.Contains(searchTerm) ||
+                        p.Description.Contains(searchTerm)))
+            .OrderByDescending(p => p.CreatedAt)
+            .ToListAsync();
+            
+        ViewBag.SearchTerm = searchTerm;
+        return View("Search", searchResults);
+    }
+
     [HttpGet("/{slug:minlength(1)}")]
-    public async Task<IActionResult> Index(string slug)
+    public async Task<IActionResult> Slug(string slug)
     {
         if (slug == "index")
         {

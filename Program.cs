@@ -34,7 +34,7 @@ app.MapControllerRoute(
 app.MapControllerRoute(
     name: "slug",
     pattern: "{slug:minlength(1)}",
-    defaults: new { controller = "Home", action = "Index" }
+    defaults: new { controller = "Home", action = "Slug" }
 );
 
 app.Run();
