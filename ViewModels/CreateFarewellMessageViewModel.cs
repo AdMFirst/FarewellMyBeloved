@@ -14,4 +14,7 @@ public class CreateFarewellMessageViewModel
     [EmailAddress(ErrorMessage = "Invalid email address")]
     [StringLength(255, ErrorMessage = "Email cannot exceed 255 characters")]
     public string? AuthorEmail { get; set; }
+
+    public int? FarewellPersonId { get; set; }
+    public string? FarewellPersonName { get; set; }
 }
