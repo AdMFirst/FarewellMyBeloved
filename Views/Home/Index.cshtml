@@ -2,7 +2,54 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container py-5">
+    <div class="row py-3">
+        <div class="col-lg-8 mx-auto text-center">
+            <h1 class="display-4 mb-4">Welcome to FarewellMyBeloved</h1>
+            <p class="lead mb-4">
+                A digital space to honor and remember our beloved ones who have passed away.
+                Create and share farewell messages, memories, and tributes to celebrate their lives
+                and keep their spirits alive in our hearts.
+            </p>
+            <p class="mb-5">
+                Each person has their own dedicated page where friends and family can share
+                their thoughts, memories, and farewells. It's a beautiful way to create a
+                lasting legacy for those we've lost.
+            </p>
+        </div>
+    </div>
+
+    <div class="row py-5">
+        <div class="col-lg-6 mx-auto">
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+                    <h3 class="card-title text-center mb-4">Find a Farewell Page</h3>
+                    <p class="text-center mb-4">Search for someone's farewell page or create a new one</p>
+                    
+                    <form asp-controller="FarewellPerson" asp-action="Search" method="get" class="mb-3">
+                        <div class="input-group">
+                            <input type="text" name="searchTerm" class="form-control"
+                                   placeholder="Enter name to search..." required>
+                            <button class="btn btn-primary" type="submit">Search</button>
+                        </div>
+                    </form>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row py-3"> 
+        <div class="col-lg-8 mx-auto text-center">
+            <p class="mb-3 lead">Not finding what you're looking for?</p>
+            <p class="mb-4">If you can't find a farewell page, you can create a new one to honor your loved one and share their legacy with others.
+                The page will be set up right away so you and others can start sharing memories and paying tribute to their life.</p>
+            <div class="text-center">
+                <a asp-controller="FarewellPerson" asp-action="Create"
+                    class="btn btn-secondary">
+                    <i class="bi bi-plus-circle"></i> Create New Farewell Page
+                </a>
+            </div>
+        </div>
+    </div>
 </div>

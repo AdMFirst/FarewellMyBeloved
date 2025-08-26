@@ -25,6 +25,25 @@ public class FarewellPersonController : Controller
         return View(farewellPeople);
     }
 
+    // GET: FarewellPerson/Search
+    public async Task<IActionResult> Search(string searchTerm)
+    {
+        if (string.IsNullOrWhiteSpace(searchTerm))
+        {
+            return RedirectToAction("Index");
+        }
+
+        var searchResults = await _context.FarewellPeople
+            .Where(p => p.IsPublic &&
+                       (p.Name.Contains(searchTerm) ||
+                        p.Description.Contains(searchTerm)))
+            .OrderByDescending(p => p.CreatedAt)
+            .ToListAsync();
+            
+        ViewBag.SearchTerm = searchTerm;
+        return View("Search", searchResults);
+    }
+
     // GET: FarewellPerson/Details/5
     public async Task<IActionResult> Details(int? id)
     {
