@@ -37,7 +37,7 @@ The initial implementation focuses on core functionality without authentication,
 - **Backend Framework**: ASP.NET Core 9.0 MVC
 - **Database**: Entity Framework Core with SQL Server
 - **Frontend**: Bootstrap 5, jQuery 3.7.0
-- **File Storage**: Local filesystem (configurable for cloud storage)
+- **Image Hosting**: External service (imgBB API)
 - **Runtime**: .NET 9.0
 
 ### 2.3 Design Patterns
@@ -330,7 +330,7 @@ public class ErrorResponse
 ### 11.2 Configuration Management
 - Environment-specific settings
 - Database connection strings
-- File storage paths
+- imgBB API configuration
 - Logging configuration
 
 ### 11.3 Monitoring and Logging
@@ -338,6 +338,7 @@ public class ErrorResponse
 - Error tracking
 - Performance monitoring
 - User activity logging (anonymous)
+- imgBB API usage tracking
 
 ## 12. Future Enhancements
 
@@ -354,10 +355,11 @@ public class ErrorResponse
 - Advanced search
 
 ### 12.3 Phase 3 (Future)
-- Cloud storage integration
+- Enhanced image hosting features
 - Mobile application
 - Analytics dashboard
 - Social media integration
+- Multiple image hosting provider support
 
 ## 13. Compliance and Legal
 

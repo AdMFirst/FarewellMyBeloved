@@ -29,7 +29,7 @@ Farewell My Beloved provides a digital space for remembrance and tribute. Users 
 - **Backend**: ASP.NET Core 9.0 MVC
 - **Database**: Entity Framework Core with SQL Server
 - **Frontend**: Bootstrap 5, jQuery
-- **File Storage**: Local filesystem (configurable for cloud storage)
+- **Image Hosting**: External service (imgBB API)
 
 ### Database Schema
 ```mermaid
@@ -81,14 +81,23 @@ erDiagram
 5. Run the application: `dotnet run`
 
 ### Configuration
-Configure your database connection in `appsettings.json`:
+Configure your database connection and imgBB API key in `appsettings.json`:
 ```json
 {
   "ConnectionStrings": {
     "DefaultConnection": "Server=.;Database=FarewellMyBeloved;Trusted_Connection=True;TrustServerCertificate=True"
+  },
+  "ImgBB": {
+    "ApiKey": "your_imgbb_api_key_here"
   }
 }
 ```
+
+### Getting imgBB API Key
+1. Visit [imgbb.com](https://imgbb.com)
+2. Sign up for a free account
+3. Go to your dashboard and find your API key
+4. Add the API key to your `appsettings.json`
 
 ## 📁 Project Structure
 
@@ -103,10 +112,11 @@ FarewellMyBeloved/
 ├── wwwroot/             # Static files
 │   ├── css/            # Stylesheets
 │   ├── js/             # JavaScript files
-│   └── images/         # Uploaded images
+│   └── images/         # Static images
 ├── Data/                # Database context
 ├── Services/            # Business logic services
-└── wwwroot/uploads/     # Uploaded file storage
+├── Interfaces/          # Service interfaces
+└── appsettings.json    # Configuration including imgBB API key
 ```
 
 ## 🎯 Usage Guide
@@ -129,10 +139,11 @@ FarewellMyBeloved/
 6. Your message will appear immediately
 
 ### Customizing Pages
-- **Portraits**: Upload clear, respectful images of the person
-- **Backgrounds**: Choose images that complement the memorial theme
+- **Portraits**: Upload clear, respectful images of the person (hosted externally via imgBB)
+- **Backgrounds**: Choose images that complement the memorial theme (hosted externally via imgBB)
 - **Descriptions**: Write meaningful biographical information
 - **Privacy**: All pages are public by default
+- **Image Hosting**: Images are automatically uploaded to imgBB and stored externally
 
 ## 🔒 Privacy & Security
 
