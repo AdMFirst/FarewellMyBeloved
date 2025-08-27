@@ -1,0 +1,65 @@
+@model FarewellMyBeloved.ViewModels.CreateFarewellMessageViewModel
+
+@{
+    ViewData["Title"] = "Create Farewell Message";
+}
+
+<h1>Create Farewell Message</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-8">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
+            @if (Model.FarewellPersonId.HasValue)
+            {
+                <div class="alert alert-info">
+                    <h5>For: @Model.FarewellPersonName</h5>
+                    <input type="hidden" asp-for="FarewellPersonId" />
+                </div>
+            }
+            else
+            {
+                <div class="form-group mb-3">
+                    <label asp-for="FarewellPersonId" class="control-label"></label>
+                    <select asp-for="FarewellPersonId" class="form-select" asp-items="ViewBag.FarewellPeople">
+                        <option value="">-- Select a Person --</option>
+                    </select>
+                    <span asp-validation-for="FarewellPersonId" class="text-danger"></span>
+                </div>
+            }
+            
+            <div class="form-group mb-3">
+                <label asp-for="Message" class="control-label"></label>
+                <textarea asp-for="Message" class="form-control" rows="5" placeholder="Enter your farewell message..."></textarea>
+                <span asp-validation-for="Message" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group mb-3">
+                <label asp-for="AuthorName" class="control-label"></label>
+                <input asp-for="AuthorName" class="form-control" placeholder="Your name (optional)" />
+                <span asp-validation-for="AuthorName" class="text-danger"></span>
+                <small class="form-text text-muted">Optional - Your name will be displayed with the message</small>
+            </div>
+            
+            <div class="form-group mb-3">
+                <label asp-for="AuthorEmail" class="control-label"></label>
+                <input asp-for="AuthorEmail" class="form-control" type="email" placeholder="your.email@example.com" />
+                <span asp-validation-for="AuthorEmail" class="text-danger"></span>
+                <small class="form-text text-muted">Optional - Your email will not be displayed publicly</small>
+            </div>
+            
+            <div class="form-group mb-3">
+                <input type="submit" value="Create" class="btn btn-primary" />
+
+                <a href="/" class="btn btn-secondary">Cancel</a>
+                
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

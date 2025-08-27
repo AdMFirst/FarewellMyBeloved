@@ -1,0 +1,106 @@
+@model FarewellMyBeloved.Models.FarewellPerson
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+@if (!string.IsNullOrEmpty(Model.BackgroundUrl))
+{
+    <div class="jumbotron jumbotron-fluid mb-0" style="background-image: url('@Model.BackgroundUrl'); background-size: cover; background-position: center; height: 250px;">
+        <div class="container">
+            <!-- Optional: Add an overlay or content here if needed -->
+        </div>
+    </div>
+}
+else
+{
+    <div class="jumbotron jumbotron-fluid bg-light mb-0" style="height: 250px;">
+        <div class="container d-flex align-items-center justify-content-center h-100">
+            <span class="text-muted">No Background Image</span>
+        </div>
+    </div>
+}
+
+<div class="container mt-n5"> @* mt-n5 pulls the container up by 5 units, overlapping the jumbotron *@
+    <div class="row justify-content-center">
+        <div class="col-12 px-0"> @* Main card now spans full width *@
+            <div class="card shadow-lg">
+                @if (!string.IsNullOrEmpty(Model.PortraitUrl))
+                {
+                    <img src="@Model.PortraitUrl" class="card-img-top rounded-circle border border-white shadow mx-auto d-block" alt="@Model.Name" style="width: 150px; height: 150px; object-fit: cover; margin-top: -75px;">
+                }
+                else
+                {
+                    <div class="card-img-top bg-light rounded-circle border border-white shadow mx-auto d-flex align-items-center justify-content-center" style="width: 150px; height: 150px; margin-top: -75px;">
+                        <span class="text-muted">No Portrait</span>
+                    </div>
+                }
+                <div class="card-body text-center pt-0"> @* pt-0 to remove top padding as image is pulled up *@
+                    <h1 class="card-title mt-3">@Model.Name</h1>
+                    <p class="card-text text-muted">@Html.Raw(Model.Description.Replace("\n", "<br>"))</p>
+                    
+                    @* Hidden unimportant details *@
+                    <div class="row mt-4 d-none">
+                        <div class="col-md-6">
+                            <p><strong>Created:</strong> @Model.CreatedAt.ToLocalTime().ToString("g")</p>
+                            <p><strong>Last Updated:</strong> @Model.UpdatedAt.ToLocalTime().ToString("g")</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Status:</strong> @(Model.IsPublic ? "Public" : "Private")</p>
+                            <p><strong>Slug:</strong> @Model.Slug</p>
+                        </div>
+                    </div>
+                    
+                    @* Hidden buttons *@
+                    <div class="mt-4 d-none">
+                        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">Delete</a>
+                        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row justify-content-center mt-4"> @* New row for messages card, with top margin *@
+        <div class="col-12 px-0"> @* Messages card now spans full width *@
+            <div class="card shadow-lg">
+                <div class="card-header">
+                    <h5>Farewell Messages</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.Messages.Any())
+                    {
+                        <div class="row g-3"> @* Use row with gutter for spacing between message cards *@
+                            @foreach (var message in Model.Messages.OrderByDescending(m => m.CreatedAt))
+                            {
+                                <div class="col-md-6 col-lg-4"> @* Each message takes 6 columns on medium, 4 on large screens *@
+                                    <div class="card h-100 shadow-sm"> @* Use card for individual messages, h-100 to make cards same height *@
+                                        <div class="card-body d-flex flex-column">
+                                            <div class="d-flex w-100 justify-content-between mb-2">
+                                                <h6 class="mb-0">@((message.AuthorName ?? "Anonymous"))</h6>
+                                                <small class="text-muted">@message.CreatedAt.ToLocalTime().ToString("g")</small>
+                                            </div>
+                                            <p class="card-text mb-auto overflow-auto" style="max-height: 200px;">@message.Message</p> @* mb-auto pushes small tag to bottom, mh-100 and overflow-auto for scrolling *@
+                                            <small class="text-muted mt-2">@(message.IsPublic ? "Public" : "Private")</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        
+                        <div class="mt-3">
+                            <a asp-controller="FarewellMessage" asp-action="Create" asp-route-farewellPersonId="@Model.Id" type="button" class="btn btn-outline-primary btn-sm" >Add Message</a>
+                        </div> 
+                    }
+                    else
+                    {
+                        <p class="text-muted">No messages yet.</p>
+                        <a asp-controller="FarewellMessage" asp-action="Create" asp-route-farewellPersonId="@Model.Id" type="button" class="btn btn-outline-primary" >Add First Message</a>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
