@@ -91,7 +91,7 @@ public class FarewellPersonController : Controller
 
             _context.Add(farewellPerson);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return Redirect($"/{farewellPerson.Slug}");
         }
         return View(viewModel);
     }

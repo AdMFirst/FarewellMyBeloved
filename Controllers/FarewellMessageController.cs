@@ -82,9 +82,10 @@ public class FarewellMessageController : Controller
 
             _context.Add(farewellMessage);
             await _context.SaveChangesAsync();
-            
+            await _context.Entry(farewellMessage).Reference(m => m.FarewellPerson).LoadAsync();
+        
             // Redirect to the person's details page
-            return RedirectToAction("Details", "FarewellPerson", new { id = viewModel.FarewellPersonId });
+            return Redirect($"/{farewellMessage.FarewellPerson?.Slug}");
         }
         
         // If we get here, something went wrong, so repopulate the FarewellPersonName
