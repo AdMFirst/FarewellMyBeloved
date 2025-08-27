@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using FarewellMyBeloved.Models;
 using FarewellMyBeloved.ViewModels;
 using System.Threading.Tasks;
@@ -29,6 +30,17 @@ public class FarewellMessageController : Controller
                 viewModel.FarewellPersonName = farewellPerson.Name;
             }
         }
+
+        // Populate ViewBag.FarewellPeople for the dropdown
+        var farewellPeople = await _context.FarewellPeople
+                                           .OrderBy(p => p.Name)
+                                           .Select(p => new SelectListItem
+                                           {
+                                               Value = p.Id.ToString(),
+                                               Text = p.Name
+                                           })
+                                           .ToListAsync();
+        ViewBag.FarewellPeople = farewellPeople;
         
         return View(viewModel);
     }
@@ -67,6 +79,17 @@ public class FarewellMessageController : Controller
                 viewModel.FarewellPersonName = farewellPerson.Name;
             }
         }
+
+        // Repopulate ViewBag.FarewellPeople if ModelState is invalid
+        var farewellPeople = await _context.FarewellPeople
+                                           .OrderBy(p => p.Name)
+                                           .Select(p => new SelectListItem
+                                           {
+                                               Value = p.Id.ToString(),
+                                               Text = p.Name
+                                           })
+                                           .ToListAsync();
+        ViewBag.FarewellPeople = farewellPeople;
         
         return View(viewModel);
     }
