@@ -15,7 +15,7 @@
                     </h2>
                 </div>
                 <div class="card-body p-4">
-                    <form asp-action="Create">
+                    <form asp-action="Create" enctype="multipart/form-data">
                         <div asp-validation-summary="ModelOnly" class="text-danger alert alert-danger"></div>
                         
                         <div class="mb-4">
@@ -35,27 +35,55 @@
                         </div>
                         
                         <div class="mb-4">
-                            <label asp-for="PortraitUrl" class="form-label fw-bold">
-                                <i class="fas fa-image me-2"></i>Portrait URL
+                            <label class="form-label fw-bold">
+                                <i class="fas fa-image me-2"></i>Portrait
                             </label>
-                            <input asp-for="PortraitUrl" class="form-control" placeholder="https://example.com/portrait.jpg" />
-                            <span asp-validation-for="PortraitUrl" class="text-danger small"></span>
-                            <small class="form-text text-muted">
-                                <i class="fas fa-info-circle me-1"></i>
-                                Optional URL to a portrait image
-                            </small>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="UsePortraitUrl" id="portraitUrlRadio" value=true checked>
+                                <label class="form-check-label" for="portraitUrlRadio">
+                                    Use URL
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="UsePortraitUrl" id="portraitFileRadio" value=false>
+                                <label class="form-check-label" for="portraitFileRadio">
+                                    Upload File
+                                </label>
+                            </div>
+                            <div id="portraitUrlInput">
+                                <input asp-for="PortraitUrl" class="form-control" placeholder="https://example.com/portrait.jpg" />
+                                <span asp-validation-for="PortraitUrl" class="text-danger small"></span>
+                            </div>
+                            <div id="portraitFileInput" style="display: none;">
+                                <input asp-for="PortraitFile" class="form-control" type="file" />
+                                <span asp-validation-for="PortraitFile" class="text-danger small"></span>
+                            </div>
                         </div>
                         
                         <div class="mb-5">
-                            <label asp-for="BackgroundUrl" class="form-label fw-bold">
-                                <i class="fas fa-photo-video me-2"></i>Background URL
+                            <label class="form-label fw-bold">
+                                <i class="fas fa-photo-video me-2"></i>Background
                             </label>
-                            <input asp-for="BackgroundUrl" class="form-control" placeholder="https://example.com/background.jpg" />
-                            <span asp-validation-for="BackgroundUrl" class="text-danger small"></span>
-                            <small class="form-text text-muted">
-                                <i class="fas fa-info-circle me-1"></i>
-                                Optional URL to a background image
-                            </small>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="UseBackgroundUrl" id="backgroundUrlRadio" value=true checked>
+                                <label class="form-check-label" for="backgroundUrlRadio">
+                                    Use URL
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="UseBackgroundUrl" id="backgroundFileRadio" value=false>
+                                <label class="form-check-label" for="backgroundFileRadio">
+                                    Upload File
+                                </label>
+                            </div>
+                            <div id="backgroundUrlInput">
+                                <input asp-for="BackgroundUrl" class="form-control" placeholder="https://example.com/background.jpg" />
+                                <span asp-validation-for="BackgroundUrl" class="text-danger small"></span>
+                            </div>
+                            <div id="backgroundFileInput" style="display: none;">
+                                <input asp-for="BackgroundFile" class="form-control" type="file" />
+                                <span asp-validation-for="BackgroundFile" class="text-danger small"></span>
+                            </div>
                         </div>
                         
                         <div class="d-grid gap-2 d-md-flex justify-content-md-center">
@@ -75,4 +103,29 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        $(document).ready(function () {
+            $('input[type=radio][name=UsePortraitUrl]').change(function() {
+                if (this.value == 'true') {
+                    $('#portraitUrlInput').show();
+                    $('#portraitFileInput').hide();
+                }
+                else if (this.value == 'false') {
+                    $('#portraitUrlInput').hide();
+                    $('#portraitFileInput').show();
+                }
+            });
+
+            $('input[type=radio][name=UseBackgroundUrl]').change(function() {
+                if (this.value == 'true') {
+                    $('#backgroundUrlInput').show();
+                    $('#backgroundFileInput').hide();
+                }
+                else if (this.value == 'false') {
+                    $('#backgroundUrlInput').hide();
+                    $('#backgroundFileInput').show();
+                }
+            });
+        });
+    </script>
 }

@@ -2,6 +2,7 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using FarewellMyBeloved.Models;
 using FarewellMyBeloved.ViewModels;
+using FarewellMyBeloved.Services;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,11 +12,15 @@ public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
     private readonly ApplicationDbContext _context;
+    private readonly IS3Service _s3Service;
+    private readonly IConfiguration _configuration;
 
-    public HomeController(ILogger<HomeController> logger, ApplicationDbContext context)
+    public HomeController(ILogger<HomeController> logger, ApplicationDbContext context, IS3Service s3Service, IConfiguration configuration)
     {
         _logger = logger;
         _context = context;
+        _s3Service = s3Service;
+        _configuration = configuration;
     }
 
     public IActionResult Index()
@@ -48,7 +53,20 @@ public class HomeController : Controller
                         p.Description.Contains(searchTerm)))
             .OrderByDescending(p => p.CreatedAt)
             .ToListAsync();
-            
+
+        // Sign the image before displaying
+        foreach (var person in searchResults)
+        {
+            if (!string.IsNullOrEmpty(person.PortraitUrl))
+            {
+                person.PortraitUrl = await SignImage(person.PortraitUrl);
+            }
+            if (!string.IsNullOrEmpty(person.BackgroundUrl))
+            {
+                person.BackgroundUrl = await SignImage(person.BackgroundUrl);
+            }
+        }
+
         ViewBag.SearchTerm = searchTerm;
         return View("Search", searchResults);
     }
@@ -71,6 +89,38 @@ public class HomeController : Controller
             return NotFound();
         }
 
+        // Sign all the image first before displaying
+        if (!string.IsNullOrEmpty(farewellPerson.PortraitUrl))
+        {
+            farewellPerson.PortraitUrl = await SignImage(farewellPerson.PortraitUrl);
+        }
+        if (!string.IsNullOrEmpty(farewellPerson.BackgroundUrl))
+        {
+            farewellPerson.BackgroundUrl = await SignImage(farewellPerson.BackgroundUrl);
+        }
+
         return View("Slug", farewellPerson);
+    }
+
+    private async Task<string> SignImage(string imagePath)
+    {
+        // check if image is a valid image url
+        if (!Uri.IsWellFormedUriString(imagePath, UriKind.Absolute) &&
+            !(imagePath.EndsWith(".jpg") || imagePath.EndsWith(".png") || imagePath.EndsWith(".jpeg")))
+        {
+            return _configuration.GetSection("App")["DefaultPortraitUrl"] ?? "https://i.ibb.co.com/2qXwjX3/default-blue1.png";
+        }
+
+        // Extract key from the image path
+        var endpoint = _configuration.GetSection("S3")["Endpoint"];
+        var bucketName = _configuration.GetSection("S3")["Bucket"];
+        
+        if (imagePath.StartsWith($"{endpoint}/{bucketName}/"))
+        {
+            var key = imagePath.Substring($"{endpoint}/{bucketName}/".Length);
+            return await _s3Service.GetSignedUrlAsync(key);
+        }
+
+        return imagePath;
     }
 }

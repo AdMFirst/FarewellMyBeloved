@@ -3,16 +3,19 @@ using Microsoft.EntityFrameworkCore;
 using FarewellMyBeloved.Models;
 using FarewellMyBeloved.ViewModels;
 using System.Threading.Tasks;
+using FarewellMyBeloved.Services;
 
 namespace FarewellMyBeloved.Controllers;
 
 public class FarewellPersonController : Controller
 {
     private readonly ApplicationDbContext _context;
+    private readonly IS3Service _s3Service;
 
-    public FarewellPersonController(ApplicationDbContext context)
+    public FarewellPersonController(ApplicationDbContext context, IS3Service s3Service)
     {
         _context = context;
+        _s3Service = s3Service;
     }
 
 
@@ -25,7 +28,7 @@ public class FarewellPersonController : Controller
     // POST: FarewellPerson/Create
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("Name,Description,PortraitUrl,BackgroundUrl")] CreateFarewellPersonViewModel viewModel)
+    public async Task<IActionResult> Create(CreateFarewellPersonViewModel viewModel)
     {
         if (ModelState.IsValid)
         {
@@ -33,24 +36,35 @@ public class FarewellPersonController : Controller
             {
                 Name = viewModel.Name,
                 Description = viewModel.Description,
-                PortraitUrl = viewModel.PortraitUrl,
-                BackgroundUrl = viewModel.BackgroundUrl,
                 Slug = GenerateSlug(viewModel.Name),
                 IsPublic = true,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
             };
 
+            if (viewModel.UsePortraitUrl)
+            {
+                farewellPerson.PortraitUrl = viewModel.PortraitUrl;
+            }
+            else if (viewModel.PortraitFile != null)
+            {
+                farewellPerson.PortraitUrl = await _s3Service.UploadFileAsync(viewModel.PortraitFile);
+            }
+
+            if (viewModel.UseBackgroundUrl)
+            {
+                farewellPerson.BackgroundUrl = viewModel.BackgroundUrl;
+            }
+            else if (viewModel.BackgroundFile != null)
+            {
+                farewellPerson.BackgroundUrl = await _s3Service.UploadFileAsync(viewModel.BackgroundFile);
+            }
+
             _context.Add(farewellPerson);
             await _context.SaveChangesAsync();
             return Redirect($"/{farewellPerson.Slug}");
         }
         return View(viewModel);
-    }
-
-    private bool FarewellPersonExists(int id)
-    {
-        return _context.FarewellPeople.Any(e => e.Id == id);
     }
 
     private string GenerateSlug(string name)
@@ -95,4 +109,5 @@ public class FarewellPersonController : Controller
             .Trim()
             .Replace(" ", "-");
     }
+
 }
