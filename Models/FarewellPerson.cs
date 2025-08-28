@@ -22,11 +22,13 @@ public class FarewellPerson
     [StringLength(5000, ErrorMessage = "Description cannot exceed 5000 characters")]
     public string Description { get; set; } = string.Empty;
 
-    [StringLength(500, ErrorMessage = "Portrait URL cannot exceed 500 characters")]
     public string? PortraitUrl { get; set; }
 
-    [StringLength(500, ErrorMessage = "Background URL cannot exceed 500 characters")]
     public string? BackgroundUrl { get; set; }
+
+    [EmailAddress(ErrorMessage = "Invalid email address")]
+    [StringLength(255, ErrorMessage = "Email cannot exceed 255 characters")]
+    public string? Email { get; set; }
 
     [Required]
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
