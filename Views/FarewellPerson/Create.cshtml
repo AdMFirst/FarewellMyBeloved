@@ -66,8 +66,9 @@
                                 <span asp-validation-for="PortraitUrl" class="text-danger small"></span>
                             </div>
                             <div id="portraitFileInput" style="display: none;">
-                                <input asp-for="PortraitFile" class="form-control" type="file" />
+                                <input asp-for="PortraitFile" class="form-control" type="file" accept="image/*" onchange="validateImageSize(this, 'PortraitFile')" />
                                 <span asp-validation-for="PortraitFile" class="text-danger small"></span>
+                                <span id="portraitFileSizeError" class="text-danger small" style="display: none;"></span>
                             </div>
                         </div>
                         
@@ -92,8 +93,9 @@
                                 <span asp-validation-for="BackgroundUrl" class="text-danger small"></span>
                             </div>
                             <div id="backgroundFileInput" style="display: none;">
-                                <input asp-for="BackgroundFile" class="form-control" type="file" />
+                                <input asp-for="BackgroundFile" class="form-control" type="file" accept="image/*" onchange="validateImageSize(this, 'BackgroundFile')" />
                                 <span asp-validation-for="BackgroundFile" class="text-danger small"></span>
+                                <span id="backgroundFileSizeError" class="text-danger small" style="display: none;"></span>
                             </div>
                         </div>
                         
@@ -138,5 +140,20 @@
                 }
             });
         });
+
+        function validateImageSize(input, fieldName) {
+            const maxSize = 5 * 1024 * 1024; // 5MB
+            const fileSizeError = document.getElementById(fieldName + 'FileSizeError');
+            
+            if (input.files && input.files[0]) {
+                if (input.files[0].size > maxSize) {
+                    fileSizeError.textContent = 'File size must be less than 5MB.';
+                    fileSizeError.style.display = 'block';
+                    input.value = ''; // Clear the file input
+                } else {
+                    fileSizeError.style.display = 'none';
+                }
+            }
+        }
     </script>
 }

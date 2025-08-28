@@ -4,6 +4,11 @@ using FarewellMyBeloved.Models;
 using FarewellMyBeloved.ViewModels;
 using System.Threading.Tasks;
 using FarewellMyBeloved.Services;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Processing;
+using SixLabors.ImageSharp.Formats.Jpeg;
+using System.IO;
+using Microsoft.AspNetCore.Http;
 
 namespace FarewellMyBeloved.Controllers;
 
@@ -30,8 +35,26 @@ public class FarewellPersonController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(CreateFarewellPersonViewModel viewModel)
     {
+        const long maxFileSize = 5 * 1024 * 1024; // 5MB
+
         if (ModelState.IsValid)
         {
+            // Server-side file size validation
+            if (!viewModel.UsePortraitUrl && viewModel.PortraitFile != null && viewModel.PortraitFile.Length > maxFileSize)
+            {
+                ModelState.AddModelError("PortraitFile", "Portrait file size must be less than 5MB.");
+            }
+
+            if (!viewModel.UseBackgroundUrl && viewModel.BackgroundFile != null && viewModel.BackgroundFile.Length > maxFileSize)
+            {
+                ModelState.AddModelError("BackgroundFile", "Background file size must be less than 5MB.");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(viewModel);
+            }
+
             var farewellPerson = new FarewellPerson
             {
                 Name = viewModel.Name,
@@ -49,7 +72,20 @@ public class FarewellPersonController : Controller
             }
             else if (viewModel.PortraitFile != null)
             {
-                farewellPerson.PortraitUrl = await _s3Service.UploadFileAsync(viewModel.PortraitFile);
+                // Compress and upload portrait
+                using var compressedPortraitStream = new MemoryStream();
+                using var image = Image.Load(viewModel.PortraitFile.OpenReadStream());
+                await image.SaveAsJpegAsync(compressedPortraitStream, new JpegEncoder
+                {
+                    Quality = 85
+                });
+                compressedPortraitStream.Position = 0;
+                var compressedPortraitFile = new FormFile(compressedPortraitStream, 0, compressedPortraitStream.Length, "PortraitFile", viewModel.PortraitFile.FileName)
+                {
+                    Headers = viewModel.PortraitFile.Headers,
+                    ContentType = viewModel.PortraitFile.ContentType
+                };
+                farewellPerson.PortraitUrl = await _s3Service.UploadFileAsync(compressedPortraitFile);
             }
 
             if (viewModel.UseBackgroundUrl)
@@ -58,7 +94,20 @@ public class FarewellPersonController : Controller
             }
             else if (viewModel.BackgroundFile != null)
             {
-                farewellPerson.BackgroundUrl = await _s3Service.UploadFileAsync(viewModel.BackgroundFile);
+                // Compress and upload background
+                using var compressedBackgroundStream = new MemoryStream();
+                using var image = Image.Load(viewModel.BackgroundFile.OpenReadStream());
+                await image.SaveAsJpegAsync(compressedBackgroundStream, new JpegEncoder
+                {
+                    Quality = 85
+                });
+                compressedBackgroundStream.Position = 0;
+                var compressedBackgroundFile = new FormFile(compressedBackgroundStream, 0, compressedBackgroundStream.Length, "BackgroundFile", viewModel.BackgroundFile.FileName)
+                {
+                    Headers = viewModel.BackgroundFile.Headers,
+                    ContentType = viewModel.BackgroundFile.ContentType
+                };
+                farewellPerson.BackgroundUrl = await _s3Service.UploadFileAsync(compressedBackgroundFile);
             }
 
             _context.Add(farewellPerson);
