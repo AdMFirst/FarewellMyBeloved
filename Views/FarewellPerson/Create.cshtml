@@ -33,6 +33,17 @@
                             <textarea asp-for="Description" class="form-control" rows="5" placeholder="Enter a description about this person..."></textarea>
                             <span asp-validation-for="Description" class="text-danger small"></span>
                         </div>
+
+                        <div class="mb-4">
+                            <label asp-for="Email" class="form-label fw-bold">
+                                <i class="fas fa-envelope me-2"></i>Your Email
+                            </label>
+                            <input asp-for="Email" class="form-control" placeholder="Enter email address (Optional)" />
+                            <span asp-validation-for="Email" class="text-danger small"></span>
+                            <div class="form-text text-muted">
+                                We'll reach out if we need to moderate your page.
+                            </div>
+                        </div>
                         
                         <div class="mb-4">
                             <label class="form-label fw-bold">

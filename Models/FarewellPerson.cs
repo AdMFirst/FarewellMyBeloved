@@ -26,6 +26,10 @@ public class FarewellPerson
 
     public string? BackgroundUrl { get; set; }
 
+    [EmailAddress(ErrorMessage = "Invalid email address")]
+    [StringLength(255, ErrorMessage = "Email cannot exceed 255 characters")]
+    public string? Email { get; set; }
+
     [Required]
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 

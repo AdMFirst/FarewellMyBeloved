@@ -26,4 +26,8 @@ public class CreateFarewellPersonViewModel
     public string? BackgroundUrl { get; set; }
 
     public IFormFile? BackgroundFile { get; set; }
+
+    [EmailAddress(ErrorMessage = "Invalid email address")]
+    [StringLength(255, ErrorMessage = "Email cannot exceed 255 characters")]
+    public string? Email { get; set; }
 }

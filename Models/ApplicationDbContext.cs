@@ -40,6 +40,10 @@ public class ApplicationDbContext : DbContext
             entity.Property(e => e.BackgroundUrl)
                 .HasMaxLength(500);
             
+            entity.Property(e => e.Email)
+                .HasMaxLength(255)
+                .HasAnnotation("EmailAddress", true);
+            
             entity.Property(e => e.IsPublic)
                 .IsRequired();
             

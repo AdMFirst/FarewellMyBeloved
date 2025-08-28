@@ -37,6 +37,7 @@ public class FarewellPersonController : Controller
                 Name = viewModel.Name,
                 Description = viewModel.Description,
                 Slug = GenerateSlug(viewModel.Name),
+                Email = viewModel.Email,
                 IsPublic = true,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
