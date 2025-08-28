@@ -4,45 +4,72 @@
     ViewData["Title"] = "Create Farewell Person";
 }
 
-<h1>Create Farewell Person</h1>
-
-<hr />
-<div class="row">
-    <div class="col-md-8">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            
-            <div class="form-group mb-3">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-xl-6">
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="card-title mb-0 text-center">
+                        <i class="fas fa-user-plus me-2"></i>
+                        Create Farewell Page
+                    </h2>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Create">
+                        <div asp-validation-summary="ModelOnly" class="text-danger alert alert-danger"></div>
+                        
+                        <div class="mb-4">
+                            <label asp-for="Name" class="form-label fw-bold">
+                                <i class="fas fa-user me-2"></i>Name
+                            </label>
+                            <input asp-for="Name" class="form-control form-control-lg" placeholder="Enter person's name" />
+                            <span asp-validation-for="Name" class="text-danger small"></span>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label asp-for="Description" class="form-label fw-bold">
+                                <i class="fas fa-align-left me-2"></i>Description
+                            </label>
+                            <textarea asp-for="Description" class="form-control" rows="5" placeholder="Enter a description about this person..."></textarea>
+                            <span asp-validation-for="Description" class="text-danger small"></span>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label asp-for="PortraitUrl" class="form-label fw-bold">
+                                <i class="fas fa-image me-2"></i>Portrait URL
+                            </label>
+                            <input asp-for="PortraitUrl" class="form-control" placeholder="https://example.com/portrait.jpg" />
+                            <span asp-validation-for="PortraitUrl" class="text-danger small"></span>
+                            <small class="form-text text-muted">
+                                <i class="fas fa-info-circle me-1"></i>
+                                Optional URL to a portrait image
+                            </small>
+                        </div>
+                        
+                        <div class="mb-5">
+                            <label asp-for="BackgroundUrl" class="form-label fw-bold">
+                                <i class="fas fa-photo-video me-2"></i>Background URL
+                            </label>
+                            <input asp-for="BackgroundUrl" class="form-control" placeholder="https://example.com/background.jpg" />
+                            <span asp-validation-for="BackgroundUrl" class="text-danger small"></span>
+                            <small class="form-text text-muted">
+                                <i class="fas fa-info-circle me-1"></i>
+                                Optional URL to a background image
+                            </small>
+                        </div>
+                        
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                            <button type="submit" class="btn btn-primary btn-lg px-4 py-2" style="min-width: 250px;">
+                                <i class="fas fa-save me-2"></i>Create
+                            </button>
+                            <a href="/" class="btn btn-outline-secondary btn-lg px-4 py-2" style="min-width: 250px;">
+                                <i class="fas fa-times me-2"></i>Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
             </div>
-            
-            <div class="form-group mb-3">
-                <label asp-for="Description" class="control-label"></label>
-                <textarea asp-for="Description" class="form-control" rows="5"></textarea>
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            
-            <div class="form-group mb-3">
-                <label asp-for="PortraitUrl" class="control-label"></label>
-                <input asp-for="PortraitUrl" class="form-control" />
-                <span asp-validation-for="PortraitUrl" class="text-danger"></span>
-                <small class="form-text text-muted">Optional URL to a portrait image</small>
-            </div>
-            
-            <div class="form-group mb-3">
-                <label asp-for="BackgroundUrl" class="control-label"></label>
-                <input asp-for="BackgroundUrl" class="form-control" />
-                <span asp-validation-for="BackgroundUrl" class="text-danger"></span>
-                <small class="form-text text-muted">Optional URL to a background image</small>
-            </div>
-            
-            <div class="form-group mb-3">
-                <input type="submit" value="Create" class="btn btn-primary" />
-                <a href="/" class="btn btn-secondary">Cancel</a>
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 
