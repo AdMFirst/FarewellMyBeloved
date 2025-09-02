@@ -1,14 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using FarewellMyBeloved.Models;
 using FarewellMyBeloved.ViewModels;
-using System.Threading.Tasks;
 using FarewellMyBeloved.Services;
 using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Processing;
 using SixLabors.ImageSharp.Formats.Jpeg;
-using System.IO;
-using Microsoft.AspNetCore.Http;
 
 namespace FarewellMyBeloved.Controllers;
 
