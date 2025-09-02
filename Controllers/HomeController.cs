@@ -78,6 +78,10 @@ public class HomeController : Controller
         {
             return RedirectToAction("Index");
         }
+        else if (slug == "Admin")
+        {
+            return RedirectToAction("Index", "Admin");
+        }
 
         // Find the slug
         var farewellPerson = await _context.FarewellPeople

@@ -137,27 +137,6 @@ app.MapControllerRoute(
     .WithStaticAssets();
 
 
-
-// Kick off GitHub login
-app.MapGet("/login", async (HttpContext ctx) =>
-{
-    await ctx.ChallengeAsync(GitHubAuthenticationDefaults.AuthenticationScheme,
-        new AuthenticationProperties { RedirectUri = "/" });
-});
-
-// End the cookie session
-app.MapGet("/logout", async (HttpContext ctx) =>
-{
-    await ctx.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-    ctx.Response.Redirect("/");
-});
-
-// Admin-only endpoint
-app.MapGet("/admin", [Authorize(Policy = "AdminsOnly")] () =>
-{
-    return Results.Text("Top secret admin page ✅");
-});
-
 app.MapGet("/not-authorized", () =>
 {
     return Results.Text("You are not authorized to access this page.", statusCode: 403);
