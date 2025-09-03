@@ -54,6 +54,34 @@ public class AdminController : Controller
         return View(viewModel);
     }
 
+    [Authorize(Policy = "AdminsOnly")]
+    [HttpGet("FarewellMessages")]
+    public async Task<IActionResult> FarewellMessages(int page = 1)
+    {
+        const int pageSize = 10;
+
+        var totalCount = await _context.FarewellMessages.CountAsync();
+        var totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
+
+        var farewellMessages = await _context.FarewellMessages
+            .Include(fm => fm.FarewellPerson)
+            .OrderBy(fm => fm.CreatedAt)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+
+        var viewModel = new FarewellMessagesIndexViewModel
+        {
+            FarewellMessages = farewellMessages,
+            PageNumber = page,
+            TotalPages = totalPages,
+            TotalItems = totalCount,
+            PageSize = pageSize
+        };
+        
+        return View(viewModel);
+    }
+
 
     [HttpGet("login")]
     [AllowAnonymous] // must allow anyone
