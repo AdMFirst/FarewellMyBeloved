@@ -1,7 +1,10 @@
 using AspNet.Security.OAuth.GitHub;
+using FarewellMyBeloved.Models;
+using FarewellMyBeloved.ViewModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FarewellMyBeloved.Controllers;
@@ -9,11 +12,46 @@ namespace FarewellMyBeloved.Controllers;
 [Route("admin")]
 public class AdminController : Controller
 {
+
+    private readonly ApplicationDbContext _context;
+
+    public AdminController(ApplicationDbContext context)
+    {
+        _context = context;
+    }
+
     [Authorize(Policy = "AdminsOnly")]
     [HttpGet("")]
     public IActionResult Index()
     {
         return View();
+    }
+
+    [Authorize(Policy = "AdminsOnly")]
+    [HttpGet("FarewellPeople")]
+    public async Task<IActionResult> FarewellPeople(int page = 1)
+    {
+        const int pageSize = 10;
+        
+        var totalCount = await _context.FarewellPeople.CountAsync();
+        var totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
+        
+        var farewellPeople = await _context.FarewellPeople
+            .OrderBy(fp => fp.Name)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+        
+        var viewModel = new FarewellPeopleIndexViewModel
+        {
+            FarewellPeople = farewellPeople,
+            PageNumber = page,
+            TotalPages = totalPages,
+            TotalItems = totalCount,
+            PageSize = pageSize
+        };
+        
+        return View(viewModel);
     }
 
 
