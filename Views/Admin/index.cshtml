@@ -1,11 +1,188 @@
+@model FarewellMyBeloved.ViewModels.AdminIndexViewModel
 @{
-    ViewData["Title"] = "Admin Page";
+    ViewData["Title"] = "Admin Dashboard";
 }
 
 <div class="container py-5">
     <div class="row py-3">
-        <div class="col-lg-8 mx-auto text-center">
-            This is Admin page, do not enter without permission
+        <div class="col-12 text-center">
+            <h1 class="display-4">Admin Dashboard</h1>
+            <p class="lead">Welcome to the administration panel</p>
+        </div>
+    </div>
+    
+    <div class="row">
+        <!-- Left Column - Farewell People -->
+        <div class="col-md-4">
+            <div class="card h-100">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">Farewell People</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-4">
+                        <h6>Last 7 Days</h6>
+                        <canvas id="farewellPeopleLast7Days" width="400" height="200"></canvas>
+                    </div>
+                    <div class="mb-4">
+                        <h6>Last 4 Weeks</h6>
+                        <canvas id="farewellPeopleLast4Weeks" width="400" height="200"></canvas>
+                    </div>
+                    <div class="d-grid">
+                        <a href="@Url.Action("FarewellPeople", "Admin")" class="btn btn-outline-primary">
+                            <i class="bi bi-people"></i> Manage Farewell People
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Middle Column - Farewell Messages -->
+        <div class="col-md-4">
+            <div class="card h-100">
+                <div class="card-header bg-success text-white">
+                    <h5 class="card-title mb-0">Farewell Messages</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-4">
+                        <h6>Last 7 Days</h6>
+                        <canvas id="farewellMessagesLast7Days" width="400" height="200"></canvas>
+                    </div>
+                    <div class="mb-4">
+                        <h6>Last 4 Weeks</h6>
+                        <canvas id="farewellMessagesLast4Weeks" width="400" height="200"></canvas>
+                    </div>
+                    <div class="d-grid">
+                        <a href="@Url.Action("FarewellMessages", "Admin")" class="btn btn-outline-success">
+                            <i class="bi bi-chat-dots"></i> Manage Farewell Messages
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Right Column - Future Use -->
+        <div class="col-md-4">
+            <div class="card h-100">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="card-title mb-0">Future Features</h5>
+                </div>
+                <div class="card-body">
+                    <div class="text-center">
+                        <i class="bi bi-gear-fill display-1 text-secondary"></i>
+                        <p class="text-muted mt-3">Additional features will be implemented here in the future.</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        // Farewell People Charts
+        const farewellPeopleLast7DaysCtx = document.getElementById('farewellPeopleLast7Days').getContext('2d');
+        new Chart(farewellPeopleLast7DaysCtx, {
+            type: 'bar',
+            data: {
+                labels: @Html.Raw(Json.Serialize(Model.FarewellPeopleChartData.Last7DaysLabels)),
+                datasets: [{
+                    label: 'People Created',
+                    data: @Html.Raw(Json.Serialize(Model.FarewellPeopleChartData.Last7DaysData)),
+                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                }
+            }
+        });
+
+        const farewellPeopleLast4WeeksCtx = document.getElementById('farewellPeopleLast4Weeks').getContext('2d');
+        new Chart(farewellPeopleLast4WeeksCtx, {
+            type: 'bar',
+            data: {
+                labels: @Html.Raw(Json.Serialize(Model.FarewellPeopleChartData.Last4WeeksLabels)),
+                datasets: [{
+                    label: 'People Created',
+                    data: @Html.Raw(Json.Serialize(Model.FarewellPeopleChartData.Last4WeeksData)),
+                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                }
+            }
+        });
+
+        // Farewell Messages Charts
+        const farewellMessagesLast7DaysCtx = document.getElementById('farewellMessagesLast7Days').getContext('2d');
+        new Chart(farewellMessagesLast7DaysCtx, {
+            type: 'bar',
+            data: {
+                labels: @Html.Raw(Json.Serialize(Model.FarewellMessagesChartData.Last7DaysLabels)),
+                datasets: [{
+                    label: 'Messages Created',
+                    data: @Html.Raw(Json.Serialize(Model.FarewellMessagesChartData.Last7DaysData)),
+                    backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                }
+            }
+        });
+
+        const farewellMessagesLast4WeeksCtx = document.getElementById('farewellMessagesLast4Weeks').getContext('2d');
+        new Chart(farewellMessagesLast4WeeksCtx, {
+            type: 'bar',
+            data: {
+                labels: @Html.Raw(Json.Serialize(Model.FarewellMessagesChartData.Last4WeeksLabels)),
+                datasets: [{
+                    label: 'Messages Created',
+                    data: @Html.Raw(Json.Serialize(Model.FarewellMessagesChartData.Last4WeeksData)),
+                    backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+}
