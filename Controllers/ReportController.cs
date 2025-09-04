@@ -1,12 +1,20 @@
 using Microsoft.AspNetCore.Mvc;
 using FarewellMyBeloved.Models;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace FarewellMyBeloved.Controllers;
 
 [Route("report")]
 public class ReportController : Controller
 {
+
+    private readonly IConfiguration _configuration;
+
+    public ReportController(IConfiguration configuration)
+    {
+        _configuration = configuration;
+    }
 
     [HttpGet("")]
     public IActionResult Index(string id, string what, string? referer = null)
@@ -22,6 +30,9 @@ public class ReportController : Controller
 
         // check if referer is a local URL to prevent open redirect
         ViewBag.Referer = !string.IsNullOrEmpty(referer) && Url.IsLocalUrl(referer) ? referer : Url.Action("Index", "Home");
+
+        var reasonStrings = _configuration.GetSection("Admin:ReasonStrings").Get<List<string>>() ?? new List<string>(["Spam", "Abuse", "Inappropriate Content", "Other"]);
+        ViewBag.Reasons = reasonStrings.Select(s => new SelectListItem { Value = s.ToLower().Replace(" ", ""), Text = s }).ToList();
 
         return View();
     }

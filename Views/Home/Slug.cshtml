@@ -41,7 +41,7 @@ else
                 </div>
                 <div class="z-index-2 position-absolute top-0 end-0 m-2"> @* Ensure buttons are above other content *@
                     <div class="btn-group">
-                        <button type="button" class="btn btn-sm" data-bs-toggle="popover"
+                        <button type="button" class="btn btn-sm p-0" data-bs-toggle="popover"
                                 data-bs-placement="bottom" data-bs-html="true"
                                 data-bs-content='<a href="@Url.Action("Index", "Report", new { what = "FarewellPerson", id = Model.Id })" target="_blank" class="btn btn-sm btn-danger w-100">
                                     <i class="fa-solid fa-flag me-1"></i>Report this page
@@ -78,7 +78,7 @@ else
                                                 <small class="text-muted mt-2">@(message.IsPublic ? "Public" : "Private")</small>
 
                                                 <div class="btn-group">
-                                                    <button type="button" class="btn" data-bs-toggle="popover"
+                                                    <button type="button" class="btn p-0" data-bs-toggle="popover"
                                                             data-bs-placement="bottom" data-bs-html="true"
                                                             data-bs-content='<a href="@Url.Action("Index", "Report", new { what = "FarewellMessage", id = message.Id })" target="_blank" class="btn btn-sm btn-danger w-100">
                                                                 <i class="fa-solid fa-flag me-1"></i>Report this message

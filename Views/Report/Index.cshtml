@@ -20,11 +20,10 @@
                         <div class="mb-3">
                             <label for="Reason" class="form-label">Reason</label>
                             <select class="form-select" id="Reason" name="Reason" required>
-                                <option value="">Select a reason</option>
-                                <option value="spam">Spam</option>
-                                <option value="abuse">Abuse</option>
-                                <option value="inappropriate">Inappropriate Content</option>
-                                <option value="other">Other</option>
+                                @foreach(var option in (IEnumerable<SelectListItem>)ViewBag.Reasons)
+                                {
+                                    <option value="@option.Value">@option.Text</option>
+                                }
                             </select>
                         </div>
 
