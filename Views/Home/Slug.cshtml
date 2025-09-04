@@ -40,9 +40,15 @@ else
                     <p class="card-text text-muted fst-italic">@Html.Raw(Model.Description.Replace("\n", "<br>"))</p>
                 </div>
                 <div class="z-index-2 position-absolute top-0 end-0 m-2"> @* Ensure buttons are above other content *@
-                    <a asp-controller="Report" asp-action="Index" asp-route-what="FarewellPerson" asp-route-id="@Model.Id" target="_blank" >
-                        <i class="fa-solid fa-circle-info text-secondary" style="font-size: small; opacity: 0.3"></i>
-                    </a>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-sm shadow-sm" data-bs-toggle="popover"
+                                data-bs-placement="bottom" data-bs-html="true"
+                                data-bs-content='<a href="@Url.Action("Index", "Report", new { what = "FarewellPerson", id = Model.Id })" target="_blank" class="btn btn-sm btn-danger w-100">
+                                    <i class="fa-solid fa-flag me-1"></i>Report this page
+                                </a>'>
+                            <i class="fa-solid fa-circle-info"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -71,10 +77,17 @@ else
                                             <div class="d-flex justify-content-between align-items-start">
                                                 <small class="text-muted mt-2">@(message.IsPublic ? "Public" : "Private")</small>
 
-                                                <a class="text-decoration-none" asp-controller="Report" asp-action="Index"
-                                                    asp-route-what="FarewellMessage" asp-route-id="@message.Id" target="_blank">
-                                                    <i class="fa-solid fa-circle-info text-secondary" style="font-size: small; opacity: 0.3"></i>
-                                                </a>
+                                                <div class="btn-group">
+                                                    <button type="button" class="btn btn-sm shadow-sm" data-bs-toggle="popover"
+                                                            data-bs-placement="bottom" data-bs-html="true"
+                                                            data-bs-content='<a href="@Url.Action("Index", "Report", new { what = "FarewellMessage", id = message.Id })" target="_blank" class="btn btn-sm btn-danger w-100">
+                                                                <i class="fa-solid fa-flag me-1"></i>Report this message
+                                                            </a>'>
+                                                        <i class="fa-solid fa-circle-info"></i>
+                                                    </button>
+                                                </div>
+                                                
+                                                
                                             </div>
 
                                         </div>
@@ -98,3 +111,17 @@ else
     </div>
 </div>
 
+@section Scripts {
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    // Initialize all popovers
+    var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
+    var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+            return new bootstrap.Popover(popoverTriggerEl, {
+                html: true,
+                sanitize: false
+            });
+        });
+    });
+</script>
+}
