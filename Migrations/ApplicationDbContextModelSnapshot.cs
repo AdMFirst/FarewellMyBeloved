@@ -22,6 +22,55 @@ namespace FarewellMyBeloved.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("FarewellMyBeloved.Models.ContentReport", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)")
+                        .HasAnnotation("EmailAddress", true);
+
+                    b.Property<string>("Explanation")
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<int?>("FarewellMessageId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("FarewellPersonId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Reason")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("ResolvedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedAt")
+                        .IsDescending();
+
+                    b.HasIndex("FarewellMessageId");
+
+                    b.HasIndex("FarewellPersonId");
+
+                    b.HasIndex("Reason");
+
+                    b.ToTable("ContentReports");
+                });
+
             modelBuilder.Entity("FarewellMyBeloved.Models.FarewellMessage", b =>
                 {
                     b.Property<int>("Id")
@@ -116,6 +165,64 @@ namespace FarewellMyBeloved.Migrations
                     b.ToTable("FarewellPeople");
                 });
 
+            modelBuilder.Entity("FarewellMyBeloved.Models.ModeratorLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Action")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int?>("ContentReportId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Details")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<string>("ModeratorName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Reason")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<int>("TargetId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TargetType")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Action");
+
+                    b.HasIndex("ContentReportId");
+
+                    b.HasIndex("CreatedAt")
+                        .IsDescending();
+
+                    b.HasIndex("ModeratorName");
+
+                    b.HasIndex("TargetId");
+
+                    b.HasIndex("TargetType");
+
+                    b.ToTable("ModeratorLogs");
+                });
+
             modelBuilder.Entity("FarewellMyBeloved.Models.FarewellMessage", b =>
                 {
                     b.HasOne("FarewellMyBeloved.Models.FarewellPerson", "FarewellPerson")
@@ -125,6 +232,21 @@ namespace FarewellMyBeloved.Migrations
                         .IsRequired();
 
                     b.Navigation("FarewellPerson");
+                });
+
+            modelBuilder.Entity("FarewellMyBeloved.Models.ModeratorLog", b =>
+                {
+                    b.HasOne("FarewellMyBeloved.Models.ContentReport", "ContentReport")
+                        .WithMany("ModeratorLogs")
+                        .HasForeignKey("ContentReportId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("ContentReport");
+                });
+
+            modelBuilder.Entity("FarewellMyBeloved.Models.ContentReport", b =>
+                {
+                    b.Navigation("ModeratorLogs");
                 });
 
             modelBuilder.Entity("FarewellMyBeloved.Models.FarewellPerson", b =>
