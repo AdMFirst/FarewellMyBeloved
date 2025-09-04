@@ -12,6 +12,8 @@ public class ApplicationDbContext : DbContext
 
     public DbSet<FarewellPerson> FarewellPeople { get; set; }
     public DbSet<FarewellMessage> FarewellMessages { get; set; }
+    public DbSet<ContentReport> ContentReports { get; set; }
+    public DbSet<ModeratorLog> ModeratorLogs { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -80,6 +82,80 @@ public class ApplicationDbContext : DbContext
             // Create indexes for performance
             entity.HasIndex(e => e.FarewellPersonId);
             
+            entity.HasIndex(e => e.CreatedAt)
+                .IsDescending();
+        });
+
+        // Configure ContentReport entity
+        modelBuilder.Entity<ContentReport>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            
+            entity.Property(e => e.Email)
+                .IsRequired()
+                .HasMaxLength(255)
+                .HasAnnotation("EmailAddress", true);
+            
+            entity.Property(e => e.Reason)
+                .IsRequired()
+                .HasMaxLength(100);
+            
+            entity.Property(e => e.Explanation)
+                .HasMaxLength(2000);
+            
+            entity.Property(e => e.CreatedAt)
+                .IsRequired();
+            
+            entity.Property(e => e.ResolvedAt);
+            
+            // Create indexes for performance
+            entity.HasIndex(e => e.FarewellPersonId);
+            entity.HasIndex(e => e.FarewellMessageId);
+            entity.HasIndex(e => e.Reason);
+            entity.HasIndex(e => e.CreatedAt)
+                .IsDescending();
+        });
+
+        // Configure ModeratorLog entity
+        modelBuilder.Entity<ModeratorLog>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            
+            entity.Property(e => e.ModeratorName)
+                .IsRequired()
+                .HasMaxLength(100);
+            
+            entity.Property(e => e.TargetType)
+                .IsRequired()
+                .HasMaxLength(50);
+            
+            entity.Property(e => e.Action)
+                .IsRequired()
+                .HasMaxLength(100);
+            
+            entity.Property(e => e.Reason)
+                .HasMaxLength(200);
+            
+            entity.Property(e => e.Details)
+                .IsRequired()
+                .HasMaxLength(2000);
+            
+            entity.Property(e => e.ContentReportId);
+            
+            entity.Property(e => e.CreatedAt)
+                .IsRequired();
+            
+            // Configure relationship with ContentReport
+            entity.HasOne(e => e.ContentReport)
+                .WithMany(r => r.ModeratorLogs)
+                .HasForeignKey(e => e.ContentReportId)
+                .OnDelete(DeleteBehavior.Cascade);
+            
+            // Create indexes for performance
+            entity.HasIndex(e => e.TargetType);
+            entity.HasIndex(e => e.TargetId);
+            entity.HasIndex(e => e.Action);
+            entity.HasIndex(e => e.ModeratorName);
             entity.HasIndex(e => e.CreatedAt)
                 .IsDescending();
         });
