@@ -41,12 +41,12 @@ else
                 </div>
                 <div class="z-index-2 position-absolute top-0 end-0 m-2"> @* Ensure buttons are above other content *@
                     <div class="btn-group">
-                        <button type="button" class="btn btn-sm shadow-sm" data-bs-toggle="popover"
+                        <button type="button" class="btn btn-sm" data-bs-toggle="popover"
                                 data-bs-placement="bottom" data-bs-html="true"
                                 data-bs-content='<a href="@Url.Action("Index", "Report", new { what = "FarewellPerson", id = Model.Id })" target="_blank" class="btn btn-sm btn-danger w-100">
                                     <i class="fa-solid fa-flag me-1"></i>Report this page
                                 </a>'>
-                            <i class="fa-solid fa-circle-info"></i>
+                            <i class="fa-solid fa-circle-info text-secondary"></i>
                         </button>
                     </div>
                 </div>
@@ -78,12 +78,12 @@ else
                                                 <small class="text-muted mt-2">@(message.IsPublic ? "Public" : "Private")</small>
 
                                                 <div class="btn-group">
-                                                    <button type="button" class="btn btn-sm shadow-sm" data-bs-toggle="popover"
+                                                    <button type="button" class="btn" data-bs-toggle="popover"
                                                             data-bs-placement="bottom" data-bs-html="true"
                                                             data-bs-content='<a href="@Url.Action("Index", "Report", new { what = "FarewellMessage", id = message.Id })" target="_blank" class="btn btn-sm btn-danger w-100">
                                                                 <i class="fa-solid fa-flag me-1"></i>Report this message
                                                             </a>'>
-                                                        <i class="fa-solid fa-circle-info"></i>
+                                                        <i class="fa-solid fa-circle-info text-secondary"></i>
                                                     </button>
                                                 </div>
                                                 
