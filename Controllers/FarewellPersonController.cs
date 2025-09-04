@@ -80,7 +80,7 @@ public class FarewellPersonController : Controller
                     Headers = viewModel.PortraitFile.Headers,
                     ContentType = viewModel.PortraitFile.ContentType
                 };
-                farewellPerson.PortraitUrl = await _s3Service.UploadFileAsync(compressedPortraitFile);
+                farewellPerson.PortraitUrl = await _s3Service.UploadFileAsync(compressedPortraitFile, S3UploadType.Portrait);
             }
 
             if (viewModel.UseBackgroundUrl)
@@ -102,7 +102,7 @@ public class FarewellPersonController : Controller
                     Headers = viewModel.BackgroundFile.Headers,
                     ContentType = viewModel.BackgroundFile.ContentType
                 };
-                farewellPerson.BackgroundUrl = await _s3Service.UploadFileAsync(compressedBackgroundFile);
+                farewellPerson.BackgroundUrl = await _s3Service.UploadFileAsync(compressedBackgroundFile, S3UploadType.Background);
             }
 
             _context.Add(farewellPerson);

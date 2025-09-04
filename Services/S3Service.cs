@@ -19,7 +19,7 @@ namespace FarewellMyBeloved.Services
             _configuration = configuration;
         }
 
-        public async Task<string> UploadFileAsync(IFormFile file)
+        public async Task<string> UploadFileAsync(IFormFile file, S3UploadType type)
         {
             // Validate input
             if (file == null || file.Length == 0)
@@ -37,7 +37,8 @@ namespace FarewellMyBeloved.Services
             }
 
             // Generate unique key for the file
-            var key = $"{Guid.NewGuid()}-{Path.GetFileName(file.FileName)}";
+            var typePrefix = type.ToString().ToLower(); // "portrait" or "background"
+            var key = $"{typePrefix}/{Guid.NewGuid()}-{Path.GetFileName(file.FileName)}";
 
             // Buffer file into MemoryStream for validation
             using (var stream = new MemoryStream())
