@@ -28,8 +28,14 @@ public class ReportController : Controller
         }
 
         // Pass the query to the view
-        ViewBag.Id = id;
-        ViewBag.What = what;
+        if (what == "FarewellPerson")
+        {
+            ViewBag.FarewellPersonId = id;
+        }
+        else if (what == "FarewellMessage")
+        {
+            ViewBag.FarewellMessageId = id;
+        }
 
         // check if referer is a local URL to prevent open redirect
         ViewBag.Referer = !string.IsNullOrEmpty(referer) && Url.IsLocalUrl(referer) ? referer : Url.Action("Index", "Home");

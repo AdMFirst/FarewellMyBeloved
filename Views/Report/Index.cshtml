@@ -33,12 +33,8 @@
                         </div>
 
                         <div class="mb-3">
-                            @{
-                                var farewellPersonId = ViewBag.What == "FarewellPerson" ? ViewBag.Id : null;
-                                var farewellMessageId = ViewBag.What == "FarewellMessage" ? ViewBag.Id : null;
-                            }
-                            <input type="hidden" id="FarewellPersonId" name="FarewellPersonId" value="@(farewellPersonId)" />
-                            <input type="hidden" id="FarewellMessageId" name="FarewellMessageId" value="@(farewellMessageId)" />
+                            <input type="hidden" id="FarewellPersonId" name="FarewellPersonId" value="@ViewBag.FarewellPersonId" />
+                            <input type="hidden" id="FarewellMessageId" name="FarewellMessageId" value="@ViewBag.FarewellMessageId" />
                         </div>
 
                         <div class="d-grid gap-2">
