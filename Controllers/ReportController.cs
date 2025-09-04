@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using FarewellMyBeloved.Models;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 namespace FarewellMyBeloved.Controllers;
 
@@ -10,10 +11,12 @@ public class ReportController : Controller
 {
 
     private readonly IConfiguration _configuration;
+    private readonly ApplicationDbContext _context;
 
-    public ReportController(IConfiguration configuration)
+    public ReportController(IConfiguration configuration, ApplicationDbContext context)
     {
         _configuration = configuration;
+        _context = context;
     }
 
     [HttpGet("")]
@@ -50,13 +53,21 @@ public class ReportController : Controller
     }
 
     [HttpPost("")]
-    public IActionResult Index(ContentReport report)
+    public async Task<IActionResult> Index(ContentReport report)
     {
-        // Log the form data for now (out of scope for now)
-        Console.WriteLine($"Report submitted - Email: {report.Email}, Reason: {report.Reason}, Explanation: {report.Explanation}");
-        Console.WriteLine($"Report type: {report.CreatedAt}, ID: {report.FarewellPersonId ?? report.FarewellMessageId}");
+        // Set the CreatedAt timestamp if not already set
+        if (report.CreatedAt == default)
+        {
+            report.CreatedAt = DateTime.UtcNow;
+        }
+        //Console.WriteLine($"New report submitted:[{report.Id}] - {report.FarewellPersonId} - {report.FarewellMessageId} - {report.Reason} - {report.Explanation}");
 
+        // Add the report to the database
+        _context.ContentReports.Add(report);
+        await _context.SaveChangesAsync();
 
-        return RedirectToAction("Success", new { reportId = Guid.NewGuid().ToString() });
+        
+
+        return RedirectToAction("Success", new { reportId = report.Id.ToString() });
     }
 }
