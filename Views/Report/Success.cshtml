@@ -1,0 +1,22 @@
+@{
+    ViewData["Title"] = "Report Success";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card border-success">
+                <div class="card-header bg-success text-white text-center">
+                    <h4>Report Received</h4>
+                </div>
+                <div class="card-body text-center">
+                    <i class="fa-solid fa-check mb-2" style="font-size: 48px;"></i>
+                    <h5 class="card-title">Thank you!</h5>
+                    <p class="card-text mb-4">Your report has been successfully received. We appreciate your feedback and will review it promptly.</p>
+                    <p class="card-text flex">Here are your reference ID: <span class="text-bold">@ViewBag.ReportId</span></p>
+                    <a asp-controller="Home" asp-action="Index" class="btn btn-success mt-3">Return to Home</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

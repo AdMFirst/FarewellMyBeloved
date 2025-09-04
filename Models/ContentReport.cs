@@ -6,8 +6,7 @@ namespace FarewellMyBeloved.Models;
 public class ContentReport
 {
     [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int Id { get; set; }
+    public Guid Id { get; set; } = Guid.NewGuid();
 
     [EmailAddress(ErrorMessage = "Invalid email address")]
     [StringLength(255, ErrorMessage = "Email cannot exceed 255 characters")]

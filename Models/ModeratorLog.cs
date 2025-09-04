@@ -6,7 +6,8 @@ namespace FarewellMyBeloved.Models;
 public class ModeratorLog
 {
     [Key]
-    public Guid Id { get; set; } = Guid.NewGuid();
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public int Id { get; set; }
 
     [Required]
     public string ModeratorName { get; set; } = string.Empty;// who performed the action
@@ -29,7 +30,7 @@ public class ModeratorLog
     public string Details { get; set; } = string.Empty;   // free-text details, optional
 
     // Optional link to a ContentReport if action was related
-    public int? ContentReportId { get; set; }
+    public Guid? ContentReportId { get; set; }
 
     [ForeignKey(nameof(ContentReportId))]
     public ContentReport? ContentReport { get; set; }

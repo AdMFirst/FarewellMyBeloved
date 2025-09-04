@@ -15,8 +15,7 @@ namespace FarewellMyBeloved.Migrations
                 name: "ContentReports",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     FarewellPersonId = table.Column<int>(type: "int", nullable: true),
                     FarewellMessageId = table.Column<int>(type: "int", nullable: true),
@@ -55,14 +54,15 @@ namespace FarewellMyBeloved.Migrations
                 name: "ModeratorLogs",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     ModeratorName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     TargetType = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     TargetId = table.Column<int>(type: "int", nullable: false),
                     Action = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Reason = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     Details = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: false),
-                    ContentReportId = table.Column<int>(type: "int", nullable: true),
+                    ContentReportId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
