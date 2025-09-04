@@ -35,9 +35,14 @@ else
                         <span class="text-muted">No Portrait</span>
                     </div>
                 }
-                <div class="card-body text-center pt-0 "> @* pt-0 to remove top padding as image is pulled up *@
+                <div class="card-body text-center pt-0 position-relative"> @* pt-0 to remove top padding as image is pulled up *@
                     <h1 class="card-title mt-3">@Model.Name</h1>
                     <p class="card-text text-muted fst-italic">@Html.Raw(Model.Description.Replace("\n", "<br>"))</p>
+                </div>
+                <div class="z-index-2 position-absolute top-0 end-0 m-2"> @* Ensure buttons are above other content *@
+                    <a asp-controller="Report" asp-action="Index" asp-route-what="FarewellPerson" asp-route-id="@Model.Id" target="_blank" >
+                        <i class="fa-solid fa-circle-info text-secondary" style="font-size: small; opacity: 0.3"></i>
+                    </a>
                 </div>
             </div>
         </div>
@@ -63,7 +68,15 @@ else
                                                 <small class="text-muted">@message.CreatedAt.ToLocalTime().ToString("g")</small>
                                             </div>
                                             <p class="card-text mb-auto overflow-auto" style="max-height: 200px;">@message.Message</p> @* mb-auto pushes small tag to bottom, mh-100 and overflow-auto for scrolling *@
-                                            <small class="text-muted mt-2">@(message.IsPublic ? "Public" : "Private")</small>
+                                            <div class="d-flex justify-content-between align-items-start">
+                                                <small class="text-muted mt-2">@(message.IsPublic ? "Public" : "Private")</small>
+
+                                                <a class="text-decoration-none" asp-controller="Report" asp-action="Index"
+                                                    asp-route-what="FarewellMessage" asp-route-id="@message.Id" target="_blank">
+                                                    <i class="fa-solid fa-circle-info text-secondary" style="font-size: small; opacity: 0.3"></i>
+                                                </a>
+                                            </div>
+
                                         </div>
                                     </div>
                                 </div>
