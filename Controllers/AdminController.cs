@@ -97,7 +97,7 @@ public class AdminController : Controller
         var totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
         
         var farewellPeople = await _context.FarewellPeople
-            .OrderBy(fp => fp.Name)
+            .OrderByDescending(fp => fp.CreatedAt)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();
@@ -125,7 +125,7 @@ public class AdminController : Controller
 
         var farewellMessages = await _context.FarewellMessages
             .Include(fm => fm.FarewellPerson)
-            .OrderBy(fm => fm.CreatedAt)
+            .OrderByDescending(fm => fm.CreatedAt)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();
@@ -153,7 +153,7 @@ public class AdminController : Controller
         
         var contentReports = await _context.ContentReports
             .Include(cr => cr.ModeratorLogs)
-            .OrderBy(cr => cr.CreatedAt)
+            .OrderByDescending(cr => cr.CreatedAt)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();
