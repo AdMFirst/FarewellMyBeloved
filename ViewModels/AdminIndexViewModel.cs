@@ -4,6 +4,7 @@ public class AdminIndexViewModel
 {
     public ChartDataViewModel FarewellPeopleChartData { get; set; } = new();
     public ChartDataViewModel FarewellMessagesChartData { get; set; } = new();
+    public ChartDataViewModel ContentReportsChartData { get; set; } = new();
 }
 
 public class ChartDataViewModel

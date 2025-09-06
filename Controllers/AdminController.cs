@@ -35,6 +35,10 @@ public class AdminController : Controller
         await GenerateChartDataAsync<FarewellMessage>(viewModel.FarewellMessagesChartData,
             fm => fm.CreatedAt);
         
+        // Generate Content Reports chart data
+        await GenerateChartDataAsync<ContentReport>(viewModel.ContentReportsChartData,
+            cr => cr.CreatedAt);
+        
         return View(viewModel);
     }
     
