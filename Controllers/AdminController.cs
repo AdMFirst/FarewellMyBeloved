@@ -10,7 +10,7 @@ using System.Globalization;
 
 namespace FarewellMyBeloved.Controllers;
 
-[Route("admin")]
+[Route("Admin")]
 public class AdminController : Controller
 {
 
@@ -133,6 +133,58 @@ public class AdminController : Controller
             TotalPages = totalPages,
             TotalItems = totalCount,
             PageSize = pageSize
+        };
+        
+        return View(viewModel);
+    }
+
+    [Authorize(Policy = "AdminsOnly")]
+    [HttpGet("ContentReports")]
+    public async Task<IActionResult> ContentReports(int page = 1)
+    {
+        const int pageSize = 10;
+        
+        var totalCount = await _context.ContentReports.CountAsync();
+        var totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
+        
+        var contentReports = await _context.ContentReports
+            .Include(cr => cr.ModeratorLogs)
+            .OrderBy(cr => cr.CreatedAt)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+        
+        // Load related data for better display
+        var farewellPersonIds = contentReports
+            .Where(cr => cr.FarewellPersonId.HasValue)
+            .Select(cr => cr.FarewellPersonId!.Value)
+            .Distinct()
+            .ToList();
+        
+        var farewellMessageIds = contentReports
+            .Where(cr => cr.FarewellMessageId.HasValue)
+            .Select(cr => cr.FarewellMessageId!.Value)
+            .Distinct()
+            .ToList();
+        
+        var farewellPersons = await _context.FarewellPeople
+            .Where(fp => farewellPersonIds.Contains(fp.Id))
+            .ToListAsync();
+        
+        var farewellMessages = await _context.FarewellMessages
+            .Include(fm => fm.FarewellPerson)
+            .Where(fm => farewellMessageIds.Contains(fm.Id))
+            .ToListAsync();
+        
+        var viewModel = new ContentReportsIndexViewModel
+        {
+            ContentReports = contentReports,
+            PageNumber = page,
+            TotalPages = totalPages,
+            TotalItems = totalCount,
+            PageSize = pageSize,
+            PersonLookup = farewellPersons.ToDictionary(p => p.Id),
+            MessageLookup = farewellMessages.ToDictionary(m => m.Id)
         };
         
         return View(viewModel);
