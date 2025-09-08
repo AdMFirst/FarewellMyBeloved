@@ -71,17 +71,81 @@
                                         }
                                     </td>
                                     <td>
-                                        <button class="btn btn-sm btn-outline-primary" disabled>View</button>
-                                        <button class="btn btn-sm btn-outline-info" disabled>Details</button>
+                                        <button class="btn btn-sm btn-outline-info" onclick="showReportDetails('@report.Id', '@relatedContent', '@(report.Email ?? "N/A")', '@report.Reason', '@report.CreatedAt.ToString("yyyy-MM-dd HH:mm")', '@(report.ResolvedAt.HasValue ? "Resolved" : "Pending")', '@(report.FarewellPersonId.HasValue ? report.FarewellPersonId.ToString() : "N/A")', '@(report.FarewellMessageId.HasValue ? report.FarewellMessageId.ToString() : "N/A")', '@(report.ResolvedAt.HasValue ? report.ResolvedAt.Value.ToString("yyyy-MM-dd HH:mm") : "N/A")')">Details</button>
                                         @if (!report.ResolvedAt.HasValue)
                                         {
-                                            <button class="btn btn-sm btn-outline-success" disabled>Resolve</button>
+                                            if (report.FarewellPersonId.HasValue)
+                                            {
+                                                <a href="@Url.Action("EditFarewellPerson", "Admin", new { id = report.FarewellPersonId })" class="btn btn-sm btn-outline-success">Resolve</a>
+                                            }
+                                            else if (report.FarewellMessageId.HasValue)
+                                            {
+                                                <a href="@Url.Action("EditFarewellMessage", "Admin", new { id = report.FarewellMessageId })" class="btn btn-sm btn-outline-success">Resolve</a>
+                                            }
+                                            else
+                                            {
+                                                <button class="btn btn-sm btn-outline-success" disabled>Resolve</button>
+                                            }
                                         }
                                     </td>
                                 </tr>
-                            }
-                        </tbody>
-                    </table>
+                           }
+                       </tbody>
+                   </table>
+
+                   <!-- Modal -->
+                   <div class="modal fade" id="reportDetailsModal" tabindex="-1" aria-labelledby="reportDetailsModalLabel" aria-hidden="true">
+                       <div class="modal-dialog modal-lg">
+                           <div class="modal-content">
+                               <div class="modal-header bg-primary text-white">
+                                   <h5 class="modal-title" id="reportDetailsModalLabel">Report Details</h5>
+                                   <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                               </div>
+                               <div class="modal-body">
+                                   <div class="row mb-3">
+                                       <div class="col-md-6">
+                                           <p><strong>Report ID:</strong> <span id="reportId"></span></p>
+                                       </div>
+                                       <div class="col-md-6">
+                                           <p><strong>Email:</strong> <span id="email"></span></p>
+                                       </div>
+                                   </div>
+                                   <div class="row mb-3">
+                                       <div class="col-md-6">
+                                           <p><strong>Related Content:</strong> <span id="relatedContent"></span></p>
+                                       </div>
+                                       <div class="col-md-6">
+                                           <p><strong>Reason:</strong> <span id="reason"></span></p>
+                                       </div>
+                                   </div>
+                                   <div class="row mb-3">
+                                       <div class="col-md-6">
+                                           <p><strong>Created At:</strong> <span id="createdAt"></span></p>
+                                       </div>
+                                       <div class="col-md-6">
+                                           <p><strong>Status:</strong> <span id="status"></span></p>
+                                       </div>
+                                   </div>
+                                   <div class="row mb-3">
+                                       <div class="col-md-6">
+                                           <p><strong>Farewell Person ID:</strong> <span id="farewellPersonId"></span></p>
+                                       </div>
+                                       <div class="col-md-6">
+                                           <p><strong>Farewell Message ID:</strong> <span id="farewellMessageId"></span></p>
+                                       </div>
+                                   </div>
+                                   <div class="row">
+                                       <div class="col-md-6">
+                                           <p><strong>Resolved At:</strong> <span id="resolvedAt"></span></p>
+                                       </div>
+                                   </div>
+                               </div>
+                               <div class="modal-footer">
+                                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                               </div>
+                           </div>
+                       </div>
+                   </div>
                 </div>
 
                 <!-- Pagination Controls -->
@@ -116,6 +180,25 @@
                                         <a class="page-link" href="@Url.Action("ContentReports", new { page = i })">@i</a>
                                     </li>
                                 }
+                            }
+
+                            @section Scripts {
+                                <script>
+                                    function showReportDetails(reportId, relatedContent, email, reason, createdAt, status, farewellPersonId, farewellMessageId, resolvedAt) {
+                                        document.getElementById('reportId').innerText = reportId;
+                                        document.getElementById('relatedContent').innerText = relatedContent;
+                                        document.getElementById('email').innerText = email;
+                                        document.getElementById('reason').innerText = reason;
+                                        document.getElementById('createdAt').innerText = createdAt;
+                                        document.getElementById('status').innerText = status;
+                                        document.getElementById('farewellPersonId').innerText = farewellPersonId;
+                                        document.getElementById('farewellMessageId').innerText = farewellMessageId;
+                                        document.getElementById('resolvedAt').innerText = resolvedAt;
+
+                                        var myModal = new bootstrap.Modal(document.getElementById('reportDetailsModal'));
+                                        myModal.show();
+                                    }
+                                </script>
                             }
 
                             @if (Model.PageNumber < Model.TotalPages)
