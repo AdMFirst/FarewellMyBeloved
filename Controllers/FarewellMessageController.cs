@@ -34,6 +34,7 @@ public class FarewellMessageController : Controller
         // Populate ViewBag.FarewellPeople for the dropdown
         var farewellPeople = await _context.FarewellPeople
                                            .OrderBy(p => p.Name)
+                                           .Where(p => p.IsPublic)
                                            .Select(p => new SelectListItem
                                            {
                                                Value = p.Id.ToString(),
