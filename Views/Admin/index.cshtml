@@ -3,7 +3,7 @@
     ViewData["Title"] = "Admin Dashboard";
 }
 
-<div class="container py-5">
+<div class="container py-0">
     <div class="row py-3">
         <div class="col-12 text-center">
             <h1 class="display-4">Admin Dashboard</h1>
@@ -85,32 +85,91 @@
         </div>
     </div>
     <div class="row mt-4">
-        <!-- Bottom Left Column - Future Use -->
+        <!-- Bottom Left Column - Admin Logs -->
         <div class="col-md-6">
             <div class="card h-100">
-                <div class="card-header bg-secondary text-white">
-                    <h5 class="card-title mb-0">Future Features</h5>
+                <div class="card-header bg-info text-white">
+                    <h5 class="card-title mb-0">Admin Logs (Last 50)</h5>
                 </div>
                 <div class="card-body">
-                    <div class="text-center">
-                        <i class="bi bi-gear-fill display-1 text-secondary"></i>
-                        <p class="text-muted mt-3">Additional features will be implemented here in the future.</p>
+                    <div class="log-container" style="max-height: 400px; overflow-y: auto;">
+                        @if (Model.ModeratorLogs.Any())
+                        {
+                            <div class="list-group list-group-flush">
+                                @foreach (var log in Model.ModeratorLogs)
+                                {
+                                    <div class="list-group-item">
+                                        <div class="d-flex justify-content-between align-items-start">
+                                            <div>
+                                                <strong>@log.ModeratorName</strong>
+                                                <span class="badge bg-secondary">@log.Action</span>
+                                                <small class="text-muted d-block">@log.Details</small>
+                                            </div>
+                                            <small class="text-muted">@log.FormattedCreatedAt</small>
+                                        </div>
+                                        <div class="mt-2">
+                                            <small class="text-muted">
+                                                Target: @log.TargetType #@log.TargetId | Reason: @log.Reason
+                                            </small>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="text-center text-muted">
+                                <i class="bi bi-journal-text display-4"></i>
+                                <p>No admin logs found.</p>
+                            </div>
+                        }
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Bottom Right Column - Future Use -->
-
+        <!-- Bottom Right Column - Content Reports -->
         <div class="col-md-6">
             <div class="card h-100">
-                <div class="card-header bg-secondary text-white">
-                    <h5 class="card-title mb-0">Future Features</h5>
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="card-title mb-0">Content Reports (Last 50)</h5>
                 </div>
                 <div class="card-body">
-                    <div class="text-center">
-                        <i class="bi bi-gear-fill display-1 text-secondary"></i>
-                        <p class="text-muted mt-3">Additional features will be implemented here in the future.</p>
+                    <div class="report-container" style="max-height: 400px; overflow-y: auto;">
+                        @if (Model.ContentReports.Any())
+                        {
+                            <div class="list-group list-group-flush">
+                                @foreach (var report in Model.ContentReports)
+                                {
+                                    <div class="list-group-item">
+                                        <div class="d-flex justify-content-between align-items-start">
+                                            <div>
+                                                <strong>@report.Email</strong>
+                                                <span class="badge @(report.ResolvedAt.HasValue ? "bg-success" : "bg-warning")">@report.Status</span>
+                                                <small class="text-muted d-block">Reason: @report.Reason</small>
+                                                @if (!string.IsNullOrEmpty(report.Explanation))
+                                                {
+                                                    <small class="text-muted d-block">Explanation: @report.Explanation</small>
+                                                }
+                                            </div>
+                                            <small class="text-muted">@report.FormattedCreatedAt</small>
+                                        </div>
+                                        <div class="mt-2">
+                                            <small class="text-muted">
+                                                Report ID: @report.Id | Created: @report.FormattedCreatedAt
+                                            </small>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="text-center text-muted">
+                                <i class="bi bi-exclamation-triangle display-4"></i>
+                                <p>No content reports found.</p>
+                            </div>
+                        }
                     </div>
                 </div>
             </div>

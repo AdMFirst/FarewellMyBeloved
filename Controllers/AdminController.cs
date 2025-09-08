@@ -45,6 +45,41 @@ public class AdminController : Controller
         await GenerateChartDataAsync<ContentReport>(viewModel.ContentReportsChartData,
             cr => cr.CreatedAt);
         
+        // Get last 50 moderator logs
+        viewModel.ModeratorLogs = await _context.ModeratorLogs
+            .OrderByDescending(ml => ml.CreatedAt)
+            .Take(50)
+            .Select(ml => new ModeratorLogViewModel
+            {
+                Id = ml.Id,
+                ModeratorName = ml.ModeratorName,
+                TargetType = ml.TargetType,
+                TargetId = ml.TargetId,
+                Action = ml.Action,
+                Reason = ml.Reason,
+                Details = ml.Details,
+                CreatedAt = ml.CreatedAt
+            })
+            .ToListAsync();
+        
+        // Get last 50 content reports
+        viewModel.ContentReports = await _context.ContentReports
+            .Include(cr => cr.ModeratorLogs)
+            .OrderByDescending(cr => cr.CreatedAt)
+            .Take(50)
+            .Select(cr => new ContentReportViewModel
+            {
+                Id = cr.Id,
+                Email = cr.Email,
+                FarewellPersonId = cr.FarewellPersonId,
+                FarewellMessageId = cr.FarewellMessageId,
+                Reason = cr.Reason,
+                Explanation = cr.Explanation,
+                CreatedAt = cr.CreatedAt,
+                ResolvedAt = cr.ResolvedAt
+            })
+            .ToListAsync();
+        
         return View(viewModel);
     }
     
