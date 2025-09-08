@@ -283,6 +283,33 @@ public class AdminController : Controller
         return View(viewModel);
     }
 
+    [Authorize(Policy = "AdminsOnly")]
+    [HttpGet("AdminLogs")]
+    public async Task<IActionResult> AdminLogs(int page = 1)
+    {
+        const int pageSize = 250;
+        
+        var totalCount = await _context.ModeratorLogs.CountAsync();
+        var totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
+        
+        var logs = await _context.ModeratorLogs
+            .OrderByDescending(ml => ml.CreatedAt)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+        
+        var viewModel = new AdminLogsIndexViewModel
+        {
+            Logs = logs,
+            PageNumber = page,
+            TotalPages = totalPages,
+            TotalItems = totalCount,
+            PageSize = pageSize
+        };
+        
+        return View(viewModel);
+    }
+
 
     [HttpGet("login")]
     [AllowAnonymous] // must allow anyone
