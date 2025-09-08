@@ -17,10 +17,13 @@ public class AdminController : Controller
 
     private readonly ApplicationDbContext _context;
     private readonly IS3Service _s3Service;
+    private readonly IConfiguration _configuration;
 
-    public AdminController(ApplicationDbContext context, IS3Service s3Service)
+
+    public AdminController(ApplicationDbContext context, IS3Service s3Service, IConfiguration configuration)
     {
         _context = context;
+        _configuration = configuration;
         _s3Service = s3Service;
     }
 
@@ -97,15 +100,45 @@ public class AdminController : Controller
 
         // Remove the endpoint and bucket name to get the key
         // URL format: {endpoint}/{bucket}/{key}
-        var parts = url.Split('/');
-        if (parts.Length >= 3)
+        var endpoint = _configuration.GetSection("S3")["Endpoint"];
+        var bucketName = _configuration.GetSection("S3")["Bucket"];
+
+        if (url.StartsWith($"{endpoint}/{bucketName}/"))
         {
-            // Join all parts after the bucket name
-            var keyParts = parts.Skip(2).ToArray();
-            return string.Join("/", keyParts);
+            var key = url.Substring($"{endpoint}/{bucketName}/".Length);
+            return key;
         }
 
         return url;
+    }
+
+    private async Task<string> makePreviewURL(string? url)
+    {
+        Console.WriteLine($"makePreviewURL called with url: {url}");
+        if (!string.IsNullOrEmpty(url))
+        {
+            if (!url.StartsWith("http"))
+            {
+                return string.Empty;
+            }
+            else
+            {
+                // Extract the key from the full URL
+                var backgroundKey = ExtractS3KeyFromUrl(url);
+
+                // if nothing changed, then its not an s3 url
+                if (backgroundKey == url)
+                {
+                    return url;
+
+                }
+                else
+                {
+                    return await _s3Service.GetSignedUrlAsync(backgroundKey);
+                }
+            }
+        }
+        return string.Empty;
     }
 
     [Authorize(Policy = "AdminsOnly")]
@@ -274,36 +307,9 @@ public class AdminController : Controller
             RelatedMessages = farewellPerson.Messages.ToList()
         };
 
-        // Generate signed URLs for existing images
-        if (!string.IsNullOrEmpty(farewellPerson.PortraitUrl))
-        {
-            try
-            {
-                // Extract the key from the full URL
-                var portraitKey = ExtractS3KeyFromUrl(farewellPerson.PortraitUrl);
-                viewModel.PortraitImageUrl = await _s3Service.GetSignedUrlAsync(portraitKey);
-            }
-            catch
-            {
-                // If signed URL generation fails, use the original URL
-                viewModel.PortraitImageUrl = farewellPerson.PortraitUrl;
-            }
-        }
-
-        if (!string.IsNullOrEmpty(farewellPerson.BackgroundUrl))
-        {
-            try
-            {
-                // Extract the key from the full URL
-                var backgroundKey = ExtractS3KeyFromUrl(farewellPerson.BackgroundUrl);
-                viewModel.BackgroundImageUrl = await _s3Service.GetSignedUrlAsync(backgroundKey);
-            }
-            catch
-            {
-                // If signed URL generation fails, use the original URL
-                viewModel.BackgroundImageUrl = farewellPerson.BackgroundUrl;
-            }
-        }
+        // Generate Preview image URLs
+        viewModel.PortraitImageUrl = await makePreviewURL(farewellPerson.PortraitUrl);
+        viewModel.BackgroundImageUrl = await makePreviewURL(farewellPerson.BackgroundUrl); 
 
         return View(viewModel);
     }
