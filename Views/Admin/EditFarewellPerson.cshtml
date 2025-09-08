@@ -77,7 +77,7 @@
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
                                         <label asp-for="FarewellPerson.PortraitUrl" class="form-label"></label>
-                                        <input asp-for="FarewellPerson.PortraitUrl" class="form-control" />
+                                        <input asp-for="FarewellPerson.PortraitUrl" class="form-control" placeholder="use &ldquo;DELETED BY ADMIN&ldquo; to remove img"/>
                                         <span asp-validation-for="FarewellPerson.PortraitUrl" class="text-danger"></span>
                                         
                                         @if ((!string.IsNullOrEmpty(Model.PortraitImageUrl)) )
