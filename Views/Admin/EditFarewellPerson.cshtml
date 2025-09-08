@@ -80,7 +80,7 @@
                                         <input asp-for="FarewellPerson.PortraitUrl" class="form-control" />
                                         <span asp-validation-for="FarewellPerson.PortraitUrl" class="text-danger"></span>
                                         
-                                        @if (!string.IsNullOrEmpty(Model.PortraitImageUrl))
+                                        @if ((!string.IsNullOrEmpty(Model.PortraitImageUrl)) )
                                         {
                                             <div class="mt-2">
                                                 <label class="form-label small text-muted w-100">Preview:</label>
@@ -95,10 +95,10 @@
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label asp-for="FarewellPerson.BackgroundUrl" class="form-label"></label>
-                                        <input asp-for="FarewellPerson.BackgroundUrl" class="form-control" />
+                                        <input asp-for="FarewellPerson.BackgroundUrl" class="form-control" placeholder="use &ldquo;DELETED BY ADMIN&ldquo; to remove img" />
                                         <span asp-validation-for="FarewellPerson.BackgroundUrl" class="text-danger"></span>
-                                        
-                                        @if (!string.IsNullOrEmpty(Model.BackgroundImageUrl))
+
+                                        @if (!string.IsNullOrEmpty(Model.BackgroundImageUrl) )
                                         {
                                             <div class="mt-2">
                                                 <label class="form-label small text-muted">Preview:</label>
