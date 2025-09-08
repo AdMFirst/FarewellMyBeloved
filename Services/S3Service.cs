@@ -91,5 +91,33 @@ namespace FarewellMyBeloved.Services
 
             return await _s3Client.GetPreSignedURLAsync(request);
         }
+
+        public async Task DeleteFileAsync(string key)
+        {
+            if (string.IsNullOrEmpty(key))
+                return;
+
+            var bucketName = _configuration.GetSection("S3")["Bucket"];
+            
+            if (string.IsNullOrEmpty(bucketName))
+                throw new InvalidOperationException("S3 bucket configuration is missing.");
+
+            try
+            {
+                var deleteRequest = new DeleteObjectRequest
+                {
+                    BucketName = bucketName,
+                    Key = key
+                };
+
+                await _s3Client.DeleteObjectAsync(deleteRequest);
+            }
+            catch (Amazon.S3.AmazonS3Exception ex)
+            {
+                // Log the error but don't throw - we don't want to fail the entire operation
+                // if S3 deletion fails for some reason
+                Console.WriteLine($"Failed to delete S3 object {key}: {ex.Message}");
+            }
+        }
     }
 }

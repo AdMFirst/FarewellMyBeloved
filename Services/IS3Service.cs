@@ -13,5 +13,6 @@ namespace FarewellMyBeloved.Services
     {
         Task<string> UploadFileAsync(IFormFile file, S3UploadType type);
         Task<string> GetSignedUrlAsync(string key);
+        Task DeleteFileAsync(string key);
     }
 }
