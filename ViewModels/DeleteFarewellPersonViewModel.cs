@@ -11,7 +11,7 @@ public class DeleteFarewellPersonViewModel
     public string Description { get; set; } = string.Empty;
     public string PortraitUrl { get; set; } = string.Empty;
     public string BackgroundUrl { get; set; } = string.Empty;
-    public int TotalMessages { get; set; }
+    public List<FarewellMessage>? FarewellMessages { get; set; } = new();
     public List<ContentReport>? RelatedContentReports { get; set; } = new();
 
     public Guid? SelectedContentReportId { get; set; }

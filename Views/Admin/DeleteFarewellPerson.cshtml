@@ -1,6 +1,181 @@
 @model FarewellMyBeloved.ViewModels.DeleteFarewellPersonViewModel
 @{
     ViewData["Title"] = $"Delete {Model.Name} - Admin";
+
+    string Truncate(string s, int max = 50) =>
+        string.IsNullOrEmpty(s) ? s : (s.Length <= max ? s : s.Substring(0, max) + "...");
 }
 
-// TODO
+<div class="container py-5">
+    <div class="row py-3">
+        <div class="col-lg-12">
+            <h2 class="mb-4 text-danger">Delete Farewell Person</h2>
+            
+            <form asp-action="DeleteFarewellPerson" method="post">
+                @Html.AntiForgeryToken()
+                
+                <input type="hidden" asp-for="SelectedContentReportId" />
+                
+                <!-- Combined Warning, Impact, and Important Notes Section -->
+                <div class="card mb-4 border-danger">
+                    <div class="card-header bg-danger text-white">
+                        <h5 class="mb-0">Warning: This action cannot be undone!</h5>
+                    </div>
+                    <div class="card-body row">
+                        <div class="mb-0 col-md-6">
+                            <p class="">You are about to permanently delete the farewell person "<strong>@Model.Name</strong>" and all associated content.</p>
+                            <p class="mb-0"><strong>@(Model.FarewellMessages?.Count ?? 0)</strong> farewell message(s) will be deleted automatically. </p>
+                            <p class=""><strong>@(Model.RelatedContentReports?.Count ?? 0)</strong> content report(s) will remain but will no longer be linked to this person.</p>
+                        </div>
+                        <div class="mb-0 col-md-6">
+                            <p class="mb-0">All associated farewell messages will be deleted automatically</p>
+                            <p class="mb-0">Images from S3 storage will be permanently removed</p>
+                            <p class="mb-0">Content reports will remain but will be unlinked</p>
+                            <p class="mb-0">This action will be logged in the moderator logs</p>
+                            <p>This action cannot be undone</p>
+                        </div>
+                        
+                    </div>
+                </div>
+                
+                <!-- Combined Person Information and Summary Section -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">Person Information</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label h6">Name</label>
+                                <p class="form-control-plaintext">@Model.Name</p>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label h6">Slug</label>
+                                <p class="form-control-plaintext">@Model.Slug</p>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label h6">Description</label>
+                            <p class="form-control-">@Model.Description</p>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label h6">Portrait Image</label>
+                                @if (!string.IsNullOrEmpty(Model.PortraitUrl) && Uri.IsWellFormedUriString(Model.PortraitUrl, UriKind.Absolute))
+                                {
+                                    <div class="mb-2">
+                                        <img src="@Model.PortraitUrl" alt="Portrait Image" class="img-fluid rounded" style="max-height: 200px;" />
+                                    </div>
+                                }
+                                else {
+                                    <p class="form-control-plaintext">@Model.PortraitUrl</p>
+                                }
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label h6">Background Image</label>
+                                @if (!string.IsNullOrEmpty(Model.BackgroundUrl) && Uri.IsWellFormedUriString(Model.BackgroundUrl, UriKind.Absolute))
+                                {
+                                    <div class="mb-2">
+                                        <img src="@Model.BackgroundUrl" alt="Background Image" class="img-fluid rounded" style="max-height: 200px;" />
+                                    </div>
+                                }
+                                else {
+                                    <p class="form-control-plaintext">@Model.BackgroundUrl</p>
+                                }
+                            </div>
+                        </div>
+                        
+                        <hr>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Total Messages</label>
+                                <p class="form-control-plaintext">@(Model.FarewellMessages?.Count ?? 0)</p>
+                                @if (Model.FarewellMessages?.Any() == true)
+                                {
+                                    <label class="form-label">Recent Messages:</label>
+                                    <div class="mb-3 overflow-auto" style="max-height: 400px;">
+                                        @foreach (var message in Model.FarewellMessages.Take(10))
+                                        {
+                                            <div class="border-bottom pb-2 mb-2">
+                                                <small><strong>@Truncate(message.AuthorName ?? "Anonymous", 20)</strong> - @Truncate(message.Message)</small><br>
+                                                <small class="text-muted">@message.CreatedAt.ToString("yyyy-MM-dd HH:mm")</small>
+                                            </div>
+                                        }
+                                    </div>
+                                }
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Content Reports</label>
+                                <p class="form-control-plaintext mb-3">@(Model.RelatedContentReports?.Count ?? 0)</p>
+                                @if (Model.RelatedContentReports?.Any() == true)
+                                {
+                                    <label class="form-label">Recent Reports:</label>
+                                    <div class="mb-3 overflow-auto" style="max-height: 400px;">
+                                        @foreach (var report in Model.RelatedContentReports.Take(10))
+                                        {
+                                            <div class="border-bottom pb-2 mb-2">
+                                                <small><strong>@report.Reason</strong> - @report.Email</small><br>
+                                                <small class="text-muted">@report.CreatedAt.ToString("yyyy-MM-dd HH:mm")</small>
+                                            </div>
+                                        }
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        
+                        
+                    </div>
+                </div>
+                
+                <!-- Admin Action Log Section -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">Admin Action Log</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label asp-for="ActionReason" class="form-label">Reason for deletion*</label>
+                            <input asp-for="ActionReason" class="form-control" placeholder="e.g., content_policy_violation, user_request, outdated_content" required />
+                            <span asp-validation-for="ActionReason" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="ActionDetails" class="form-label">Details *</label>
+                            <textarea asp-for="ActionDetails" class="form-control" rows="3" placeholder="Provide additional details about why this person is being deleted..." required></textarea>
+                            <span asp-validation-for="ActionDetails" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label asp-for="SelectedContentReportId" class="form-label">Link to Content Report (Optional)</label>
+                            <select asp-for="SelectedContentReportId" class="form-select">
+                                <option value="">No content report linked</option>
+                                @foreach (var report in Model.RelatedContentReports)
+                                {
+                                    <option value="@report.Id">@report.Reason - @report.Email (@report.CreatedAt.ToString("yyyy-MM-dd HH:mm"))</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-4">
+                    <small class="text-muted px-2">* Required</small>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <a href="@Url.Action("FarewellPeople")" class="btn btn-secondary">Cancel</a>
+                    <div>
+                        <button type="submit" class="btn btn-danger">Delete Farewell Person</button>
+                    </div>
+                </div>
+                
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

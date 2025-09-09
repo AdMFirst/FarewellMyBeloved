@@ -128,10 +128,24 @@ public class AdminController : Controller
         return CultureInfo.InvariantCulture.Calendar.GetWeekOfYear(date, CalendarWeekRule.FirstDay, DayOfWeek.Monday);
     }
 
+    /// <summary>
+    /// Extracts the object key from a full S3 URL.
+    /// </summary>
+    /// <param name="url">
+    /// The full S3 URL. Can be <c>null</c> or empty.  
+    /// Expected format: {endpoint}/{bucket}/{key}
+    /// </param>
+    /// <returns>
+    /// - If <paramref name="url"/> is <c>null</c> or empty → <c>string.Empty</c>  
+    /// - If <paramref name="url"/> starts with the configured endpoint and bucket → the extracted key  
+    /// - Otherwise, returns the original <paramref name="url"/> (meaning it's not an S3 URL).
+    /// </returns>
     private string ExtractS3KeyFromUrl(string url)
     {
         if (string.IsNullOrEmpty(url))
+        {
             return string.Empty;
+        }
 
         // Remove the endpoint and bucket name to get the key
         // URL format: {endpoint}/{bucket}/{key}
@@ -147,34 +161,72 @@ public class AdminController : Controller
         return url;
     }
 
-    private async Task<string> makePreviewURL(string? url)
+    /// <summary>
+    /// Validates if the URL points to the configured S3 bucket.  
+    /// If yes, returns the object key; otherwise returns <c>null</c>.
+    /// </summary>
+    /// <param name="url">The input URL (nullable).</param>
+    /// <returns>
+    /// - Extracted key if URL belongs to S3 bucket  
+    /// - <c>null</c> if the URL is null, empty, non-http, or not an S3 URL
+    /// </returns>
+    private string? ExtractS3KeyIfValid(string? url)
     {
-        // For debug Console.WriteLine($"makePreviewURL called with url: {url}");
-        if (!string.IsNullOrEmpty(url))
-        {
-            if (!url.StartsWith("http"))
-            {
-                return string.Empty;
-            }
-            else
-            {
-                // Extract the key from the full URL
-                var backgroundKey = ExtractS3KeyFromUrl(url);
+        if (string.IsNullOrEmpty(url))
+            return null;
 
-                // if nothing changed, then its not an s3 url
-                if (backgroundKey == url)
-                {
-                    return url;
+        if (!url.StartsWith("http"))
+            return null;
 
-                }
-                else
-                {
-                    return await _s3Service.GetSignedUrlAsync(backgroundKey);
-                }
-            }
-        }
-        return string.Empty;
+        var key = ExtractS3KeyFromUrl(url);
+
+        // if nothing changed, it's not an S3 URL
+        return key == url ? null : key;
     }
+
+    /// <summary>
+    /// Generates a signed preview URL if the input is a valid S3 URL.  
+    /// Returns the original URL for external links, or empty string for invalid/non-URL input.
+    /// </summary>
+    /// <param name="url">The input URL (nullable).</param>
+    /// <returns>
+    /// - Signed S3 URL if input points to S3  
+    /// - Original URL if input is external but valid (http)  
+    /// - <c>string.Empty</c> if input is null, empty, or non-URL string
+    /// </returns>
+    private async Task<string> MakePreviewUrlAsync(string? url)
+    {
+        if (string.IsNullOrEmpty(url))
+            return string.Empty;
+
+        var key = ExtractS3KeyIfValid(url);
+        if (key == null)
+        {
+            // Not S3: if it's an external http URL, return as-is
+            // otherwise (non-URL string) return empty
+            return url.StartsWith("http") ? url : string.Empty;
+        }
+
+        return await _s3Service.GetSignedUrlAsync(key);
+    }
+
+    /// <summary>
+    /// Detects if the input URL is an S3 object. If yes, deletes the corresponding file.  
+    /// Otherwise does nothing.
+    /// </summary>
+    /// <param name="url">The input URL (nullable).</param>
+    private async Task DetectAndDeleteS3ImageAsync(string? url)
+    {
+        if (string.IsNullOrEmpty(url))
+            return;
+
+        var key = ExtractS3KeyIfValid(url);
+        if (key == null)
+            return;
+
+        await _s3Service.DeleteFileAsync(key);
+    }
+
 
     [Authorize(Policy = "AdminsOnly")]
     [HttpGet("FarewellPeople")]
@@ -370,8 +422,8 @@ public class AdminController : Controller
         };
 
         // Generate Preview image URLs
-        viewModel.PortraitImageUrl = await makePreviewURL(farewellPerson.PortraitUrl);
-        viewModel.BackgroundImageUrl = await makePreviewURL(farewellPerson.BackgroundUrl);
+        viewModel.PortraitImageUrl = await MakePreviewUrlAsync(farewellPerson.PortraitUrl);
+        viewModel.BackgroundImageUrl = await MakePreviewUrlAsync(farewellPerson.BackgroundUrl);
 
         return View(viewModel);
     }
@@ -497,8 +549,32 @@ public class AdminController : Controller
     [HttpGet("FarewellPeople/Delete/{id}")]
     public async Task<IActionResult> DeleteFarewellPerson(int id)
     {
-        // TODO
-        var viewModel = new DeleteFarewellPersonViewModel();
+        var farewellPerson = await _context.FarewellPeople
+            .Include(p => p.Messages)
+            .FirstOrDefaultAsync(fp => fp.Id == id);
+
+        if (farewellPerson == null)
+        {
+            return NotFound();
+        }
+
+        // Get related content reports
+        var relatedReports = await _context.ContentReports
+            .Where(cr => cr.FarewellPersonId == id)
+            .OrderByDescending(cr => cr.CreatedAt)
+            .ToListAsync();
+
+        var viewModel = new DeleteFarewellPersonViewModel
+        {
+            Name = farewellPerson.Name,
+            Slug = farewellPerson.Slug,
+            Description = farewellPerson.Description,
+            PortraitUrl = await MakePreviewUrlAsync(farewellPerson.PortraitUrl),
+            BackgroundUrl = await MakePreviewUrlAsync(farewellPerson.BackgroundUrl),
+            FarewellMessages = farewellPerson.Messages.ToList(),
+            RelatedContentReports = relatedReports
+        };
+
         return View(viewModel);
     }
 
@@ -512,7 +588,58 @@ public class AdminController : Controller
             return View(viewModel);
         }
 
-        // TODO 
-        return RedirectToAction("FarewellPeople");
+        var farewellPerson = await _context.FarewellPeople
+            .FirstOrDefaultAsync(fp => fp.Id == id);
+
+        if (farewellPerson == null)
+        {
+            return NotFound();
+        }
+
+        var moderatorName = User.Identity?.Name ?? "Unknown Admin";
+
+        try
+        {
+            // Delete old images from S3 if they exist
+            await DetectAndDeleteS3ImageAsync(farewellPerson.PortraitUrl);
+            await DetectAndDeleteS3ImageAsync(farewellPerson.BackgroundUrl);
+
+            // Remove the farewell person
+            _context.FarewellPeople.Remove(farewellPerson);
+
+            // Create moderator log for deletion
+            var moderatorLog = new ModeratorLog
+            {
+                ModeratorName = moderatorName,
+                TargetType = "FarewellPerson",
+                TargetId = farewellPerson.Id,
+                Action = "delete",
+                Reason = viewModel.ActionReason ?? "admin_delete",
+                Details = viewModel.ActionDetails ?? $"Farewell person '{farewellPerson.Name}' deleted by admin",
+                ContentReportId = viewModel.SelectedContentReportId
+            };
+
+            _context.ModeratorLogs.Add(moderatorLog);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("FarewellPeople");
+        }
+        catch (Exception ex)
+        {
+            // Log the error
+            Console.WriteLine($"Error deleting farewell person: {ex.Message}");
+            
+            // Re-populate the view model for error display
+            var relatedReports = await _context.ContentReports
+                .Where(cr => cr.FarewellPersonId == id)
+                .OrderByDescending(cr => cr.CreatedAt)
+                .ToListAsync();
+
+            viewModel.RelatedContentReports = relatedReports;
+            viewModel.FarewellMessages = farewellPerson.Messages.ToList();
+
+            ModelState.AddModelError("", "An error occurred while deleting the farewell person. Please try again.");
+            return View(viewModel);
+        }
     }
 }
