@@ -42,8 +42,9 @@
                                         </span>
                                     </td>
                                     <td>
-                                        <a href="/@person.Slug" class="btn btn-sm btn-outline-primary" target="_blank">View</a>
-                                        <a href="/Admin/FarewellPeople/@person.Id" class="btn btn-sm btn-outline-secondary">Edit</a>
+                                        <a asp-controller="Home" asp-action="Slug" asp-route-slug="@person.Slug" class="btn btn-sm btn-outline-primary" target="_blank">View</a>
+                                        <a asp-controller="Admin" asp-action="EditFarewellPerson" asp-route-id="@person.Id" class="btn btn-sm btn-outline-secondary">Edit</a>
+                                        <a asp-controller="Admin" asp-action="DeleteFarewellPerson" asp-route-id="@person.Id" class="btn btn-sm btn-outline-danger">Delete</a>
                                     </td>
                                 </tr>
                             }

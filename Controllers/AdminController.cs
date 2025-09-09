@@ -32,19 +32,19 @@ public class AdminController : Controller
     public async Task<IActionResult> Index()
     {
         var viewModel = new AdminIndexViewModel();
-        
+
         // Generate Farewell People chart data
         await GenerateChartDataAsync<FarewellPerson>(viewModel.FarewellPeopleChartData,
             fp => fp.CreatedAt);
-        
+
         // Generate Farewell Messages chart data
         await GenerateChartDataAsync<FarewellMessage>(viewModel.FarewellMessagesChartData,
             fm => fm.CreatedAt);
-        
+
         // Generate Content Reports chart data
         await GenerateChartDataAsync<ContentReport>(viewModel.ContentReportsChartData,
             cr => cr.CreatedAt);
-        
+
         // Get last 50 moderator logs
         viewModel.ModeratorLogs = await _context.ModeratorLogs
             .OrderByDescending(ml => ml.CreatedAt)
@@ -61,7 +61,7 @@ public class AdminController : Controller
                 CreatedAt = ml.CreatedAt
             })
             .ToListAsync();
-        
+
         // Get last 50 content reports
         viewModel.ContentReports = await _context.ContentReports
             .Include(cr => cr.ModeratorLogs)
@@ -79,50 +79,50 @@ public class AdminController : Controller
                 ResolvedAt = cr.ResolvedAt
             })
             .ToListAsync();
-        
+
         return View(viewModel);
     }
-    
+
     private async Task GenerateChartDataAsync<T>(ChartDataViewModel chartData,
         Func<T, DateTime> dateSelector) where T : class
     {
         var now = DateTime.Now;
         var timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("Asia/Jakarta");
         var nowJakarta = TimeZoneInfo.ConvertTimeFromUtc(now.ToUniversalTime(), timeZoneInfo);
-        
+
         // Get all data and filter client-side
         var allData = await _context.Set<T>().ToListAsync();
-        
+
         // Last 7 days data
         for (int i = 6; i >= 0; i--)
         {
             var date = nowJakarta.AddDays(-i);
             var startOfDay = TimeZoneInfo.ConvertTimeToUtc(date.Date, timeZoneInfo);
             var endOfDay = startOfDay.AddDays(1);
-            
+
             var count = allData.Count(e => dateSelector(e) >= startOfDay && dateSelector(e) < endOfDay);
-                
+
             chartData.Last7DaysLabels.Add(date.ToString("dd/MM"));
             chartData.Last7DaysData.Add(count);
         }
-        
+
         // Last 4 weeks data
         for (int i = 3; i >= 0; i--)
         {
             var weekStart = nowJakarta.AddDays(-(i * 7 + 6));
             var weekEnd = weekStart.AddDays(7);
-            
+
             var startOfWeek = TimeZoneInfo.ConvertTimeToUtc(weekStart.Date, timeZoneInfo);
             var endOfWeek = TimeZoneInfo.ConvertTimeToUtc(weekEnd.Date, timeZoneInfo);
-            
+
             var count = allData.Count(e => dateSelector(e) >= startOfWeek && dateSelector(e) < endOfWeek);
-                
+
             var weekNumber = GetWeekNumber(weekStart);
             chartData.Last4WeeksLabels.Add($"Week {weekNumber}");
             chartData.Last4WeeksData.Add(count);
         }
     }
-    
+
     private int GetWeekNumber(DateTime date)
     {
         return CultureInfo.InvariantCulture.Calendar.GetWeekOfYear(date, CalendarWeekRule.FirstDay, DayOfWeek.Monday);
@@ -181,16 +181,16 @@ public class AdminController : Controller
     public async Task<IActionResult> FarewellPeople(int page = 1)
     {
         const int pageSize = 10;
-        
+
         var totalCount = await _context.FarewellPeople.CountAsync();
         var totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
-        
+
         var farewellPeople = await _context.FarewellPeople
             .OrderByDescending(fp => fp.CreatedAt)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();
-        
+
         var viewModel = new FarewellPeopleIndexViewModel
         {
             FarewellPeople = farewellPeople,
@@ -199,7 +199,7 @@ public class AdminController : Controller
             TotalItems = totalCount,
             PageSize = pageSize
         };
-        
+
         return View(viewModel);
     }
 
@@ -227,7 +227,7 @@ public class AdminController : Controller
             TotalItems = totalCount,
             PageSize = pageSize
         };
-        
+
         return View(viewModel);
     }
 
@@ -236,39 +236,39 @@ public class AdminController : Controller
     public async Task<IActionResult> ContentReports(int page = 1)
     {
         const int pageSize = 10;
-        
+
         var totalCount = await _context.ContentReports.CountAsync();
         var totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
-        
+
         var contentReports = await _context.ContentReports
             .Include(cr => cr.ModeratorLogs)
             .OrderByDescending(cr => cr.CreatedAt)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();
-        
+
         // Load related data for better display
         var farewellPersonIds = contentReports
             .Where(cr => cr.FarewellPersonId.HasValue)
             .Select(cr => cr.FarewellPersonId!.Value)
             .Distinct()
             .ToList();
-        
+
         var farewellMessageIds = contentReports
             .Where(cr => cr.FarewellMessageId.HasValue)
             .Select(cr => cr.FarewellMessageId!.Value)
             .Distinct()
             .ToList();
-        
+
         var farewellPersons = await _context.FarewellPeople
             .Where(fp => farewellPersonIds.Contains(fp.Id))
             .ToListAsync();
-        
+
         var farewellMessages = await _context.FarewellMessages
             .Include(fm => fm.FarewellPerson)
             .Where(fm => farewellMessageIds.Contains(fm.Id))
             .ToListAsync();
-        
+
         var viewModel = new ContentReportsIndexViewModel
         {
             ContentReports = contentReports,
@@ -279,7 +279,7 @@ public class AdminController : Controller
             PersonLookup = farewellPersons.ToDictionary(p => p.Id),
             MessageLookup = farewellMessages.ToDictionary(m => m.Id)
         };
-        
+
         return View(viewModel);
     }
 
@@ -288,16 +288,16 @@ public class AdminController : Controller
     public async Task<IActionResult> AdminLogs(int page = 1)
     {
         const int pageSize = 250;
-        
+
         var totalCount = await _context.ModeratorLogs.CountAsync();
         var totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
-        
+
         var logs = await _context.ModeratorLogs
             .OrderByDescending(ml => ml.CreatedAt)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();
-        
+
         var viewModel = new AdminLogsIndexViewModel
         {
             Logs = logs,
@@ -306,7 +306,7 @@ public class AdminController : Controller
             TotalItems = totalCount,
             PageSize = pageSize
         };
-        
+
         return View(viewModel);
     }
 
@@ -331,13 +331,13 @@ public class AdminController : Controller
     }
 
     [Authorize(Policy = "AdminsOnly")]
-    [HttpGet("FarewellPeople/{id}")]
+    [HttpGet("FarewellPeople/Edit/{id}")]
     public async Task<IActionResult> EditFarewellPerson(int id)
     {
         var farewellPerson = await _context.FarewellPeople
             .Include(fp => fp.Messages)
             .FirstOrDefaultAsync(fp => fp.Id == id);
-        
+
         if (farewellPerson == null)
         {
             return NotFound();
@@ -371,13 +371,13 @@ public class AdminController : Controller
 
         // Generate Preview image URLs
         viewModel.PortraitImageUrl = await makePreviewURL(farewellPerson.PortraitUrl);
-        viewModel.BackgroundImageUrl = await makePreviewURL(farewellPerson.BackgroundUrl); 
+        viewModel.BackgroundImageUrl = await makePreviewURL(farewellPerson.BackgroundUrl);
 
         return View(viewModel);
     }
 
     [Authorize(Policy = "AdminsOnly")]
-    [HttpPost("FarewellPeople/{id}")]
+    [HttpPost("FarewellPeople/Edit/{id}")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> EditFarewellPerson(int id, AdminEditFarewellPersonViewModel viewModel)
     {
@@ -389,7 +389,7 @@ public class AdminController : Controller
         var farewellPerson = await _context.FarewellPeople
             .Include(fp => fp.Messages)
             .FirstOrDefaultAsync(fp => fp.Id == id);
-        
+
         if (farewellPerson == null)
         {
             return NotFound();
@@ -423,7 +423,7 @@ public class AdminController : Controller
 
         // Edit functionality with logging
         var moderatorName = User.Identity?.Name ?? "Unknown Admin";
-        
+
         // Check if anything actually changed
         var hasChanges = farewellPerson.Name != viewModel.FarewellPerson.Name ||
                            farewellPerson.Slug != viewModel.FarewellPerson.Slug ||
@@ -444,11 +444,11 @@ public class AdminController : Controller
                     await _s3Service.DeleteFileAsync(oldPortraitKey);
                 }
                 catch (Exception ex)
-                    {
-                        // Log error but continue with the operation
-                        Console.WriteLine($"Failed to delete old portrait image: {ex.Message}");
-                    }
+                {
+                    // Log error but continue with the operation
+                    Console.WriteLine($"Failed to delete old portrait image: {ex.Message}");
                 }
+            }
 
             if (farewellPerson.BackgroundUrl != viewModel.FarewellPerson.BackgroundUrl && !string.IsNullOrEmpty(farewellPerson.BackgroundUrl))
             {
@@ -484,11 +484,35 @@ public class AdminController : Controller
                 Details = viewModel.FarewellPerson.ActionDetails ?? $"Farewell person '{farewellPerson.Name}' updated by admin",
                 ContentReportId = viewModel.FarewellPerson.SelectedContentReportId
             };
-            
+
             _context.ModeratorLogs.Add(moderatorLog);
             await _context.SaveChangesAsync();
         }
 
+        return RedirectToAction("FarewellPeople");
+    }
+
+
+    [Authorize(Policy = "AdminsOnly")]
+    [HttpGet("FarewellPeople/Delete/{id}")]
+    public async Task<IActionResult> DeleteFarewellPerson(int id)
+    {
+        // TODO
+        var viewModel = new DeleteFarewellPersonViewModel();
+        return View(viewModel);
+    }
+
+    [Authorize(Policy = "AdminsOnly")]
+    [HttpPost("FarewellPeople/Delete/{id}")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteFarewellPerson(int id, DeleteFarewellPersonViewModel viewModel)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(viewModel);
+        }
+
+        // TODO 
         return RedirectToAction("FarewellPeople");
     }
 }
