@@ -133,24 +133,15 @@
                             </div>
                         </div>
                         
-                        <div class="card mb-4">
+                        <div class="card mb-0">
                             <div class="card-header">
                                 <h5 class="mb-0">Admin Action Log</h5>
                             </div>
                             <div class="card-body">
-                                <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <label asp-for="FarewellPerson.Action" class="form-label">Action Type</label>
-                                        <select asp-for="FarewellPerson.Action" class="form-select">
-                                            <option value="edit">Edit</option>
-                                            <option value="delete">Delete</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label asp-for="FarewellPerson.ActionReason" class="form-label">Reason *</label>
-                                        <input asp-for="FarewellPerson.ActionReason" class="form-control" placeholder="e.g., content_update, policy_violation" required />
-                                        <span asp-validation-for="FarewellPerson.ActionReason" class="text-danger"></span>
-                                    </div>
+                                <div class="mb-3">
+                                    <label asp-for="FarewellPerson.ActionReason" class="form-label">Reason for edit*</label>
+                                    <input asp-for="FarewellPerson.ActionReason" class="form-control" placeholder="e.g., content_update, policy_violation" required />
+                                    <span asp-validation-for="FarewellPerson.ActionReason" class="text-danger"></span>
                                 </div>
                                 <div class="mb-3">
                                     <label asp-for="FarewellPerson.ActionDetails" class="form-label">Details *</label>
@@ -160,13 +151,17 @@
                             </div>
                         </div>
                         
+                        <div class="mb-4">
+                            <small class="text-muted px-2">* Required</small>
+                        </div>
+
                         <div class="d-flex justify-content-between">
                             <a href="@Url.Action("FarewellPeople")" class="btn btn-secondary">Cancel</a>
                             <div>
                                 <button type="submit" name="saveButton" value="save" class="btn btn-primary">Save Changes</button>
-                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete Person</button>
                             </div>
                         </div>
+                        
                     </form>
                 </div>
                 
@@ -223,69 +218,8 @@
     </div>
 </div>
 
-<!-- Delete Confirmation Modal -->
-<div class="modal fade" id="deleteModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Confirm Delete</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <p>Are you sure you want to delete "@Model.FarewellPerson.Name"?</p>
-                <p class="text-danger">This action cannot be undone and will also delete all associated messages.</p>
-                
-                <div class="mb-3">
-                    <label for="deleteReason" class="form-label">Delete Reason (Required)</label>
-                    <input type="text" id="deleteReason" name="deleteReason" class="form-control" required />
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="submit" name="saveButton" value="delete" class="btn btn-danger">Confirm Delete</button>
-            </div>
-        </div>
-    </div>
-</div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const deleteModal = document.getElementById('deleteModal');
-            const deleteForm = deleteModal.querySelector('form') || document.querySelector('form');
-            
-            deleteModal.addEventListener('shown.bs.modal', function () {
-                document.getElementById('deleteReason').focus();
-            });
-            
-            // Handle delete confirmation
-            const deleteButton = document.querySelector('button[value="delete"]');
-            if (deleteButton) {
-                deleteButton.addEventListener('click', function(e) {
-                    const reason = document.getElementById('deleteReason').value.trim();
-                    if (!reason) {
-                        e.preventDefault();
-                        alert('Please provide a delete reason.');
-                        return;
-                    }
-                    
-                    // Set the delete confirmation flag
-                    const deleteInput = document.createElement('input');
-                    deleteInput.type = 'hidden';
-                    deleteInput.name = 'isDeleteConfirmed';
-                    deleteInput.value = 'true';
-                    deleteForm.appendChild(deleteInput);
-                    
-                    // Add delete reason to the form
-                    const reasonInput = document.createElement('input');
-                    reasonInput.type = 'hidden';
-                    reasonInput.name = 'FarewellPerson.ActionReason';
-                    reasonInput.value = reason;
-                    deleteForm.appendChild(reasonInput);
-                });
-            }
-        });
-    </script>
 }

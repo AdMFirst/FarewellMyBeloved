@@ -149,7 +149,7 @@ public class AdminController : Controller
 
     private async Task<string> makePreviewURL(string? url)
     {
-        Console.WriteLine($"makePreviewURL called with url: {url}");
+        // For debug Console.WriteLine($"makePreviewURL called with url: {url}");
         if (!string.IsNullOrEmpty(url))
         {
             if (!url.StartsWith("http"))
@@ -421,46 +421,11 @@ public class AdminController : Controller
             return View(viewModel);
         }
 
-        if (viewModel.IsDeleteConfirmed)
-        {
-            // Delete functionality with logging
-            var moderatorName = User.Identity?.Name ?? "Unknown Admin";
-            
-            // Create moderator log
-            var moderatorLog = new ModeratorLog
-            {
-                ModeratorName = moderatorName,
-                TargetType = "FarewellPerson",
-                TargetId = farewellPerson.Id,
-                Action = "delete",
-                Reason = viewModel.FarewellPerson.ActionReason ?? "admin_delete",
-                Details = viewModel.FarewellPerson.ActionDetails ?? $"Farewell person '{farewellPerson.Name}' deleted by admin",
-                ContentReportId = viewModel.FarewellPerson.SelectedContentReportId
-            };
-            
-            _context.ModeratorLogs.Add(moderatorLog);
-            
-            // Delete related messages first (due to cascade)
-            var relatedMessages = await _context.FarewellMessages
-                .Where(fm => fm.FarewellPersonId == id)
-                .ToListAsync();
-            
-            _context.FarewellMessages.RemoveRange(relatedMessages);
-            
-            // Delete the farewell person
-            _context.FarewellPeople.Remove(farewellPerson);
-            
-            await _context.SaveChangesAsync();
-            
-            return RedirectToAction("FarewellPeople");
-        }
-        else
-        {
-            // Edit functionality with logging
-            var moderatorName = User.Identity?.Name ?? "Unknown Admin";
-            
-            // Check if anything actually changed
-            var hasChanges = farewellPerson.Name != viewModel.FarewellPerson.Name ||
+        // Edit functionality with logging
+        var moderatorName = User.Identity?.Name ?? "Unknown Admin";
+        
+        // Check if anything actually changed
+        var hasChanges = farewellPerson.Name != viewModel.FarewellPerson.Name ||
                            farewellPerson.Slug != viewModel.FarewellPerson.Slug ||
                            farewellPerson.Description != viewModel.FarewellPerson.Description ||
                            farewellPerson.PortraitUrl != viewModel.FarewellPerson.PortraitUrl ||
@@ -468,63 +433,62 @@ public class AdminController : Controller
                            farewellPerson.Email != viewModel.FarewellPerson.Email ||
                            farewellPerson.IsPublic != viewModel.FarewellPerson.IsPublic;
 
-            if (hasChanges)
+        if (hasChanges)
+        {
+            // Delete old images from S3 if they changed
+            if (farewellPerson.PortraitUrl != viewModel.FarewellPerson.PortraitUrl && !string.IsNullOrEmpty(farewellPerson.PortraitUrl))
             {
-                // Delete old images from S3 if they changed
-                if (farewellPerson.PortraitUrl != viewModel.FarewellPerson.PortraitUrl && !string.IsNullOrEmpty(farewellPerson.PortraitUrl))
+                try
                 {
-                    try
-                    {
-                        var oldPortraitKey = ExtractS3KeyFromUrl(farewellPerson.PortraitUrl);
-                        await _s3Service.DeleteFileAsync(oldPortraitKey);
-                    }
-                    catch (Exception ex)
+                    var oldPortraitKey = ExtractS3KeyFromUrl(farewellPerson.PortraitUrl);
+                    await _s3Service.DeleteFileAsync(oldPortraitKey);
+                }
+                catch (Exception ex)
                     {
                         // Log error but continue with the operation
                         Console.WriteLine($"Failed to delete old portrait image: {ex.Message}");
                     }
                 }
 
-                if (farewellPerson.BackgroundUrl != viewModel.FarewellPerson.BackgroundUrl && !string.IsNullOrEmpty(farewellPerson.BackgroundUrl))
+            if (farewellPerson.BackgroundUrl != viewModel.FarewellPerson.BackgroundUrl && !string.IsNullOrEmpty(farewellPerson.BackgroundUrl))
+            {
+                try
                 {
-                    try
-                    {
-                        var oldBackgroundKey = ExtractS3KeyFromUrl(farewellPerson.BackgroundUrl);
-                        await _s3Service.DeleteFileAsync(oldBackgroundKey);
-                    }
-                    catch (Exception ex)
-                    {
-                        // Log error but continue with the operation
-                        Console.WriteLine($"Failed to delete old background image: {ex.Message}");
-                    }
+                    var oldBackgroundKey = ExtractS3KeyFromUrl(farewellPerson.BackgroundUrl);
+                    await _s3Service.DeleteFileAsync(oldBackgroundKey);
                 }
-
-                farewellPerson.Name = viewModel.FarewellPerson.Name;
-                farewellPerson.Slug = viewModel.FarewellPerson.Slug;
-                farewellPerson.Description = viewModel.FarewellPerson.Description;
-                farewellPerson.PortraitUrl = viewModel.FarewellPerson.PortraitUrl;
-                farewellPerson.BackgroundUrl = viewModel.FarewellPerson.BackgroundUrl;
-                farewellPerson.Email = viewModel.FarewellPerson.Email;
-                farewellPerson.IsPublic = viewModel.FarewellPerson.IsPublic;
-                farewellPerson.UpdatedAt = DateTime.UtcNow;
-
-                // Create moderator log for changes
-                var moderatorLog = new ModeratorLog
+                catch (Exception ex)
                 {
-                    ModeratorName = moderatorName,
-                    TargetType = "FarewellPerson",
-                    TargetId = farewellPerson.Id,
-                    Action = "edit",
-                    Reason = viewModel.FarewellPerson.ActionReason ?? "admin_edit",
-                    Details = viewModel.FarewellPerson.ActionDetails ?? $"Farewell person '{farewellPerson.Name}' updated by admin",
-                    ContentReportId = viewModel.FarewellPerson.SelectedContentReportId
-                };
-                
-                _context.ModeratorLogs.Add(moderatorLog);
-                await _context.SaveChangesAsync();
+                    // Log error but continue with the operation
+                    Console.WriteLine($"Failed to delete old background image: {ex.Message}");
+                }
             }
 
-            return RedirectToAction("FarewellPeople");
+            farewellPerson.Name = viewModel.FarewellPerson.Name;
+            farewellPerson.Slug = viewModel.FarewellPerson.Slug;
+            farewellPerson.Description = viewModel.FarewellPerson.Description;
+            farewellPerson.PortraitUrl = viewModel.FarewellPerson.PortraitUrl;
+            farewellPerson.BackgroundUrl = viewModel.FarewellPerson.BackgroundUrl;
+            farewellPerson.Email = viewModel.FarewellPerson.Email;
+            farewellPerson.IsPublic = viewModel.FarewellPerson.IsPublic;
+            farewellPerson.UpdatedAt = DateTime.UtcNow;
+
+            // Create moderator log for changes
+            var moderatorLog = new ModeratorLog
+            {
+                ModeratorName = moderatorName,
+                TargetType = "FarewellPerson",
+                TargetId = farewellPerson.Id,
+                Action = "edit",
+                Reason = viewModel.FarewellPerson.ActionReason ?? "admin_edit",
+                Details = viewModel.FarewellPerson.ActionDetails ?? $"Farewell person '{farewellPerson.Name}' updated by admin",
+                ContentReportId = viewModel.FarewellPerson.SelectedContentReportId
+            };
+            
+            _context.ModeratorLogs.Add(moderatorLog);
+            await _context.SaveChangesAsync();
         }
+
+        return RedirectToAction("FarewellPeople");
     }
 }
