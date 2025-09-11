@@ -44,7 +44,7 @@ public class HomeController : Controller
     {
         if (string.IsNullOrWhiteSpace(searchTerm))
         {
-            return RedirectToAction("Index");
+            return View();
         }
 
         var searchResults = await _context.FarewellPeople
