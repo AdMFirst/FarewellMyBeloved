@@ -1,9 +1,6 @@
 @model FarewellMyBeloved.ViewModels.DeleteFarewellMessageViewModel
 @{
     ViewData["Title"] = $"Delete Farewell Message - Admin";
-
-    string Truncate(string s, int max = 50) =>
-        string.IsNullOrEmpty(s) ? s : (s.Length <= max ? s : s.Substring(0, max) + "...");
 }
 
 <div class="container py-5">
@@ -56,7 +53,7 @@
                         
                         <div class="mb-3">
                             <label class="form-label h6">Message</label>
-                            <div class="form-control" style="min-height: 100px; white-space: pre-wrap;">@Model.Message</div>
+                            <p class="form-control-plaintext overflow-auto" style="max-height: 200px; white-space: pre-wrap;">@Model.Message</p>
                         </div>
                         
                         <div class="row">

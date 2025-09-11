@@ -1,6 +1,10 @@
 @model FarewellMyBeloved.ViewModels.FarewellPeopleIndexViewModel
 @{
     ViewData["Title"] = "Farewell People - Admin";
+
+    
+    string Truncate(string s, int max = 50) =>
+        string.IsNullOrEmpty(s) ? s : (s.Length <= max ? s : s.Substring(0, max) + "...");
 }
 
 <div class="container py-5">
@@ -32,8 +36,8 @@
                             @foreach (var person in Model.FarewellPeople)
                             {
                                 <tr>
-                                    <td>@person.Name</td>
-                                    <td>@person.Slug</td>
+                                    <td>@Truncate(person.Name, 40)</td>
+                                    <td>@Truncate(person.Slug, 20)</td>
                                     <td>@(person.Email ?? "N/A")</td>
                                     <td>@person.CreatedAt.ToString("yyyy-MM-dd")</td>
                                     <td>
