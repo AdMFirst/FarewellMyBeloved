@@ -151,9 +151,12 @@
                             <label asp-for="SelectedContentReportId" class="form-label">Link to Content Report (Optional)</label>
                             <select asp-for="SelectedContentReportId" class="form-select">
                                 <option value="">No content report linked</option>
-                                @foreach (var report in Model.RelatedContentReports)
+                                @if(Model.RelatedContentReports != null)
                                 {
-                                    <option value="@report.Id">@report.Reason - @report.Email (@report.CreatedAt.ToString("yyyy-MM-dd HH:mm"))</option>
+                                    @foreach (var report in Model.RelatedContentReports)
+                                    {
+                                        <option value="@report.Id">@report.Reason - @report.Email (@report.CreatedAt.ToLocalTime().ToString("yyyy-MM-dd HH:mm"))</option>
+                                    }
                                 }
                             </select>
                         </div>
@@ -167,15 +170,76 @@
                 <div class="d-flex justify-content-between">
                     <a href="@Url.Action("FarewellPeople")" class="btn btn-secondary">Cancel</a>
                     <div>
-                        <button type="submit" class="btn btn-danger">Delete Farewell Person</button>
+                        <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete Farewell Person</button>
                     </div>
                 </div>
-                
             </form>
+        </div>
+    </div>
+</div>
+
+<!-- Confirmation Modal -->
+<div class="modal fade" id="deleteConfirmationModal" tabindex="-1" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
+    <div class="modal modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="deleteConfirmationModalLabel">Confirm Deletion</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-warning mb-3">
+                    <h6 class="alert-heading"><i class="bi bi-exclamation-triangle-fill me-2"></i>Important Legal Notice</h6>
+                    <p class="mb-2">This deletion action should only be used for legal purposes including:</p>
+                    <ul class="mb-0">
+                        <li>Removing content that violates applicable laws</li>
+                        <li>Responding to valid legal requests or court orders</li>
+                        <li>Addressing copyright infringement claims</li>
+                        <li>Removing illegal or harmful content</li>
+                    </ul>
+                </div>
+                
+                <p class="mb-3">Are you absolutely sure you want to permanently delete "<strong>@Model.Name</strong>" and all associated content?</p>
+                
+                <p class="mb-3">Whenever possible, consider hiding content from public view first before complete deletion.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirmSubmitBtn">Yes, Delete Permanently</button>
+            </div>
         </div>
     </div>
 </div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+            const deleteModal = new bootstrap.Modal(document.getElementById('deleteConfirmationModal'));
+            const confirmSubmitBtn = document.getElementById('confirmSubmitBtn');
+            const deleteForm = document.querySelector('form');
+            
+            // Show modal when delete button is clicked
+            confirmDeleteBtn.addEventListener('click', function() {
+                deleteModal.show();
+            });
+            
+            // Submit form when confirmed in modal
+            confirmSubmitBtn.addEventListener('click', function() {
+                deleteModal.hide();
+                
+                if (deleteForm.checkValidity()) {
+                    deleteForm.submit();
+                } else {
+                    deleteForm.reportValidity();
+                }
+            });
+            
+            // Hide modal when cancel button is clicked
+            document.querySelector('[data-bs-dismiss="modal"]').addEventListener('click', function() {
+                deleteModal.hide();
+            });
+        });
+    </script>
 }
