@@ -1,0 +1,354 @@
+@model FarewellMyBeloved.ViewModels.AdminIndexViewModel
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<div class="container py-0">
+    <div class="row py-3">
+        <div class="col-12 text-center">
+            <h1 class="display-4">Admin Dashboard</h1>
+            <p class="lead">Welcome to the administration panel</p>
+        </div>
+    </div>
+    
+    <div class="row">
+        <!-- Top Left Column - Farewell People -->
+        <div class="col-md-4">
+            <div class="card h-100">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">Farewell People</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-4">
+                        <h6>Last 7 Days</h6>
+                        <canvas id="farewellPeopleLast7Days" width="400" height="200"></canvas>
+                    </div>
+                    <div class="mb-4">
+                        <h6>Last 4 Weeks</h6>
+                        <canvas id="farewellPeopleLast4Weeks" width="400" height="200"></canvas>
+                    </div>
+                    <div class="d-grid">
+                        <a href="@Url.Action("FarewellPeople", "Admin")" class="btn btn-outline-primary">
+                            <i class="bi bi-people"></i> Manage Farewell People
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Top Middle Column - Farewell Messages -->
+        <div class="col-md-4">
+            <div class="card h-100">
+                <div class="card-header bg-success text-white">
+                    <h5 class="card-title mb-0">Farewell Messages</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-4">
+                        <h6>Last 7 Days</h6>
+                        <canvas id="farewellMessagesLast7Days" width="400" height="200"></canvas>
+                    </div>
+                    <div class="mb-4">
+                        <h6>Last 4 Weeks</h6>
+                        <canvas id="farewellMessagesLast4Weeks" width="400" height="200"></canvas>
+                    </div>
+                    <div class="d-grid">
+                        <a href="@Url.Action("FarewellMessages", "Admin")" class="btn btn-outline-success">
+                            <i class="bi bi-chat-dots"></i> Manage Farewell Messages
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Top Right Column - Content Reports -->
+        <div class="col-md-4">
+            <div class="card h-100">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="card-title mb-0">Content Reports</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-4">
+                        <h6>Last 7 Days</h6>
+                        <canvas id="contentReportsLast7Days" width="400" height="200"></canvas>
+                    </div>
+                    <div class="mb-4">
+                        <h6>Last 4 Weeks</h6>
+                        <canvas id="contentReportsLast4Weeks" width="400" height="200"></canvas>
+                    </div>
+                    <div class="d-grid">
+                        <a href="@Url.Action("ContentReports", "Admin")" class="btn btn-outline-warning">
+                            <i class="bi bi-exclamation-triangle"></i> Manage Content Reports
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <!-- Bottom Left Column - Admin Logs -->
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-header bg-info text-white flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">Admin Logs <a href="@Url.Action("AdminLogs", "Admin")" class="text-muted small">View All</a></h5>
+                </div>
+                <div class="card-body">
+                    <div class="log-container" style="max-height: 400px; overflow-y: auto;">
+                        @if (Model.ModeratorLogs.Any())
+                        {
+                            <div class="list-group list-group-flush">
+                                @foreach (var log in Model.ModeratorLogs)
+                                {
+                                    <div class="list-group-item">
+                                        <div class="d-flex justify-content-between align-items-start">
+                                            <div>
+                                                <strong>@log.ModeratorName</strong>
+                                                <span class="badge bg-secondary">@log.Action</span>
+                                                <small class="text-muted d-block">@log.Details</small>
+                                            </div>
+                                            <small class="text-muted">@log.FormattedCreatedAt</small>
+                                        </div>
+                                        <div class="mt-2">
+                                            <small class="text-muted">
+                                                Target: @log.TargetType #@log.TargetId | Reason: @log.Reason
+                                            </small>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="text-center text-muted">
+                                <i class="bi bi-journal-text display-4"></i>
+                                <p>No admin logs found.</p>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Right Column - Content Reports -->
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="card-title mb-0">Last 50 Content Reports</h5>
+                </div>
+                <div class="card-body">
+                    <div class="report-container" style="max-height: 400px; overflow-y: auto;">
+                        @if (Model.ContentReports.Any())
+                        {
+                            <div class="list-group list-group-flush">
+                                @foreach (var report in Model.ContentReports)
+                                {
+                                    <div class="list-group-item">
+                                        <div class="d-flex justify-content-between align-items-start">
+                                            <div>
+                                                <strong>@report.Email</strong>
+                                                <span class="badge @(report.ResolvedAt.HasValue ? "bg-success" : "bg-warning")">@report.Status</span>
+                                                <small class="text-muted d-block">Reason: @report.Reason</small>
+                                                @if (!string.IsNullOrEmpty(report.Explanation))
+                                                {
+                                                    <small class="text-muted d-block">Explanation: @report.Explanation</small>
+                                                }
+                                            </div>
+                                            <small class="text-muted">@report.FormattedCreatedAt</small>
+                                        </div>
+                                        <div class="mt-2">
+                                            <small class="text-muted">
+                                                Report ID: @report.Id | Created: @report.FormattedCreatedAt
+                                            </small>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="text-center text-muted">
+                                <i class="bi bi-exclamation-triangle display-4"></i>
+                                <p>No content reports found.</p>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Farewell People Charts
+        const farewellPeopleLast7DaysCtx = document.getElementById('farewellPeopleLast7Days').getContext('2d');
+        new Chart(farewellPeopleLast7DaysCtx, {
+            type: 'bar',
+            data: {
+                labels: @Html.Raw(Json.Serialize(Model.FarewellPeopleChartData.Last7DaysLabels)),
+                datasets: [{
+                    label: 'People Created',
+                    data: @Html.Raw(Json.Serialize(Model.FarewellPeopleChartData.Last7DaysData)),
+                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                }
+            }
+        });
+
+        const farewellPeopleLast4WeeksCtx = document.getElementById('farewellPeopleLast4Weeks').getContext('2d');
+        new Chart(farewellPeopleLast4WeeksCtx, {
+            type: 'bar',
+            data: {
+                labels: @Html.Raw(Json.Serialize(Model.FarewellPeopleChartData.Last4WeeksLabels)),
+                datasets: [{
+                    label: 'People Created',
+                    data: @Html.Raw(Json.Serialize(Model.FarewellPeopleChartData.Last4WeeksData)),
+                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                }
+            }
+        });
+
+        // Farewell Messages Charts
+        const farewellMessagesLast7DaysCtx = document.getElementById('farewellMessagesLast7Days').getContext('2d');
+        new Chart(farewellMessagesLast7DaysCtx, {
+            type: 'bar',
+            data: {
+                labels: @Html.Raw(Json.Serialize(Model.FarewellMessagesChartData.Last7DaysLabels)),
+                datasets: [{
+                    label: 'Messages Created',
+                    data: @Html.Raw(Json.Serialize(Model.FarewellMessagesChartData.Last7DaysData)),
+                    backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                }
+            }
+        });
+
+        const farewellMessagesLast4WeeksCtx = document.getElementById('farewellMessagesLast4Weeks').getContext('2d');
+        new Chart(farewellMessagesLast4WeeksCtx, {
+            type: 'bar',
+            data: {
+                labels: @Html.Raw(Json.Serialize(Model.FarewellMessagesChartData.Last4WeeksLabels)),
+                datasets: [{
+                    label: 'Messages Created',
+                    data: @Html.Raw(Json.Serialize(Model.FarewellMessagesChartData.Last4WeeksData)),
+                    backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                }
+            }
+        });
+
+        // Content Reports Charts
+        const contentReportsLast7DaysCtx = document.getElementById('contentReportsLast7Days').getContext('2d');
+        new Chart(contentReportsLast7DaysCtx, {
+            type: 'bar',
+            data: {
+                labels: @Html.Raw(Json.Serialize(Model.ContentReportsChartData.Last7DaysLabels)),
+                datasets: [{
+                    label: 'Reports Created',
+                    data: @Html.Raw(Json.Serialize(Model.ContentReportsChartData.Last7DaysData)),
+                    backgroundColor: 'rgba(255, 193, 7, 0.6)',
+                    borderColor: 'rgba(255, 193, 7, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                }
+            }
+        });
+
+        const contentReportsLast4WeeksCtx = document.getElementById('contentReportsLast4Weeks').getContext('2d');
+        new Chart(contentReportsLast4WeeksCtx, {
+            type: 'bar',
+            data: {
+                labels: @Html.Raw(Json.Serialize(Model.ContentReportsChartData.Last4WeeksLabels)),
+                datasets: [{
+                    label: 'Reports Created',
+                    data: @Html.Raw(Json.Serialize(Model.ContentReportsChartData.Last4WeeksData)),
+                    backgroundColor: 'rgba(255, 193, 7, 0.6)',
+                    borderColor: 'rgba(255, 193, 7, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                }
+            }
+        });
+
+        (function(){
+            try {
+                if (localStorage.getItem('isAdmin') == 'true') {
+                    return; // Skip if already set
+                } else {
+                    localStorage.setItem('isAdmin', 'true');
+                }
+            } catch (e) {
+            console.warn('localStorage unavailable', e);
+            }
+        })();
+    </script>
+
+}

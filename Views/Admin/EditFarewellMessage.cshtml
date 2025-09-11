@@ -1,0 +1,133 @@
+@model FarewellMyBeloved.ViewModels.EditFarewellMessageViewModel
+@{
+    ViewData["Title"] = $"Edit Farewell Message - Admin";
+}
+
+<div class="container py-5">
+    <div class="row py-3">
+        <div class="col-lg-12">
+            <h2 class="mb-4">Edit Farewell Message</h2>
+            
+            <form asp-action="EditFarewellMessage" method="post">
+                @Html.AntiForgeryToken()
+                
+                <input type="hidden" asp-for="Id" />
+                
+                <!-- Message Information Section -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">Message Information</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="FarewellPersonName" class="form-label h6">Farewell Person</label>
+                                <p class="form-control-plaintext">@Model.FarewellPersonName</p>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="CreatedAt" class="form-label h6">Created At</label>
+                                <p class="form-control-plaintext">@Model.CreatedAt.ToString("yyyy-MM-dd HH:mm")</p>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label asp-for="Message" class="form-label">Message *</label>
+                            <textarea asp-for="Message" class="form-control" rows="6" placeholder="Enter the farewell message..." required>@Model.Message</textarea>
+                            <span asp-validation-for="Message" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="AuthorName" class="form-label">Author Name</label>
+                                <input asp-for="AuthorName" class="form-control" placeholder="Enter author name (optional)" />
+                                <span asp-validation-for="AuthorName" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="AuthorEmail" class="form-label">Author Email</label>
+                                <input asp-for="AuthorEmail" class="form-control" placeholder="Enter author email (optional)" />
+                                <span asp-validation-for="AuthorEmail" class="text-danger"></span>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" asp-for="IsPublic" />
+                                <label class="form-check-label" asp-for="IsPublic">
+                                    Public Message
+                                </label>
+                                <span asp-validation-for="IsPublic" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Content Reports Section -->
+                @if (Model.RelatedContentReports?.Any() == true)
+                {
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5 class="mb-0">Related Content Reports</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label asp-for="SelectedContentReportId" class="form-label">Link to Content Report (Optional)</label>
+                                <select asp-for="SelectedContentReportId" class="form-select">
+                                    <option value="">No content report linked</option>
+                                    @foreach (var report in Model.RelatedContentReports)
+                                    {
+                                        <option value="@report.Id">@report.Reason - @report.Email (@report.CreatedAt.ToLocalTime().ToString("yyyy-MM-dd HH:mm"))</option>
+                                    }
+                                </select>
+                            </div>
+                            
+                            <label class="form-label">Recent Reports:</label>
+                            <div class="mb-3 overflow-auto" style="max-height: 300px;">
+                                @foreach (var report in Model.RelatedContentReports.Take(5))
+                                {
+                                    <div class="border-bottom pb-2 mb-2">
+                                        <small><strong>@report.Reason</strong> - @report.Email</small><br>
+                                        <small class="text-muted">@report.CreatedAt.ToString("yyyy-MM-dd HH:mm")</small>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+                
+                <!-- Admin Action Log Section -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">Admin Action Log</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label asp-for="ActionReason" class="form-label">Reason for edit*</label>
+                            <input asp-for="ActionReason" class="form-control" placeholder="e.g., content_improvement, user_request, policy_compliance" required />
+                            <span asp-validation-for="ActionReason" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="ActionDetails" class="form-label">Details *</label>
+                            <textarea asp-for="ActionDetails" class="form-control" rows="3" placeholder="Provide additional details about why this message is being edited..." required></textarea>
+                            <span asp-validation-for="ActionDetails" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-4">
+                    <small class="text-muted px-2">* Required</small>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <a href="@Url.Action("FarewellMessages")" class="btn btn-secondary">Cancel</a>
+                    <div>
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

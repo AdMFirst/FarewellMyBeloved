@@ -44,7 +44,7 @@ public class HomeController : Controller
     {
         if (string.IsNullOrWhiteSpace(searchTerm))
         {
-            return RedirectToAction("Index");
+            return View();
         }
 
         var searchResults = await _context.FarewellPeople
@@ -78,6 +78,10 @@ public class HomeController : Controller
         {
             return RedirectToAction("Index");
         }
+        else if (slug == "Admin")
+        {
+            return RedirectToAction("Index", "Admin");
+        }
 
         // Find the slug
         var farewellPerson = await _context.FarewellPeople
@@ -105,16 +109,19 @@ public class HomeController : Controller
     private async Task<string> SignImage(string imagePath)
     {
         // check if image is a valid image url
-        if (!Uri.IsWellFormedUriString(imagePath, UriKind.Absolute) &&
-            !(imagePath.EndsWith(".jpg") || imagePath.EndsWith(".png") || imagePath.EndsWith(".jpeg")))
+        if (!IsValidImagePath(imagePath))
         {
-            return _configuration.GetSection("App")["DefaultPortraitUrl"] ?? "https://i.ibb.co.com/2qXwjX3/default-blue1.png";
+            if (imagePath.Equals("DELETED BY ADMIN"))
+            {
+                return _configuration.GetSection("Image")["DeletedUrl"] ?? "https://s6.imgcdn.dev/YQkM7y.jpg";
+            }
+            return _configuration.GetSection("Image")["DefaultUrl"] ?? "https://s6.imgcdn.dev/YQO8MN.webp";
         }
 
         // Extract key from the image path
         var endpoint = _configuration.GetSection("S3")["Endpoint"];
         var bucketName = _configuration.GetSection("S3")["Bucket"];
-        
+
         if (imagePath.StartsWith($"{endpoint}/{bucketName}/"))
         {
             var key = imagePath.Substring($"{endpoint}/{bucketName}/".Length);
@@ -123,4 +130,27 @@ public class HomeController : Controller
 
         return imagePath;
     }
+    
+    private bool IsValidImagePath(string imagePath)
+    {
+        if (string.IsNullOrWhiteSpace(imagePath)) return false;
+
+        var lower = imagePath.ToLowerInvariant().Trim();
+
+        // common image extensions
+        return Uri.IsWellFormedUriString(imagePath, UriKind.Absolute)
+            || lower.EndsWith(".jpg")
+            || lower.EndsWith(".jpeg")
+            || lower.EndsWith(".png")
+            || lower.EndsWith(".gif")
+            || lower.EndsWith(".bmp")
+            || lower.EndsWith(".tiff")
+            || lower.EndsWith(".tif")
+            || lower.EndsWith(".webp")
+            || lower.EndsWith(".svg")
+            || lower.EndsWith(".ico")
+            || lower.EndsWith(".heic")
+            || lower.EndsWith(".heif");
+    }
+
 }

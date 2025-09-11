@@ -33,12 +33,14 @@ public class FarewellMessageController : Controller
 
         // Populate ViewBag.FarewellPeople for the dropdown
         var farewellPeople = await _context.FarewellPeople
-                                           .OrderBy(p => p.Name)
+                                           .OrderByDescending(p => p.CreatedAt)
+                                           .Where(p => p.IsPublic)
                                            .Select(p => new SelectListItem
                                            {
                                                Value = p.Id.ToString(),
                                                Text = p.Name
                                            })
+                                           .Take(250) // limit to 250 entries
                                            .ToListAsync();
         ViewBag.FarewellPeople = farewellPeople;
         

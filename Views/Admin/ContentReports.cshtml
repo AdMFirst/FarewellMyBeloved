@@ -1,0 +1,238 @@
+@model FarewellMyBeloved.ViewModels.ContentReportsIndexViewModel
+@{
+    ViewData["Title"] = "Content Reports - Admin";
+}
+
+<div class="container py-5">
+    <div class="row py-3">
+        <div class="col-lg-12">
+            <h2 class="mb-4">Content Reports Management</h2>
+
+            @if (!Model.ContentReports.Any())
+            {
+                <div class="alert alert-info">
+                    No content reports found.
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Report ID</th>
+                                <th>Related Content</th>
+                                <th>Reason</th>
+                                <th>Created</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var report in Model.ContentReports)
+                            {
+                                var relatedContent = "N/A";
+                                var viewUrl = "";
+                                
+                                if (report.FarewellPersonId.HasValue && Model.PersonLookup != null)
+                                {
+                                    if (Model.PersonLookup.TryGetValue(report.FarewellPersonId.Value!, out var person))
+                                    {
+                                        relatedContent = person.Name;
+                                        viewUrl = $"/{person.Slug}";
+                                    }
+                                }
+                                else if (report.FarewellMessageId.HasValue && Model.MessageLookup != null)
+                                {
+                                    if (Model.MessageLookup.TryGetValue(report.FarewellMessageId.Value!, out var message))
+                                    {
+                                        relatedContent = message.FarewellPerson?.Name ?? "Unknown Person";
+                                        viewUrl = $"/{message.FarewellPerson?.Slug}/message/{message.Id}";
+                                    }
+                                }
+                                
+                                <tr>
+                                    <td>@report.Id.ToString()</td>
+                                    <td>@relatedContent</td>
+                                    <td>
+                                        <span class="badge bg-warning text-dark">@report.Reason</span>
+                                    </td>
+                                    <td>@report.CreatedAt.ToString("yyyy-MM-dd HH:mm")</td>
+                                    <td>
+                                        @if (report.ResolvedAt.HasValue)
+                                        {
+                                            <span class="badge bg-success">Resolved</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-danger">Pending</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-info" onclick="showReportDetails('@report.Id', '@relatedContent', '@(report.Email ?? "N/A")', '@report.Reason', '@report.CreatedAt.ToString("yyyy-MM-dd HH:mm")', '@(report.ResolvedAt.HasValue ? "Resolved" : "Pending")', '@(report.FarewellPersonId.HasValue ? report.FarewellPersonId.ToString() : "N/A")', '@(report.FarewellMessageId.HasValue ? report.FarewellMessageId.ToString() : "N/A")', '@(report.ResolvedAt.HasValue ? report.ResolvedAt.Value.ToString("yyyy-MM-dd HH:mm") : "N/A")', '@report.Explanation')">Details</button>
+                                        @if (!report.ResolvedAt.HasValue)
+                                        {
+                                            if (report.FarewellPersonId.HasValue)
+                                            {
+                                                <a href="@Url.Action("EditFarewellPerson", "Admin", new { id = report.FarewellPersonId })" class="btn btn-sm btn-outline-success">Resolve</a>
+                                            }
+                                            else if (report.FarewellMessageId.HasValue)
+                                            {
+                                                <a href="@Url.Action("EditFarewellMessage", "Admin", new { id = report.FarewellMessageId })" class="btn btn-sm btn-outline-success">Resolve</a>
+                                            }
+                                            else
+                                            {
+                                                <button class="btn btn-sm btn-outline-success" disabled>Resolve</button>
+                                            }
+                                        }
+                                    </td>
+                                </tr>
+                           }
+                       </tbody>
+                   </table>
+
+                   <!-- Modal -->
+                   <div class="modal fade" id="reportDetailsModal" tabindex="-1" aria-labelledby="reportDetailsModalLabel" aria-hidden="true">
+                       <div class="modal-dialog modal-lg">
+                           <div class="modal-content">
+                               <div class="modal-header bg-primary text-white">
+                                   <h5 class="modal-title" id="reportDetailsModalLabel">Report Details</h5>
+                                   <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                               </div>
+                               <div class="modal-body">
+                                   <div class="row">
+                                       <div class="col">
+                                           <p><strong>Report ID:</strong> <span id="reportId"></span></p>
+                                       </div>
+                                   </div>
+                                   <div class="row">
+                                       <div class="col-md-6">
+                                           <p><strong>Related Content:</strong> <span id="relatedContent"></span></p>
+                                       </div>
+                                       <div class="col-md-6">
+                                           <p><strong>Reason:</strong> <span id="reason"></span></p>
+                                       </div>
+                                   </div>
+                                   <div class="row">
+                                       <div class="col-md-6">
+                                           <p><strong>Created At:</strong> <span id="createdAt"></span></p>
+                                       </div>
+                                       <div class="col-md-6">
+                                           <p><strong>Email:</strong> <span id="email"></span></p>
+                                       </div>
+                                   </div>
+                                   <div class="row">
+                                       <div class="col-md-6">
+                                           <p><strong>Farewell Person ID:</strong> <span id="farewellPersonId"></span></p>
+                                       </div>
+                                       <div class="col-md-6">
+                                           <p><strong>Farewell Message ID:</strong> <span id="farewellMessageId"></span></p>
+                                       </div>
+                                   </div>
+                                   <div class="row">
+                                        <div class="col-md-6">
+                                           <p><strong>Status:</strong> <span id="status"></span></p>
+                                       </div>
+                                       <div class="col-md-6">
+                                           <p><strong>Resolved At:</strong> <span id="resolvedAt"></span></p>
+                                       </div>
+                                       
+                                   </div>
+                                   <div class="row">
+                                        <div class="col">
+                                            <strong>Details:</strong>
+                                            <p><span id="details"></span></p>
+                                       </div>
+                                   </div>
+                               </div>
+                               <div class="modal-footer">
+                                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+                </div>
+
+                <!-- Pagination Controls -->
+                @if (Model.TotalPages > 1)
+                {
+                    <nav aria-label="Farewell people pagination">
+                        <ul class="pagination justify-content-center">
+                            @if (Model.PageNumber > 1)
+                            {
+                                <li class="page-item">
+                                    <a class="page-link" href="@Url.Action("ContentReports", new { page = Model.PageNumber - 1 })">Previous</a>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="page-item disabled">
+                                    <span class="page-link">Previous</span>
+                                </li>
+                            }
+
+                            @for (int i = 1; i <= Model.TotalPages; i++)
+                            {
+                                if (i == Model.PageNumber)
+                                {
+                                    <li class="page-item active">
+                                        <span class="page-link">@i</span>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="page-item">
+                                        <a class="page-link" href="@Url.Action("ContentReports", new { page = i })">@i</a>
+                                    </li>
+                                }
+                            }
+
+                            @section Scripts {
+                                <script>
+                                    function showReportDetails(reportId, relatedContent, email, reason, createdAt, status, farewellPersonId, farewellMessageId, resolvedAt, details) {
+                                        document.getElementById('reportId').innerText = reportId;
+                                        document.getElementById('relatedContent').innerText = relatedContent;
+                                        document.getElementById('email').innerText = email;
+                                        document.getElementById('reason').innerText = reason;
+                                        document.getElementById('createdAt').innerText = createdAt;
+                                        document.getElementById('status').innerText = status;
+                                        document.getElementById('farewellPersonId').innerText = farewellPersonId;
+                                        document.getElementById('farewellMessageId').innerText = farewellMessageId;
+                                        document.getElementById('resolvedAt').innerText = resolvedAt;
+                                        document.getElementById('details').innerText = details;
+
+                                        var myModal = new bootstrap.Modal(document.getElementById('reportDetailsModal'));
+                                        myModal.show();
+                                    }
+                                </script>
+                            }
+
+                            @if (Model.PageNumber < Model.TotalPages)
+                            {
+                                <li class="page-item">
+                                    <a class="page-link" href="@Url.Action("ContentReports", new { page = Model.PageNumber + 1 })">Next</a>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="page-item disabled">
+                                    <span class="page-link">Next</span>
+                                </li>
+                            }
+                        </ul>
+                    </nav>
+                }
+
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <small class="text-muted">
+                            Showing @(Model.ContentReports.Count * (Model.PageNumber - 1) + 1) to
+                            @(Math.Min(Model.ContentReports.Count * Model.PageNumber, Model.TotalItems))
+                            of @Model.TotalItems entries (Page @Model.PageNumber of @Model.TotalPages)
+                        </small>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

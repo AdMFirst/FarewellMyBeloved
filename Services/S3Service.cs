@@ -19,7 +19,7 @@ namespace FarewellMyBeloved.Services
             _configuration = configuration;
         }
 
-        public async Task<string> UploadFileAsync(IFormFile file)
+        public async Task<string> UploadFileAsync(IFormFile file, S3UploadType type)
         {
             // Validate input
             if (file == null || file.Length == 0)
@@ -37,7 +37,8 @@ namespace FarewellMyBeloved.Services
             }
 
             // Generate unique key for the file
-            var key = $"{Guid.NewGuid()}-{Path.GetFileName(file.FileName)}";
+            var typePrefix = type.ToString().ToLower(); // "portrait" or "background"
+            var key = $"{typePrefix}/{Guid.NewGuid()}-{Path.GetFileName(file.FileName)}";
 
             // Buffer file into MemoryStream for validation
             using (var stream = new MemoryStream())
@@ -89,6 +90,34 @@ namespace FarewellMyBeloved.Services
             };
 
             return await _s3Client.GetPreSignedURLAsync(request);
+        }
+
+        public async Task DeleteFileAsync(string key)
+        {
+            if (string.IsNullOrEmpty(key))
+                return;
+
+            var bucketName = _configuration.GetSection("S3")["Bucket"];
+            
+            if (string.IsNullOrEmpty(bucketName))
+                throw new InvalidOperationException("S3 bucket configuration is missing.");
+
+            try
+            {
+                var deleteRequest = new DeleteObjectRequest
+                {
+                    BucketName = bucketName,
+                    Key = key
+                };
+
+                await _s3Client.DeleteObjectAsync(deleteRequest);
+            }
+            catch (Amazon.S3.AmazonS3Exception ex)
+            {
+                // Log the error but don't throw - we don't want to fail the entire operation
+                // if S3 deletion fails for some reason
+                Console.WriteLine($"Failed to delete S3 object {key}: {ex.Message}");
+            }
         }
     }
 }
