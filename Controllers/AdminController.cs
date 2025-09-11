@@ -556,6 +556,240 @@ public class AdminController : Controller
         return RedirectToAction("FarewellPeople");
     }
 
+    [Authorize(Policy = "AdminsOnly")]
+    [HttpGet("FarewellMessages/Edit/{id}")]
+    public async Task<IActionResult> EditFarewellMessage(int id)
+    {
+        var farewellMessage = await _context.FarewellMessages
+            .Include(fm => fm.FarewellPerson)
+            .FirstOrDefaultAsync(fm => fm.Id == id);
+
+        if (farewellMessage == null)
+        {
+            return NotFound();
+        }
+
+        // Get all content reports that might be related to this message
+        var relatedReports = await _context.ContentReports
+            .Where(cr => cr.FarewellMessageId == id)
+            .OrderByDescending(cr => cr.CreatedAt)
+            .ToListAsync();
+
+        var viewModel = new EditFarewellMessageViewModel
+        {
+            Id = farewellMessage.Id,
+            Message = farewellMessage.Message,
+            AuthorName = farewellMessage.AuthorName,
+            AuthorEmail = farewellMessage.AuthorEmail,
+            FarewellPersonId = farewellMessage.FarewellPersonId,
+            FarewellPersonName = farewellMessage.FarewellPerson?.Name ?? string.Empty,
+            CreatedAt = farewellMessage.CreatedAt,
+            IsPublic = farewellMessage.IsPublic,
+            RelatedContentReports = relatedReports
+        };
+
+        return View(viewModel);
+    }
+
+    [Authorize(Policy = "AdminsOnly")]
+    [HttpPost("FarewellMessages/Edit/{id}")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> EditFarewellMessage(int id, EditFarewellMessageViewModel viewModel)
+    {
+        if (id != viewModel.Id)
+        {
+            return BadRequest();
+        }
+
+        var farewellMessage = await _context.FarewellMessages
+            .Include(fm => fm.FarewellPerson)
+            .FirstOrDefaultAsync(fm => fm.Id == id);
+
+        if (farewellMessage == null)
+        {
+            return NotFound();
+        }
+
+        // Validate required action log fields
+        if (string.IsNullOrWhiteSpace(viewModel.ActionReason))
+        {
+            ModelState.AddModelError("ActionReason", "Action reason is required");
+        }
+
+        if (string.IsNullOrWhiteSpace(viewModel.ActionDetails))
+        {
+            ModelState.AddModelError("ActionDetails", "Action details are required");
+        }
+
+        // If validation fails, return to the view with errors
+        if (!ModelState.IsValid)
+        {
+            // Get all content reports that might be related to this message
+            var relatedReports = await _context.ContentReports
+                .Where(cr => cr.FarewellMessageId == id)
+                .OrderByDescending(cr => cr.CreatedAt)
+                .ToListAsync();
+
+            viewModel.RelatedContentReports = relatedReports;
+            viewModel.FarewellPersonName = farewellMessage.FarewellPerson?.Name ?? string.Empty;
+
+            return View(viewModel);
+        }
+
+        // Edit functionality with logging
+        var moderatorName = User.Identity?.Name ?? "Unknown Admin";
+
+        // Check if anything actually changed
+        var hasChanges = farewellMessage.Message != viewModel.Message ||
+                         farewellMessage.AuthorName != viewModel.AuthorName ||
+                         farewellMessage.AuthorEmail != viewModel.AuthorEmail ||
+                         farewellMessage.IsPublic != viewModel.IsPublic;
+
+        if (hasChanges)
+        {
+            farewellMessage.Message = viewModel.Message;
+            farewellMessage.AuthorName = viewModel.AuthorName;
+            farewellMessage.AuthorEmail = viewModel.AuthorEmail;
+            farewellMessage.IsPublic = viewModel.IsPublic;
+
+            // Create moderator log for changes
+            var moderatorLog = new ModeratorLog
+            {
+                ModeratorName = moderatorName,
+                TargetType = "FarewellMessage",
+                TargetId = farewellMessage.Id,
+                Action = "edit",
+                Reason = viewModel.ActionReason ?? "admin_edit",
+                Details = viewModel.ActionDetails ?? $"Farewell message '{farewellMessage.Message}' updated by admin",
+                ContentReportId = viewModel.SelectedContentReportId
+            };
+
+            // Set the related report to be resolved if one was selected
+            if (viewModel.SelectedContentReportId.HasValue)
+            {
+                var contentReport = await _context.ContentReports
+                    .FirstOrDefaultAsync(cr => cr.Id == viewModel.SelectedContentReportId.Value);
+                
+                if (contentReport != null && !contentReport.ResolvedAt.HasValue)
+                {
+                    contentReport.ResolvedAt = DateTime.UtcNow;
+                }
+            }
+            //Console.WriteLine(viewModel.SelectedContentReportId != null ? viewModel.SelectedContentReportId: "Content report not sighterd");
+            _context.ModeratorLogs.Add(moderatorLog);
+            await _context.SaveChangesAsync();
+        }
+
+        return RedirectToAction("FarewellMessages");
+    }
+
+    [Authorize(Policy = "AdminsOnly")]
+    [HttpGet("FarewellMessages/Delete/{id}")]
+    public async Task<IActionResult> DeleteFarewellMessage(int id)
+    {
+        var farewellMessage = await _context.FarewellMessages
+            .Include(fm => fm.FarewellPerson)
+            .FirstOrDefaultAsync(fm => fm.Id == id);
+
+        if (farewellMessage == null)
+        {
+            return NotFound();
+        }
+
+        // Get related content reports
+        var relatedReports = await _context.ContentReports
+            .Where(cr => cr.FarewellMessageId == id)
+            .OrderByDescending(cr => cr.CreatedAt)
+            .ToListAsync();
+
+        var viewModel = new DeleteFarewellMessageViewModel
+        {
+            Id = farewellMessage.Id,
+            Message = farewellMessage.Message,
+            AuthorName = farewellMessage.AuthorName,
+            AuthorEmail = farewellMessage.AuthorEmail,
+            FarewellPersonId = farewellMessage.FarewellPersonId,
+            FarewellPersonName = farewellMessage.FarewellPerson?.Name ?? string.Empty,
+            CreatedAt = farewellMessage.CreatedAt,
+            RelatedContentReports = relatedReports
+        };
+
+        return View(viewModel);
+    }
+
+    [Authorize(Policy = "AdminsOnly")]
+    [HttpPost("FarewellMessages/Delete/{id}")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteFarewellMessage(int id, DeleteFarewellMessageViewModel viewModel)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(viewModel);
+        }
+
+        var farewellMessage = await _context.FarewellMessages
+            .FirstOrDefaultAsync(fm => fm.Id == id);
+
+        if (farewellMessage == null)
+        {
+            return NotFound();
+        }
+
+        var moderatorName = User.Identity?.Name ?? "Unknown Admin";
+
+        try
+        {
+            // Remove the farewell message
+            _context.FarewellMessages.Remove(farewellMessage);
+
+            // Create moderator log for deletion
+            var moderatorLog = new ModeratorLog
+            {
+                ModeratorName = moderatorName,
+                TargetType = "FarewellMessage",
+                TargetId = farewellMessage.Id,
+                Action = "delete",
+                Reason = viewModel.ActionReason ?? "admin_delete",
+                Details = viewModel.ActionDetails ?? $"Farewell message '{farewellMessage.Message}' deleted by admin",
+                ContentReportId = viewModel.SelectedContentReportId
+            };
+
+            // Set the related report to be resolved if one was selected
+            if (viewModel.SelectedContentReportId.HasValue)
+            {
+                var contentReport = await _context.ContentReports
+                    .FirstOrDefaultAsync(cr => cr.Id == viewModel.SelectedContentReportId.Value);
+                
+                if (contentReport != null && !contentReport.ResolvedAt.HasValue)
+                {
+                    contentReport.ResolvedAt = DateTime.UtcNow;
+                }
+            }
+            Console.WriteLine(viewModel.SelectedContentReportId);
+            _context.ModeratorLogs.Add(moderatorLog);
+            await _context.SaveChangesAsync();
+            
+            return RedirectToAction("FarewellMessages");
+        }
+        catch (Exception ex)
+        {
+            // Log the error
+            Console.WriteLine($"Error deleting farewell message: {ex.Message}");
+            
+            // Re-populate the view model for error display
+            var relatedReports = await _context.ContentReports
+                .Where(cr => cr.FarewellMessageId == id)
+                .OrderByDescending(cr => cr.CreatedAt)
+                .ToListAsync();
+
+            viewModel.RelatedContentReports = relatedReports;
+            viewModel.FarewellPersonName = farewellMessage.FarewellPerson?.Name ?? string.Empty;
+
+            ModelState.AddModelError("", "An error occurred while deleting the farewell message. Please try again.");
+            return View(viewModel);
+        }
+    }
+
 
     [Authorize(Policy = "AdminsOnly")]
     [HttpGet("FarewellPeople/Delete/{id}")]

@@ -1,0 +1,209 @@
+@model FarewellMyBeloved.ViewModels.DeleteFarewellMessageViewModel
+@{
+    ViewData["Title"] = $"Delete Farewell Message - Admin";
+
+    string Truncate(string s, int max = 50) =>
+        string.IsNullOrEmpty(s) ? s : (s.Length <= max ? s : s.Substring(0, max) + "...");
+}
+
+<div class="container py-5">
+    <div class="row py-3">
+        <div class="col-lg-12">
+            <h2 class="mb-4 text-danger">Delete Farewell Message</h2>
+            
+            <form asp-action="DeleteFarewellMessage" method="post">
+                @Html.AntiForgeryToken()
+                
+                
+                <!-- Combined Warning and Important Notes Section -->
+                <div class="card mb-4 border-danger">
+                    <div class="card-header bg-danger text-white">
+                        <h5 class="mb-0">Warning: This action cannot be undone!</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="mb-0 col-md-6">
+                                <p class="">You are about to permanently delete the farewell message from "@Model.FarewellPersonName".</p>
+                                <p class="mb-0">This message will be permanently removed from the system.</p>
+                                <p class=""><strong>@(Model.RelatedContentReports?.Count ?? 0)</strong> content report(s) will remain but will no longer be linked to this message.</p>
+                            </div>
+                            <div class="mb-0 col-md-6">
+                                <p class="mb-0">The message will be permanently deleted</p>
+                                <p class="mb-0">Content reports will remain but will be unlinked</p>
+                                <p class="mb-0">This action will be logged in the moderator logs</p>
+                                <p>This action cannot be undone</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Combined Message Information and Summary Section -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">Message Information</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label h6">Farewell Person</label>
+                                <p class="form-control-plaintext">@Model.FarewellPersonName</p>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label h6">Created At</label>
+                                <p class="form-control-plaintext">@Model.CreatedAt.ToString("yyyy-MM-dd HH:mm")</p>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label h6">Message</label>
+                            <div class="form-control" style="min-height: 100px; white-space: pre-wrap;">@Model.Message</div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Author Name</label>
+                                <p class="form-control-plaintext">@Model.AuthorName</p>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Author Email</label>
+                                <p class="form-control-plaintext">@Model.AuthorEmail</p>
+                            </div>
+                        </div>
+                        
+                        <hr>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Content Reports</label>
+                                <p class="form-control-plaintext mb-3">@(Model.RelatedContentReports?.Count ?? 0)</p>
+                                @if (Model.RelatedContentReports?.Any() == true)
+                                {
+                                    <label class="form-label">Recent Reports:</label>
+                                    <div class="mb-3 overflow-auto" style="max-height: 300px;">
+                                        @foreach (var report in Model.RelatedContentReports.Take(5))
+                                        {
+                                            <div class="border-bottom pb-2 mb-2">
+                                                <small><strong>@report.Reason</strong> - @report.Email</small><br>
+                                                <small class="text-muted">@report.CreatedAt.ToString("yyyy-MM-dd HH:mm")</small>
+                                            </div>
+                                        }
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Admin Action Log Section -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">Admin Action Log</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label asp-for="ActionReason" class="form-label">Reason for deletion*</label>
+                            <input asp-for="ActionReason" class="form-control" placeholder="e.g., content_policy_violation, user_request, inappropriate_content" required />
+                            <span asp-validation-for="ActionReason" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="ActionDetails" class="form-label">Details *</label>
+                            <textarea asp-for="ActionDetails" class="form-control" rows="3" placeholder="Provide additional details about why this message is being deleted..." required></textarea>
+                            <span asp-validation-for="ActionDetails" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label asp-for="SelectedContentReportId" class="form-label">Link to Content Report (Optional)</label>
+                            <select asp-for="SelectedContentReportId" class="form-select">
+                                <option value="">No content report linked</option>
+                                @if(Model.RelatedContentReports != null)
+                                {
+                                    @foreach (var report in Model.RelatedContentReports)
+                                    {
+                                        <option value="@report.Id">@report.Reason - @report.Email (@report.CreatedAt.ToLocalTime().ToString("yyyy-MM-dd HH:mm"))</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-4">
+                    <small class="text-muted px-2">* Required</small>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <a href="@Url.Action("FarewellMessages")" class="btn btn-secondary">Cancel</a>
+                    <div>
+                        <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete Farewell Message</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Confirmation Modal -->
+<div class="modal fade" id="deleteConfirmationModal" tabindex="-1" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
+    <div class="modal modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="deleteConfirmationModalLabel">Confirm Deletion</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-warning mb-3">
+                    <h6 class="alert-heading"><i class="bi bi-exclamation-triangle-fill me-2"></i>Important Legal Notice</h6>
+                    <p class="mb-2">This deletion action should only be used for legal purposes including:</p>
+                    <ul class="mb-0">
+                        <li>Removing content that violates applicable laws</li>
+                        <li>Responding to valid legal requests or court orders</li>
+                        <li>Addressing copyright infringement claims</li>
+                        <li>Removing illegal or harmful content</li>
+                    </ul>
+                </div>
+                
+                <p class="mb-3">Are you absolutely sure you want to permanently delete this farewell message?</p>
+                
+                <p class="mb-3">Whenever possible, consider hiding content from public view first before complete deletion.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirmSubmitBtn">Yes, Delete Permanently</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+            const deleteModal = new bootstrap.Modal(document.getElementById('deleteConfirmationModal'));
+            const confirmSubmitBtn = document.getElementById('confirmSubmitBtn');
+            const deleteForm = document.querySelector('form');
+            
+            // Show modal when delete button is clicked
+            confirmDeleteBtn.addEventListener('click', function() {
+                deleteModal.show();
+            });
+            
+            // Submit form when confirmed in modal
+            confirmSubmitBtn.addEventListener('click', function() {
+                deleteModal.hide();
+                
+                if (deleteForm.checkValidity()) {
+                    deleteForm.submit();
+                } else {
+                    deleteForm.reportValidity();
+                }
+            });
+            
+            // Hide modal when cancel button is clicked
+            document.querySelector('[data-bs-dismiss="modal"]').addEventListener('click', function() {
+                deleteModal.hide();
+            });
+        });
+    </script>
+}
