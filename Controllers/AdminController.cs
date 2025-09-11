@@ -369,7 +369,7 @@ public class AdminController : Controller
     {
         return Challenge(new AuthenticationProperties
         {
-            RedirectUri = "/admin/index" // go here after successful login
+            RedirectUri = "/Admin" // go here after successful login
         }, "GitHub");
     }
 

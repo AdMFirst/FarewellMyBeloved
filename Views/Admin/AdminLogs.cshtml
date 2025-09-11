@@ -35,7 +35,14 @@
                                     <td>@log.Id</td>
                                     <td>@log.ModeratorName</td>
                                     <td>
-                                        <span class="badge bg-primary">@log.Action</span>
+                                        @if(log.Action == "edit"){
+                                            <span class="badge bg-primary">Edit</span>
+                                        } else if (log.Action == "delete"){
+                                            <span class="badge bg-danger">Delete</span>
+                                        } else {
+                                            <span class="badge bg-secondary">@log.Action</span>
+
+                                        }
                                     </td>
                                     <td>
                                         @if (!string.IsNullOrEmpty(log.TargetType) && log.TargetId > 0)
