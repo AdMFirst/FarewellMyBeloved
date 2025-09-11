@@ -41,7 +41,7 @@ public class ReportController : Controller
         ViewBag.Referer = !string.IsNullOrEmpty(referer) && Url.IsLocalUrl(referer) ? referer : Url.Action("Index", "Home");
 
         var reasonStrings = _configuration.GetSection("Admin:ReasonStrings").Get<List<string>>() ?? new List<string>(["Spam", "Abuse", "Inappropriate Content", "Other"]);
-        ViewBag.Reasons = reasonStrings.Select(s => new SelectListItem { Value = s.ToLower().Replace(" ", ""), Text = s }).ToList();
+        ViewBag.Reasons = reasonStrings.Select(s => new SelectListItem { Value = s, Text = s }).ToList();
 
         return View();
     }

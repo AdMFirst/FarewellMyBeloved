@@ -22,7 +22,6 @@
                             <tr>
                                 <th>Report ID</th>
                                 <th>Related Content</th>
-                                <th>Email</th>
                                 <th>Reason</th>
                                 <th>Created</th>
                                 <th>Status</th>
@@ -53,9 +52,8 @@
                                 }
                                 
                                 <tr>
-                                    <td>@report.Id.ToString().Substring(0, 8)</td>
+                                    <td>@report.Id.ToString()</td>
                                     <td>@relatedContent</td>
-                                    <td>@(report.Email ?? "N/A")</td>
                                     <td>
                                         <span class="badge bg-warning text-dark">@report.Reason</span>
                                     </td>
@@ -71,7 +69,7 @@
                                         }
                                     </td>
                                     <td>
-                                        <button class="btn btn-sm btn-outline-info" onclick="showReportDetails('@report.Id', '@relatedContent', '@(report.Email ?? "N/A")', '@report.Reason', '@report.CreatedAt.ToString("yyyy-MM-dd HH:mm")', '@(report.ResolvedAt.HasValue ? "Resolved" : "Pending")', '@(report.FarewellPersonId.HasValue ? report.FarewellPersonId.ToString() : "N/A")', '@(report.FarewellMessageId.HasValue ? report.FarewellMessageId.ToString() : "N/A")', '@(report.ResolvedAt.HasValue ? report.ResolvedAt.Value.ToString("yyyy-MM-dd HH:mm") : "N/A")')">Details</button>
+                                        <button class="btn btn-sm btn-outline-info" onclick="showReportDetails('@report.Id', '@relatedContent', '@(report.Email ?? "N/A")', '@report.Reason', '@report.CreatedAt.ToString("yyyy-MM-dd HH:mm")', '@(report.ResolvedAt.HasValue ? "Resolved" : "Pending")', '@(report.FarewellPersonId.HasValue ? report.FarewellPersonId.ToString() : "N/A")', '@(report.FarewellMessageId.HasValue ? report.FarewellMessageId.ToString() : "N/A")', '@(report.ResolvedAt.HasValue ? report.ResolvedAt.Value.ToString("yyyy-MM-dd HH:mm") : "N/A")', '@report.Explanation')">Details</button>
                                         @if (!report.ResolvedAt.HasValue)
                                         {
                                             if (report.FarewellPersonId.HasValue)
@@ -102,15 +100,12 @@
                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                                </div>
                                <div class="modal-body">
-                                   <div class="row mb-3">
-                                       <div class="col-md-6">
+                                   <div class="row">
+                                       <div class="col">
                                            <p><strong>Report ID:</strong> <span id="reportId"></span></p>
                                        </div>
-                                       <div class="col-md-6">
-                                           <p><strong>Email:</strong> <span id="email"></span></p>
-                                       </div>
                                    </div>
-                                   <div class="row mb-3">
+                                   <div class="row">
                                        <div class="col-md-6">
                                            <p><strong>Related Content:</strong> <span id="relatedContent"></span></p>
                                        </div>
@@ -118,15 +113,15 @@
                                            <p><strong>Reason:</strong> <span id="reason"></span></p>
                                        </div>
                                    </div>
-                                   <div class="row mb-3">
+                                   <div class="row">
                                        <div class="col-md-6">
                                            <p><strong>Created At:</strong> <span id="createdAt"></span></p>
                                        </div>
                                        <div class="col-md-6">
-                                           <p><strong>Status:</strong> <span id="status"></span></p>
+                                           <p><strong>Email:</strong> <span id="email"></span></p>
                                        </div>
                                    </div>
-                                   <div class="row mb-3">
+                                   <div class="row">
                                        <div class="col-md-6">
                                            <p><strong>Farewell Person ID:</strong> <span id="farewellPersonId"></span></p>
                                        </div>
@@ -135,8 +130,18 @@
                                        </div>
                                    </div>
                                    <div class="row">
+                                        <div class="col-md-6">
+                                           <p><strong>Status:</strong> <span id="status"></span></p>
+                                       </div>
                                        <div class="col-md-6">
                                            <p><strong>Resolved At:</strong> <span id="resolvedAt"></span></p>
+                                       </div>
+                                       
+                                   </div>
+                                   <div class="row">
+                                        <div class="col">
+                                            <strong>Details:</strong>
+                                            <p><span id="details"></span></p>
                                        </div>
                                    </div>
                                </div>
@@ -184,7 +189,7 @@
 
                             @section Scripts {
                                 <script>
-                                    function showReportDetails(reportId, relatedContent, email, reason, createdAt, status, farewellPersonId, farewellMessageId, resolvedAt) {
+                                    function showReportDetails(reportId, relatedContent, email, reason, createdAt, status, farewellPersonId, farewellMessageId, resolvedAt, details) {
                                         document.getElementById('reportId').innerText = reportId;
                                         document.getElementById('relatedContent').innerText = relatedContent;
                                         document.getElementById('email').innerText = email;
@@ -194,6 +199,7 @@
                                         document.getElementById('farewellPersonId').innerText = farewellPersonId;
                                         document.getElementById('farewellMessageId').innerText = farewellMessageId;
                                         document.getElementById('resolvedAt').innerText = resolvedAt;
+                                        document.getElementById('details').innerText = details;
 
                                         var myModal = new bootstrap.Modal(document.getElementById('reportDetailsModal'));
                                         myModal.show();

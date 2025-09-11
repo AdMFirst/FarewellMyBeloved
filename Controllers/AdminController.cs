@@ -537,6 +537,18 @@ public class AdminController : Controller
                 ContentReportId = viewModel.FarewellPerson.SelectedContentReportId
             };
 
+            // Set the related report to be resolved if one was selected
+            if (viewModel.FarewellPerson.SelectedContentReportId.HasValue)
+            {
+                var contentReport = await _context.ContentReports
+                    .FirstOrDefaultAsync(cr => cr.Id == viewModel.FarewellPerson.SelectedContentReportId.Value);
+                
+                if (contentReport != null && !contentReport.ResolvedAt.HasValue)
+                {
+                    contentReport.ResolvedAt = DateTime.UtcNow;
+                }
+            }
+
             _context.ModeratorLogs.Add(moderatorLog);
             await _context.SaveChangesAsync();
         }
@@ -619,8 +631,22 @@ public class AdminController : Controller
                 ContentReportId = viewModel.SelectedContentReportId
             };
 
+            // Set the related report to be resolved if one was selected
+            if (viewModel.SelectedContentReportId.HasValue)
+            {
+                var contentReport = await _context.ContentReports
+                    .FirstOrDefaultAsync(cr => cr.Id == viewModel.SelectedContentReportId.Value);
+                
+                if (contentReport != null && !contentReport.ResolvedAt.HasValue)
+                {
+                    contentReport.ResolvedAt = DateTime.UtcNow;
+                }
+            }
+
+
             _context.ModeratorLogs.Add(moderatorLog);
             await _context.SaveChangesAsync();
+            
 
             return RedirectToAction("FarewellPeople");
         }
