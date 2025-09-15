@@ -69,12 +69,12 @@ erDiagram
     CONTENT_REPORT {
         guid Id PK
         string Email
-        int? FarewellPersonId FK
-        int? FarewellMessageId FK
+        int FarewellPersonId "FK, Nullable"
+        int FarewellMessageId "FK, Nullable"
         string Reason
-        string? Explanation
+        string Explanation "Nullable"
         DateTime CreatedAt
-        DateTime? ResolvedAt
+        DateTime ResolvedAt "Nullable"
     }
     
     MODERATOR_LOG {
@@ -85,7 +85,7 @@ erDiagram
         string Action
         string Reason
         string Details
-        guid? ContentReportId FK
+        guid ContentReportId "FK, Nullable"
         DateTime CreatedAt
     }
     
