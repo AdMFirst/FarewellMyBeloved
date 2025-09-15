@@ -1,10 +1,10 @@
 # Farewell My Beloved
 
-A compassionate web platform where people can create memorial pages for their loved ones and share heartfelt farewell messages.
+A compassionate web platform where people can create memorial pages for their loved ones and share heartfelt farewell messages, with comprehensive admin moderation and content management capabilities.
 
 ## 🌟 Overview
 
-Farewell My Beloved provides a digital space for remembrance and tribute. Users can create dedicated pages for individuals who have passed away, and visitors can leave messages of condolence, memories, and farewells. The platform emphasizes privacy, allowing message authors to remain anonymous if they choose.
+Farewell My Beloved provides a digital space for remembrance and tribute. Users can create dedicated pages for individuals who have passed away, and visitors can leave messages of condolence, memories, and farewells. The platform includes robust admin features for content moderation, reporting, and management, while maintaining privacy by allowing message authors to remain anonymous if they choose.
 
 ## ✨ Key Features
 
@@ -16,20 +16,29 @@ Farewell My Beloved provides a digital space for remembrance and tribute. Users 
 - **Optional Identity**: Message authors can choose to remain anonymous
 - **Responsive Design**: Works beautifully on all devices
 
+### Admin & Moderation Features
+- **Admin Dashboard**: Comprehensive analytics and monitoring tools
+- **Content Moderation**: Edit and delete inappropriate content
+- **User Reporting**: Content reporting system with multiple reason categories
+- **Activity Logging**: Complete audit trail of all admin actions
+- **Role-Based Access**: GitHub OAuth-based authentication with admin privileges
+- **Content Management**: Bulk operations on farewell people and messages
+
 ### User Experience
 - **Simple Interface**: Easy-to-use forms for creating pages and posting messages
 - **File Upload Support**: Upload portraits and background images for personalization
-- **Message Pagination**: Navigate through multiple messages easily
-- **Auto-Approval**: Messages are published immediately without moderation
-- **Search Functionality**: Find memorial pages by name or browse all available pages
+- **Auto-Approval**: Messages are published immediately without hassle
+- **Search Functionality**: Find memorial pages by name or description
 
 ## 🏗️ Architecture
 
 ### Technology Stack
 - **Backend**: ASP.NET Core 9.0 MVC
 - **Database**: Entity Framework Core with SQL Server
-- **Frontend**: Bootstrap 5, jQuery
-- **Image Hosting**: External service (imgBB API)
+- **Frontend**: Bootstrap 5, jQuery, Font Awesome Icon
+- **Image Hosting**: AWS S3-compatible storage
+- **Authentication**: GitHub OAuth with cookie-based sessions
+- **Cloud Services**: Amazon S3 SDK for file management
 
 ### Database Schema
 ```mermaid
@@ -41,6 +50,7 @@ erDiagram
         string Description
         string PortraitUrl
         string BackgroundUrl
+        string Email "Optional"
         DateTime CreatedAt
         DateTime UpdatedAt
         bool IsPublic
@@ -56,7 +66,35 @@ erDiagram
         bool IsPublic
     }
     
+    CONTENT_REPORT {
+        guid Id PK
+        string Email
+        int? FarewellPersonId FK
+        int? FarewellMessageId FK
+        string Reason
+        string? Explanation
+        DateTime CreatedAt
+        DateTime? ResolvedAt
+    }
+    
+    MODERATOR_LOG {
+        int Id PK
+        string ModeratorName
+        string TargetType
+        int TargetId
+        string Action
+        string Reason
+        string Details
+        guid? ContentReportId FK
+        DateTime CreatedAt
+    }
+    
     FAREWELL_PERSON ||--o{ FAREWELL_MESSAGE : "has"
+    FAREWELL_PERSON ||--o{ CONTENT_REPORT : "reported"
+    FAREWELL_MESSAGE ||--o{ CONTENT_REPORT : "reported"
+    CONTENT_REPORT ||--o{ MODERATOR_LOG : "handled_by"
+    FAREWELL_PERSON ||--o{ MODERATOR_LOG : "modified"
+    FAREWELL_MESSAGE ||--o{ MODERATOR_LOG : "modified"
 ```
 
 ### System Components
@@ -72,6 +110,8 @@ erDiagram
 - .NET 9.0 SDK
 - SQL Server (or compatible database)
 - Visual Studio 2022 or VS Code
+- GitHub account for admin authentication
+- S3 Compatible account for image hosting
 
 ### Installation
 1. Clone the repository
@@ -81,42 +121,89 @@ erDiagram
 5. Run the application: `dotnet run`
 
 ### Configuration
-Configure your database connection and imgBB API key in `appsettings.json`:
+Configure your database connection, S3 storage, GitHub authentication, and admin settings in `appsettings.json`:
 ```json
 {
   "ConnectionStrings": {
-    "DefaultConnection": "Server=.;Database=FarewellMyBeloved;Trusted_Connection=True;TrustServerCertificate=True"
+    "DefaultConnection": "Server=(localdb)\\mssqllocaldb;Database=FarewellMyBeloved;Trusted_Connection=True;MultipleActiveResultSets=true"
   },
-  "ImgBB": {
-    "ApiKey": "your_imgbb_api_key_here"
+  "S3": {
+    "Bucket": "farewell-my-beloved-images",
+    "AccessKey": "YOUR_S3_ACCESS_KEY",
+    "SecretKey": "YOUR_S3_SECRET_KEY",
+    "Endpoint": "https://s3.filebase.com"
+  },
+  "Authentication": {
+    "GitHub": {
+      "ClientId": "your-github-client-id",
+      "ClientSecret": "your-github-client-secret"
+    }
+  },
+  "Admin": {
+    "Emails": [
+      "admin@example.com",
+      "admin.2@example.com"
+    ],
+    "ReasonStrings": [
+      "Spam",
+      "Abuse",
+      "Inappropriate Content",
+      "Other"
+    ]
   }
 }
 ```
 
-### Getting imgBB API Key
-1. Visit [imgbb.com](https://imgbb.com)
-2. Sign up for a free account
-3. Go to your dashboard and find your API key
-4. Add the API key to your `appsettings.json`
+### Setup Instructions
+1. **GitHub OAuth Setup**:
+   - Visit [GitHub Developer Settings](https://github.com/settings/developers)
+   - Create a new OAuth App
+   - Set Authorization callback URL to `http://localhost:5000/signin-github` (or your production URL)
+   - Add Client ID and Secret to `appsettings.json`
+
+2. **S3 Storage Setup**:
+   - Use any compatible S3 service
+   - Create a bucket for storing images
+   - Generate access keys
+   - Configure bucket for public read access
+   - Update S3 settings in `appsettings.json`
+
+3. **Admin Configuration**:
+   - Add GitHub email addresses of admin users to the `Admin:Emails` array
+   - Configure reason strings for content reporting
 
 ## 📁 Project Structure
 
 ```
 FarewellMyBeloved/
 ├── Controllers/           # MVC Controllers
+│   ├── HomeController.cs
+│   ├── FarewellPersonController.cs
+│   ├── FarewellMessageController.cs
+│   ├── AdminController.cs     # Admin dashboard and moderation
+│   └── ReportController.cs    # Content reporting system
 ├── Models/               # Data models and view models
+│   ├── ApplicationDbContext.cs
+│   ├── FarewellPerson.cs
+│   ├── FarewellMessage.cs
+│   ├── ContentReport.cs       # User content reporting
+│   └── ModeratorLog.cs        # Admin action logging
 ├── Views/                # Razor views
 │   ├── Home/            # Home page views
 │   ├── FarewellPerson/  # Memorial page views
+│   ├── Admin/           # Admin dashboard and management
+│   ├── Report/          # Content reporting views
 │   └── Shared/          # Shared layout components
+├── Services/            # Business logic services
+│   ├── IS3Service.cs    # S3 storage interface
+│   └── S3Service.cs     # S3 storage implementation
+├── ViewModels/          # View models for various pages
 ├── wwwroot/             # Static files
 │   ├── css/            # Stylesheets
 │   ├── js/             # JavaScript files
 │   └── images/         # Static images
-├── Data/                # Database context
-├── Services/            # Business logic services
-├── Interfaces/          # Service interfaces
-└── appsettings.json    # Configuration including imgBB API key
+├── Migrations/          # Entity Framework migrations
+└── appsettings.json    # Configuration including S3, auth, and admin settings
 ```
 
 ## 🎯 Usage Guide
@@ -125,8 +212,8 @@ FarewellMyBeloved/
 1. Navigate to the home page
 2. Click "Create Memorial Page"
 3. Fill in the person's name and description
-4. Upload a portrait image (optional)
-5. Upload a background image (optional)
+4. Upload a portrait image (or use an existing image url)
+5. Upload a background image (or use an existing image url)
 6. Submit the form
 7. Share the unique URL with others
 
@@ -139,11 +226,17 @@ FarewellMyBeloved/
 6. Your message will appear immediately
 
 ### Customizing Pages
-- **Portraits**: Upload clear, respectful images of the person (hosted externally via imgBB)
-- **Backgrounds**: Choose images that complement the memorial theme (hosted externally via imgBB)
+- **Portraits**: Upload clear, respectful images of the person
+- **Backgrounds**: Choose images that complement the memorial theme
 - **Descriptions**: Write meaningful biographical information
 - **Privacy**: All pages are public by default
-- **Image Hosting**: Images are automatically uploaded to imgBB and stored externally
+
+### Admin Features
+- **Dashboard**: View analytics and statistics for all content
+- **Content Management**: Edit or delete farewell people and messages
+- **Moderation**: Handle user reports with detailed action logging
+- **Audit Trail**: Complete history of all admin actions and decisions
+- **Bulk Operations**: Manage multiple items efficiently
 
 ## 🔒 Privacy & Security
 
@@ -152,10 +245,17 @@ FarewellMyBeloved/
 - **No Personal Data Collection**: We don't require personal information for message posting
 - **Public Messages**: All messages are displayed publicly on memorial pages
 
+### Admin Security
+- **GitHub OAuth**: Secure authentication using GitHub's OAuth system
+- **Role-Based Access**: Only authorized GitHub users can access admin features
+- **Email Whitelisting**: Admin access restricted to specific GitHub accounts
+- **Session Management**: Secure cookie-based authentication with proper logout
+
 ### Data Protection
 - **Input Validation**: All user inputs are validated and sanitized
-- **File Upload Security**: Restricted file types and size limits
+- **File Upload Security**: Restricted file types and size limits for S3 uploads
 - **XSS Protection**: Built-in security measures prevent cross-site scripting
+- **S3 Security**: Secure file storage with proper access controls
 
 ## 🛠️ Development
 
@@ -179,36 +279,61 @@ dotnet test
 
 ## 📝 Future Enhancements
 
+### Current Features (Implemented)
+- ✅ Admin dashboard with comprehensive analytics
+- ✅ Content moderation and reporting system
+- ✅ GitHub OAuth authentication
+- ✅ AWS S3-compatible image hosting
+- ✅ Complete audit logging of admin actions
+- ✅ Role-based access control
+- ✅ Content management with bulk operations
+
 ### Planned Features
-- [ ] User authentication for page management
-- [ ] Admin panel for content moderation
-- [ ] Email notifications for new messages
-- [ ] Advanced search and filtering
+- [ ] Advanced search and filtering capabilities
 - [ ] Social media sharing integration
 - [ ] Mobile app development
 - [ ] Multi-language support
 - [ ] Theme customization options
+- [ ] Enhanced analytics dashboard
+
+### Cancelled Features
+- ❎ Email notifications for new messages and reports
 
 ### Technical Improvements
-- [ ] Cloud storage integration (Azure Blob/AWS S3)
 - [ ] Caching for better performance
 - [ ] API development for third-party integration
-- [ ] Analytics and statistics tracking
+- [ ] Enhanced analytics and statistics tracking
 - [ ] SEO optimization
+- [ ] Rate limiting and DDoS protection
 
 ## 🤝 Contributing
 
 We welcome contributions to make Farewell My Beloved a better platform for everyone. Please follow these guidelines:
 
+### Development Guidelines
 1. Fork the repository
-2. Create a feature branch
-3. Make your changes
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Make your changes following C# coding standards
 4. Add tests if applicable
-5. Submit a pull request
+5. Ensure all existing tests pass
+6. Submit a pull request with a clear description of changes
+
+### Code Standards
+- Follow C# coding conventions and best practices
+- Use meaningful variable and method names
+- Implement proper error handling and logging
+- Write clean, maintainable code with proper documentation
+- Ensure security best practices are followed
+
+### Testing
+- Run the test suite before submitting changes
+- Add unit tests for new functionality
+- Test admin features thoroughly
+- Verify all authentication and authorization flows
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the GPL-3.0 License - see the LICENSE file for details.
 
 ## 🙏 Acknowledgments
 

@@ -3,21 +3,29 @@
 ## 1. Introduction
 
 ### 1.1 Purpose
-This document provides a comprehensive technical specification for the Farewell My Beloved web application. The application serves as a digital memorial platform where users can create dedicated pages for deceased individuals and allow visitors to leave farewell messages.
+This document provides a comprehensive technical specification for the Farewell My Beloved web application. The application serves as a digital memorial platform where users can create dedicated pages for deceased individuals and allow visitors to leave farewell messages, with comprehensive admin moderation and content management capabilities.
 
 ### 1.2 Scope
-The initial implementation focuses on core functionality without authentication, allowing:
+The current implementation includes:
 - Creation of memorial pages with customizable content
 - Dynamic routing for individual memorial pages
 - Message posting with optional author identification
-- File upload support for images
+- File upload support for images using S3 storage
 - Responsive web interface
+- Admin dashboard with analytics and monitoring
+- Content moderation and reporting system
+- GitHub OAuth authentication
+- Complete audit logging of admin actions
 
 ### 1.3 Definitions
 - **Memorial Page**: A dedicated web page for remembering a deceased person
 - **Slug**: URL-friendly identifier for memorial pages (e.g., "donald-trump")
 - **Message**: A farewell message left by a visitor
 - **Author**: Optional identifier for message posters (name/email)
+- **Content Report**: User-submitted report for inappropriate content
+- **Moderator Log**: Administrative action record for content moderation
+- **S3 Storage**: AWS S3-compatible file storage service (Filebase)
+- **GitHub OAuth**: Authentication using GitHub's OAuth 2.0 system
 
 ## 2. System Architecture
 
@@ -37,7 +45,9 @@ The initial implementation focuses on core functionality without authentication,
 - **Backend Framework**: ASP.NET Core 9.0 MVC
 - **Database**: Entity Framework Core with SQL Server
 - **Frontend**: Bootstrap 5, jQuery 3.7.0
-- **Image Hosting**: External service (imgBB API)
+- **Image Hosting**: AWS S3-compatible storage (Filebase)
+- **Authentication**: GitHub OAuth with cookie-based sessions
+- **Cloud Services**: Amazon S3 SDK for file management
 - **Runtime**: .NET 9.0
 
 ### 2.3 Design Patterns
@@ -58,6 +68,7 @@ erDiagram
         string Description "Required, max 5000 chars"
         string PortraitUrl "Optional, max 500 chars"
         string BackgroundUrl "Optional, max 500 chars"
+        string Email "Optional, max 255 chars"
         DateTime CreatedAt "Required, default GetUtcDate()"
         DateTime UpdatedAt "Required, default GetUtcDate()"
         bool IsPublic "Required, default true"
@@ -73,7 +84,35 @@ erDiagram
         bool IsPublic "Required, default true"
     }
     
+    CONTENT_REPORT {
+        guid Id PK
+        string Email "Required, max 255 chars"
+        int? FarewellPersonId "Optional, FK to FAREWELL_PERSON"
+        int? FarewellMessageId "Optional, FK to FAREWELL_MESSAGE"
+        string Reason "Required, max 100 chars"
+        string? Explanation "Optional, max 1000 chars"
+        DateTime CreatedAt "Required, default GetUtcDate()"
+        DateTime? ResolvedAt "Optional"
+    }
+    
+    MODERATOR_LOG {
+        int Id PK
+        string ModeratorName "Required, max 100 chars"
+        string TargetType "Required, max 50 chars"
+        int TargetId "Required"
+        string Action "Required, max 50 chars"
+        string Reason "Optional, max 200 chars"
+        string Details "Required, max 1000 chars"
+        guid? ContentReportId "Optional, FK to CONTENT_REPORT"
+        DateTime CreatedAt "Required, default GetUtcDate()"
+    }
+    
     FAREWELL_PERSON ||--o{ FAREWELL_MESSAGE : "has"
+    FAREWELL_PERSON ||--o{ CONTENT_REPORT : "reported"
+    FAREWELL_MESSAGE ||--o{ CONTENT_REPORT : "reported"
+    CONTENT_REPORT ||--o{ MODERATOR_LOG : "handled_by"
+    FAREWELL_PERSON ||--o{ MODERATOR_LOG : "modified"
+    FAREWELL_MESSAGE ||--o{ MODERATOR_LOG : "modified"
 ```
 
 ### 3.2 Database Schema Details
@@ -85,8 +124,9 @@ erDiagram
 | Name | nvarchar(200) | Required, MaxLength(200) | Person's full name |
 | Slug | nvarchar(200) | Required, MaxLength(200), Unique | URL-friendly identifier |
 | Description | nvarchar(5000) | Required, MaxLength(5000) | Biographical information |
-| PortraitUrl | nvarchar(500) | Optional, MaxLength(500) | Path to portrait image |
-| BackgroundUrl | nvarchar(500) | Optional, MaxLength(500) | Path to background image |
+| PortraitUrl | nvarchar(500) | Optional, MaxLength(500) | S3 URL to portrait image |
+| BackgroundUrl | nvarchar(500) | Optional, MaxLength(500) | S3 URL to background image |
+| Email | nvarchar(255) | Optional, MaxLength(255) | Contact email (optional) |
 | CreatedAt | datetime2 | Required, Default(GetUtcDate()) | Creation timestamp |
 | UpdatedAt | datetime2 | Required, Default(GetUtcDate()) | Last update timestamp |
 | IsPublic | bit | Required, Default(1) | Page visibility status |
@@ -102,6 +142,31 @@ erDiagram
 | CreatedAt | datetime2 | Required, Default(GetUtcDate()) | Creation timestamp |
 | IsPublic | bit | Required, Default(1) | Message visibility status |
 
+#### CONTENT_REPORT Table
+| Column | Data Type | Constraints | Description |
+|--------|-----------|-------------|-------------|
+| Id | uniqueidentifier | Primary Key, Default(NewId()) | Unique identifier |
+| Email | nvarchar(255) | Required, MaxLength(255) | Reporter's email |
+| FarewellPersonId | int | Optional, Foreign Key | Reference to reported person |
+| FarewellMessageId | int | Optional, Foreign Key | Reference to reported message |
+| Reason | nvarchar(100) | Required, MaxLength(100) | Report reason (Spam, Abuse, etc.) |
+| Explanation | nvarchar(1000) | Optional, MaxLength(1000) | Detailed explanation |
+| CreatedAt | datetime2 | Required, Default(GetUtcDate()) | Report creation timestamp |
+| ResolvedAt | datetime2 | Optional | Resolution timestamp |
+
+#### MODERATOR_LOG Table
+| Column | Data Type | Constraints | Description |
+|--------|-----------|-------------|-------------|
+| Id | int | Primary Key, Identity | Unique identifier |
+| ModeratorName | nvarchar(100) | Required | Admin user's display name |
+| TargetType | nvarchar(50) | Required | Entity type modified |
+| TargetId | int | Required | ID of modified entity |
+| Action | nvarchar(50) | Required | Action performed (edit, delete, etc.) |
+| Reason | nvarchar(200) | Optional | Action reason code |
+| Details | nvarchar(1000) | Required | Detailed action description |
+| ContentReportId | uniqueidentifier | Optional, Foreign Key | Related content report |
+| CreatedAt | datetime2 | Required, Default(GetUtcDate()) | Action timestamp |
+
 ### 3.3 Database Indexes
 ```sql
 -- Primary keys are automatically indexed
@@ -110,6 +175,11 @@ erDiagram
 CREATE INDEX IX_FarewellPerson_Slug ON FAREWELL_PERSON(Slug);
 CREATE INDEX IX_FarewellMessage_FarewellPersonId ON FAREWELL_MESSAGE(FarewellPersonId);
 CREATE INDEX IX_FarewellMessage_CreatedAt ON FAREWELL_MESSAGE(CreatedAt DESC);
+CREATE INDEX IX_ContentReport_CreatedAt ON CONTENT_REPORT(CreatedAt DESC);
+CREATE INDEX IX_ContentReport_FarewellPersonId ON CONTENT_REPORT(FarewellPersonId);
+CREATE INDEX IX_ContentReport_FarewellMessageId ON CONTENT_REPORT(FarewellMessageId);
+CREATE INDEX IX_ModeratorLog_CreatedAt ON MODERATOR_LOG(CreatedAt DESC);
+CREATE INDEX IX_ModeratorLog_TargetType ON MODERATOR_LOG(TargetType, TargetId);
 ```
 
 ## 4. API Specification
@@ -119,73 +189,58 @@ CREATE INDEX IX_FarewellMessage_CreatedAt ON FAREWELL_MESSAGE(CreatedAt DESC);
 #### HomeController
 | Action | HTTP Method | Route | Description |
 |--------|-------------|-------|-------------|
-| Index | GET | / | Display list of all memorial pages |
-| Privacy | GET | /Privacy | Privacy policy page |
+| Index | GET | / | Displays the home page |
+| Privacy | GET | /Privacy | Displays the privacy policy page |
+| Error | GET | /Home/Error | Displays the error page |
+| Search | GET | /Home/Search | Performs a search for memorial pages |
+| Slug | GET | /{slug} | Displays a specific memorial page by its slug |
 
 #### FarewellPersonController
 | Action | HTTP Method | Route | Description |
 |--------|-------------|-------|-------------|
-| Index | GET | /FarewellPerson | List all memorial pages |
-| Create | GET | /FarewellPerson/Create | Show create form |
-| Create | POST | /FarewellPerson/Create | Create new memorial page |
-| Edit | GET | /FarewellPerson/Edit/{id} | Show edit form |
-| Edit | POST | /FarewellPerson/Edit/{id} | Update memorial page |
-| Details | GET | /FarewellPerson/Details/{slug} | Display memorial page |
-| Delete | GET | /FarewellPerson/Delete/{id} | Show delete confirmation |
-| Delete | POST | /FarewellPerson/Delete/{id} | Delete memorial page |
+| Create | GET | /FarewellPerson/Create | Displays the form to create a new memorial page |
+| Create | POST | /FarewellPerson/Create | Handles the submission for creating a new memorial page |
 
 #### FarewellMessageController
 | Action | HTTP Method | Route | Description |
 |--------|-------------|-------|-------------|
-| Create | POST | /FarewellMessage/Create | Create new message |
-| GetMessages | GET | /FarewellMessage/GetMessages/{personId} | Get paginated messages |
+| Create | GET | /FarewellMessage/Create | Displays the form to create a new farewell message |
+| Create | POST | /FarewellMessage/Create | Handles the submission for creating a new farewell message |
 
-### 4.2 ViewModels
+#### AdminController
+| Action | HTTP Method | Route | Description |
+|--------|-------------|-------|-------------|
+| Index | GET | /Admin | Displays the admin dashboard with analytics |
+| FarewellPeople | GET | /Admin/FarewellPeople | Manages memorial pages with pagination |
+| FarewellMessages | GET | /Admin/FarewellMessages | Manages farewell messages with pagination |
+| ContentReports | GET | /Admin/ContentReports | Manages content reports with pagination |
+| AdminLogs | GET | /Admin/AdminLogs | Displays admin action logs with pagination |
+| Login | GET | /Admin/login | Initiates GitHub OAuth login process |
+| Logout | GET | /Admin/logout | Logs out the current admin user |
+| EditFarewellPerson | GET | /Admin/FarewellPeople/Edit/{id} | Displays the form to edit a memorial page |
+| EditFarewellPerson | POST | /Admin/FarewellPeople/Edit/{id} | Handles submission for editing a memorial page |
+| EditFarewellMessage | GET | /Admin/FarewellMessages/Edit/{id} | Displays the form to edit a farewell message |
+| EditFarewellMessage | POST | /Admin/FarewellMessages/Edit/{id} | Handles submission for editing a farewell message |
+| DeleteFarewellMessage | GET | /Admin/FarewellMessages/Delete/{id} | Displays confirmation for deleting a message |
+| DeleteFarewellMessage | POST | /Admin/FarewellMessages/Delete/{id} | Handles deletion of a farewell message |
+| DeleteFarewellPerson | GET | /Admin/FarewellPeople/Delete/{id} | Displays confirmation for deleting a memorial page |
+| DeleteFarewellPerson | POST | /Admin/FarewellPeople/Delete/{id} | Handles deletion of a memorial page |
 
-#### CreateFarewellPersonViewModel
-```csharp
-public class CreateFarewellPersonViewModel
-{
-    [Required(ErrorMessage = "Name is required")]
-    [StringLength(200, ErrorMessage = "Name cannot exceed 200 characters")]
-    public string Name { get; set; } = string.Empty;
-
-    [Required(ErrorMessage = "Description is required")]
-    [StringLength(5000, ErrorMessage = "Description cannot exceed 5000 characters")]
-    public string Description { get; set; } = string.Empty;
-
-    [StringLength(500, ErrorMessage = "Portrait URL cannot exceed 500 characters")]
-    public string? PortraitUrl { get; set; }
-
-    [StringLength(500, ErrorMessage = "Background URL cannot exceed 500 characters")]
-    public string? BackgroundUrl { get; set; }
-}
-```
-
-#### CreateFarewellMessageViewModel
-```csharp
-public class CreateFarewellMessageViewModel
-{
-    [Required(ErrorMessage = "Message is required")]
-    [StringLength(2000, ErrorMessage = "Message cannot exceed 2000 characters")]
-    public string Message { get; set; } = string.Empty;
-
-    [StringLength(100, ErrorMessage = "Name cannot exceed 100 characters")]
-    public string? AuthorName { get; set; }
-
-    [EmailAddress(ErrorMessage = "Invalid email address")]
-    [StringLength(255, ErrorMessage = "Email cannot exceed 255 characters")]
-    public string? AuthorEmail { get; set; }
-}
-```
+#### ReportController
+| Action | HTTP Method | Route | Description |
+|--------|-------------|-------|-------------|
+| Index | GET | /report | Displays the content report submission form |
+| Index | POST | /report | Handles the submission of a new content report |
+| Success | GET | /report/success | Displays the report submission success page |
 
 ## 5. File Upload Specification
 
 ### 5.1 Upload Requirements
 - **Portrait Images**: Max 5MB, formats: JPG, PNG, GIF
 - **Background Images**: Max 10MB, formats: JPG, PNG
-- **Storage Location**: `/wwwroot/uploads/{personId}/`
-- **File Naming**: `{timestamp}_{original_filename}`
+- **Storage Location**: AWS S3-compatible storage (Filebase)
+- **File Naming**: `{type}/{guid}-{original_filename}` (type = portrait/background)
+- **Access Control**: Public read access, signed URLs for preview
 
 ### 5.2 Upload Validation
 ```csharp
@@ -231,13 +286,13 @@ app.MapControllerRoute(
 
 // Dynamic route for memorial pages
 app.MapControllerRoute(
-    name: "memorial-page",
-    pattern: "{slug}",
-    defaults: new { controller = "FarewellPerson", action = "Details" });
+    name: "slug",
+    pattern: "{slug:minlength(1)}",
+    defaults: new { controller = "Home", action = "Slug" });
 ```
 
 ### 6.2 Route Priority
-1. Static routes (Privacy, etc.)
+1. Static routes (Privacy, Admin, etc.)
 2. Memorial page dynamic route (`/{slug}`)
 3. Default MVC route
 
@@ -248,18 +303,29 @@ app.MapControllerRoute(
 - Client-side validation using jQuery validation
 - HTML encoding to prevent XSS attacks
 - SQL injection prevention through Entity Framework
+- Model validation with Data Annotations
 
 ### 7.2 File Upload Security
-- File type validation
-- File size limits
-- Safe file naming
+- File type validation for S3 uploads
+- File size limits (5MB for portraits, 10MB for backgrounds)
+- Secure file naming with GUIDs
+- S3 access controls with signed URLs
 - Path traversal prevention
 
-### 7.3 Data Protection
-- Sensitive data encryption (future enhancement)
-- Rate limiting for message posting
+### 7.3 Authentication & Authorization
+- GitHub OAuth 2.0 authentication
+- Cookie-based session management
+- Role-based access control with email whitelisting
+- Admin-only route protection
+- Automatic logout for unauthorized users
+
+### 7.4 Data Protection
+- S3 secure storage with proper access controls
+- Input sanitization and validation
+- Rate limiting for API endpoints
 - Request size limits
 - CORS configuration
+- Audit logging for all admin actions
 
 ## 8. Performance Requirements
 
@@ -323,43 +389,56 @@ public class ErrorResponse
 ## 11. Deployment Requirements
 
 ### 11.1 Environment Setup
-- Development: Local IIS Express
-- Staging: Cloud-based staging environment
-- Production: Cloud-based production environment
+- Development: Local IIS Express with SQL Server LocalDB
+- Staging: Cloud-based staging environment with production database
+- Production: Cloud-based production environment with S3 storage
 
 ### 11.2 Configuration Management
-- Environment-specific settings
+- Environment-specific settings in `appsettings.json` and `appsettings.Production.json`
 - Database connection strings
-- imgBB API configuration
+- S3 storage configuration (bucket, credentials, endpoint)
+- GitHub OAuth configuration (client ID, client secret)
+- Admin email whitelisting
+- Content report reason strings
 - Logging configuration
 
 ### 11.3 Monitoring and Logging
-- Application logging
-- Error tracking
-- Performance monitoring
-- User activity logging (anonymous)
-- imgBB API usage tracking
+- Application logging using built .NET logging
+- Error tracking with custom error pages
+- Performance monitoring for database queries
+- User activity logging (anonymous analytics)
+- Admin action audit logging
+- S3 API usage tracking
+- Content report resolution tracking
 
 ## 12. Future Enhancements
 
-### 12.1 Phase 1 (Current)
+### 12.1 Phase 1 (Current - Implemented)
 - Core memorial page functionality
 - Message system with optional author info
-- File upload support
+- S3 file upload support
 - Responsive design
+- GitHub OAuth authentication
+- Admin dashboard with analytics
+- Content reporting system
+- Complete audit logging
+- Role-based access control
 
 ### 12.2 Phase 2 (Planned)
-- User authentication
-- Admin panel
-- Email notifications
-- Advanced search
+- Email notifications for new messages and reports
+- Advanced search and filtering capabilities
+- Enhanced analytics dashboard
+- Social media sharing integration
+- Theme customization options
+- Rate limiting and DDoS protection
 
 ### 12.3 Phase 3 (Future)
-- Enhanced image hosting features
-- Mobile application
-- Analytics dashboard
-- Social media integration
-- Multiple image hosting provider support
+- Mobile application development
+- Multi-language support
+- API development for third-party integration
+- Enhanced caching for performance
+- SEO optimization
+- Multiple S3 provider support
 
 ## 13. Compliance and Legal
 

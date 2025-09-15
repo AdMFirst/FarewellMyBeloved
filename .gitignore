@@ -487,3 +487,4 @@ $RECYCLE.BIN/
 # development files
 appsettings.Development.json
 .vscode/
+security report/
