@@ -1,0 +1,47 @@
+@{
+    ViewData["Title"] = "Authentication Error";
+}
+
+<div class="text-center">
+    <h1 class="text-danger">Authentication Error</h1>
+    
+    @if (ViewBag.ErrorMessage != null)
+    {
+        <h2 class="text-danger">@ViewBag.ErrorMessage</h2>
+    }
+    else
+    {
+        <h2 class="text-danger">Authentication Failed</h2>
+    }
+    
+    @if (ViewBag.DetailedMessage != null)
+    {
+        <p class="lead text-muted">@ViewBag.DetailedMessage</p>
+    }
+    
+    <div class="card mt-4">
+        <div class="card-body">
+            <h5>What happened?</h5>
+            <p>
+                @(ViewBag.DetailedMessage ?? "An error occurred during the GitHub authentication process. Please try again.")
+            </p>
+            
+            <div class="mt-4">
+                <a href="@Url.Action("Login", "Admin")" class="btn btn-primary">
+                    <i class="fab fa-github"></i> Try Again
+                </a>
+                <a href="@Url.Action("Index", "Home")" class="btn btn-secondary">
+                    <i class="fas fa-home"></i> Go to Home
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    @if (!string.IsNullOrEmpty(ViewBag.RequestId))
+    {
+        <hr />
+        <p class="text-muted small">
+            Request ID: @ViewBag.RequestId
+        </p>
+    }
+</div>

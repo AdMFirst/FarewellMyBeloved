@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using System.Globalization;
 
+
 namespace FarewellMyBeloved.Controllers;
 
 [Route("Admin")]
@@ -20,11 +21,16 @@ public class AdminController : Controller
     private readonly IConfiguration _configuration;
 
 
-    public AdminController(ApplicationDbContext context, IS3Service s3Service, IConfiguration configuration)
+    private readonly IStateParameterService _stateParameterService;
+    private readonly ILogger<AdminController> _logger;
+
+    public AdminController(ApplicationDbContext context, IS3Service s3Service, IConfiguration configuration, IStateParameterService stateParameterService, ILogger<AdminController> logger)
     {
         _context = context;
         _configuration = configuration;
         _s3Service = s3Service;
+        _stateParameterService = stateParameterService;
+        _logger = logger;
     }
 
     [Authorize(Policy = "AdminsOnly")]
@@ -365,14 +371,97 @@ public class AdminController : Controller
 
     [HttpGet("login")]
     [AllowAnonymous] // must allow anyone
-    public IActionResult Login()
+    public async Task<IActionResult> Login()
     {
+        _logger.LogInformation("GitHub OAuth login initiated");
+        
+        // Generate and store state parameter for CSRF protection
+        var state = _stateParameterService.GenerateStateParameter();
+        await _stateParameterService.StoreStateParameterAsync(state);
+
+        _logger.LogInformation("Redirecting to GitHub OAuth with state parameter");
+        return Challenge(new AuthenticationProperties
+        {
+            RedirectUri = $"/Admin/callback?state={state}" // go here after successful login with state parameter
+        }, "GitHub");
+    }
+
+
+    [HttpGet("callback")]
+    [AllowAnonymous]
+    public async Task<IActionResult> Callback(string? state, string? error, string? error_description)
+    {
+        _logger.LogInformation("GitHub OAuth callback received");
+        
+        // Handle error response from GitHub
+        if (!string.IsNullOrEmpty(error))
+        {
+            _logger.LogError("GitHub OAuth error: {Error} - {ErrorDescription}", error, error_description ?? "No description");
+            
+            return RedirectToAction("OAuthError", new {
+                error = "oauth_error",
+                error_description = error_description ?? "Authentication failed"
+            });
+        }
+
+        // Validate state parameter to prevent CSRF attacks
+        if (string.IsNullOrEmpty(state))
+        {
+            _logger.LogWarning("OAuth callback received without state parameter - potential CSRF attack");
+            return RedirectToAction("OAuthError", new {
+                error = "missing_state",
+                error_description = "Invalid authentication request"
+            });
+        }
+
+        _logger.LogDebug("Validating OAuth state parameter");
+        var isValidState = await _stateParameterService.ValidateStateParameterAsync(state);
+        if (!isValidState)
+        {
+            _logger.LogWarning("OAuth callback received with invalid state parameter - potential CSRF attack");
+            return RedirectToAction("OAuthError", new {
+                error = "invalid_state",
+                error_description = "Invalid authentication request"
+            });
+        }
+
+        // State is valid, remove it from storage
+        await _stateParameterService.RemoveStateParameterAsync(state);
+        _logger.LogInformation("OAuth state parameter validated successfully, proceeding with authentication");
+
+        // Proceed with the authentication challenge
         return Challenge(new AuthenticationProperties
         {
             RedirectUri = "/Admin" // go here after successful login
         }, "GitHub");
     }
 
+    [HttpGet("error")]
+    [AllowAnonymous]
+    public IActionResult OAuthError(string? error, string? error_description)
+    {
+        _logger.LogWarning("OAuth error page accessed with error: {Error}", error ?? "unknown");
+        
+        if (error == "oauth_error")
+        {
+            ViewBag.ErrorMessage = "Authentication failed";
+            ViewBag.DetailedMessage = error_description ?? "An error occurred during GitHub authentication.";
+        }
+        else if (error == "missing_state" || error == "invalid_state")
+        {
+            _logger.LogWarning("Potential CSRF attack detected: {Error}", error);
+            ViewBag.ErrorMessage = "Invalid authentication request";
+            ViewBag.DetailedMessage = "The authentication request appears to be invalid or tampered with. Please try again.";
+        }
+        else
+        {
+            ViewBag.ErrorMessage = "Authentication error";
+            ViewBag.DetailedMessage = "An unknown error occurred during authentication.";
+        }
+        
+        ViewBag.RequestId = HttpContext.TraceIdentifier;
+        return View("OAuthError");
+    }
 
     [HttpGet("logout")]
     [Authorize] // any logged-in user

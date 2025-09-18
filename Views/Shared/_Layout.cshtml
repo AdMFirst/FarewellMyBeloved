@@ -57,7 +57,7 @@
                             }
                             @if (isAdmin)
                             {
-                                <a id="logoutButton" class="btn btn-outline-danger text-dark" href="#">Logout<i class="fa-solid fa-right-from-bracket ps-2" aria-hidden="true"></i></a>
+                                <a class="btn btn-outline-danger text-dark" asp-controller="Admin" asp-action="Logout">Logout<i class="fa-solid fa-right-from-bracket ps-2" aria-hidden="true"></i></a>
                             }
                         </li>
                     </ul>
@@ -73,7 +73,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2025 - AdMFirst - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2025 - AdMFirst - <a href="https://github.com/AdMFirst/FarewellMyBeloved" target="_blank">Contribute</a> - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

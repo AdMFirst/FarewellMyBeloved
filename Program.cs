@@ -6,11 +6,24 @@ using AspNet.Security.OAuth.GitHub;
 using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// Add session services for state parameter storage
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
+// Add HttpContextAccessor
+builder.Services.AddHttpContextAccessor();
 
 // Add S3 Service
 var awsConfig = builder.Configuration.GetSection("S3");
@@ -29,6 +42,9 @@ var config = new AmazonS3Config
 var s3Client = new AmazonS3Client(accessKeyId, secretAccessKey, config);
 builder.Services.AddSingleton<IAmazonS3>(s3Client);
 builder.Services.AddScoped<IS3Service, S3Service>();
+
+// Register state parameter service
+builder.Services.AddScoped<IStateParameterService, StateParameterService>();
 
 // Add Entity Framework services
 builder.Services.AddDbContext<FarewellMyBeloved.Models.ApplicationDbContext>(options =>
@@ -90,6 +106,9 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseRouting();
+
+// Use session middleware before authentication
+app.UseSession();
 
 app.UseAuthentication();
 
