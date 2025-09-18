@@ -23,6 +23,9 @@ builder.Services.AddSession(options =>
     options.IdleTimeout = TimeSpan.FromMinutes(30);
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
+    options.Cookie.SecurePolicy = SecurePolicy.Always;
+    options.Cookie.SameSite = SameSiteMode.Strict;
+    options.Cookie.SlidingExpiration = true;
 });
 
 // Add HttpContextAccessor
@@ -60,7 +63,14 @@ builder.Services
         options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
         options.DefaultChallengeScheme = GitHubAuthenticationDefaults.AuthenticationScheme; // "GitHub"
     })
-    .AddCookie()
+    .AddCookie(options =>
+    {
+        options.Cookie.SecurePolicy = SecurePolicy.Always;
+        options.Cookie.SameSite = SameSiteMode.Strict;
+        options.SlidingExpiration = true;
+        // Expire the authentication cookie after 30 minutes of inactivity
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+    })
     .AddGitHub(options =>
     {
         options.ClientId = builder.Configuration["Authentication:GitHub:ClientId"]!;
