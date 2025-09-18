@@ -338,17 +338,6 @@
             }
         });
 
-        (function(){
-            try {
-                if (localStorage.getItem('isAdmin') == 'true') {
-                    return; // Skip if already set
-                } else {
-                    localStorage.setItem('isAdmin', 'true');
-                }
-            } catch (e) {
-            console.warn('localStorage unavailable', e);
-            }
-        })();
     </script>
 
 }

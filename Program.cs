@@ -58,21 +58,21 @@ builder.Services
     });
 
 // Only let a specific GitHub username in as "admin"
+// Load allowed admin emails once from configuration at startup
+var allowedEmails = builder.Configuration
+    .GetSection("Admin:Emails")
+    .Get<string[]>() ?? Array.Empty<string>();
+
+// Add authorization policy that allows only users with emails in allowedEmails
 builder.Services.AddAuthorization(opts =>
 {
     opts.AddPolicy("AdminsOnly", policy =>
         policy.RequireAssertion(ctx =>
         {
-            var allowedEmails = builder.Configuration
-                .GetSection("Admin:Emails")
-                .Get<string[]>();
-
             var email = ctx.User.FindFirst(ClaimTypes.Email)?.Value;
 
             return !string.IsNullOrEmpty(email) &&
-                   allowedEmails != null &&
-                   allowedEmails.Any(adminEmail =>
-                       string.Equals(adminEmail, email, StringComparison.OrdinalIgnoreCase));
+                allowedEmails.Contains(email, StringComparer.OrdinalIgnoreCase);
         }));
 });
 
@@ -92,18 +92,15 @@ app.UseHttpsRedirection();
 app.UseRouting();
 
 app.UseAuthentication();
+
+// Middleware to auto-logout authenticated users whose email is not in allowedEmails
 app.Use(async (context, next) =>
 {
     if (context.User.Identity?.IsAuthenticated == true)
     {
-        var allowedEmails = context.RequestServices
-            .GetRequiredService<IConfiguration>()
-            .GetSection("Admin:Emails")
-            .Get<string[]>();
-
         var email = context.User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value;
 
-        if (allowedEmails == null || !allowedEmails.Contains(email, StringComparer.OrdinalIgnoreCase))
+        if (string.IsNullOrEmpty(email) || !allowedEmails.Contains(email, StringComparer.OrdinalIgnoreCase))
         {
             // Immediately sign them out
             await context.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
@@ -141,8 +138,6 @@ app.MapGet("/not-authorized", () =>
 {
     return Results.Text("You are not authorized to access this page.", statusCode: 403);
 });
-
-
 
 app.MapControllerRoute(
     name: "slug",
