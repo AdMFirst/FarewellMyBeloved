@@ -40,36 +40,7 @@ public class HomeController : Controller
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 
-    public async Task<IActionResult> Search(string searchTerm)
-    {
-        if (string.IsNullOrWhiteSpace(searchTerm))
-        {
-            return View();
-        }
-
-        var searchResults = await _context.FarewellPeople
-            .Where(p => p.IsPublic &&
-                       (p.Name.Contains(searchTerm) ||
-                        p.Description.Contains(searchTerm)))
-            .OrderByDescending(p => p.CreatedAt)
-            .ToListAsync();
-
-        // Sign the image before displaying
-        foreach (var person in searchResults)
-        {
-            if (!string.IsNullOrEmpty(person.PortraitUrl))
-            {
-                person.PortraitUrl = await SignImage(person.PortraitUrl);
-            }
-            if (!string.IsNullOrEmpty(person.BackgroundUrl))
-            {
-                person.BackgroundUrl = await SignImage(person.BackgroundUrl);
-            }
-        }
-
-        ViewBag.SearchTerm = searchTerm;
-        return View("Search", searchResults);
-    }
+    
 
     [HttpGet("/{slug:minlength(1)}")]
     public async Task<IActionResult> Slug(string slug)
