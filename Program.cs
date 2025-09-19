@@ -18,15 +18,7 @@ builder.Services.AddControllersWithViews();
 
 // Add session services for state parameter storage
 builder.Services.AddDistributedMemoryCache();
-builder.Services.AddSession(options =>
-{
-    options.IdleTimeout = TimeSpan.FromMinutes(30);
-    options.Cookie.HttpOnly = true;
-    options.Cookie.IsEssential = true;
-    options.Cookie.SecurePolicy = SecurePolicy.Always;
-    options.Cookie.SameSite = SameSiteMode.Strict;
-    options.Cookie.SlidingExpiration = true;
-});
+ 
 
 // Add HttpContextAccessor
 builder.Services.AddHttpContextAccessor();
@@ -65,7 +57,7 @@ builder.Services
     })
     .AddCookie(options =>
     {
-        options.Cookie.SecurePolicy = SecurePolicy.Always;
+        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
         options.Cookie.SameSite = SameSiteMode.Strict;
         options.SlidingExpiration = true;
         // Expire the authentication cookie after 30 minutes of inactivity
