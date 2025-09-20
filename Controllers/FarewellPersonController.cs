@@ -5,6 +5,10 @@ using FarewellMyBeloved.Services;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Jpeg;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
 
 namespace FarewellMyBeloved.Controllers;
 
@@ -167,8 +171,46 @@ public class FarewellPersonController : Controller
 
     private string GenerateSlug(string name)
     {
-        return name.ToLowerInvariant()
-            .Replace(" ", "-")
+        if (string.IsNullOrWhiteSpace(name)) return Guid.NewGuid().ToString();;
+
+        // Normalize and remove diacritics
+        var normalized = name.Normalize(NormalizationForm.FormKD);
+        var sb = new StringBuilder();
+        foreach (var c in normalized)
+        {
+            var cat = CharUnicodeInfo.GetUnicodeCategory(c);
+            if (cat != UnicodeCategory.NonSpacingMark && cat != UnicodeCategory.SpacingCombiningMark)
+                sb.Append(c);
+        }
+        var cleaned = sb.ToString();
+
+        // Lowercase and replace some common dash/space variants
+        cleaned = cleaned.ToLowerInvariant()
+            .Replace('\u2013', '-') // en dash
+            .Replace('\u2014', '-') // em dash
+            .Replace('\u2015', '-') // horizontal bar
+            .Replace('\u2212', '-') // minus sign
+            .Replace('\u00A0', ' ') // no-break space
+            .Replace('\u2009', ' ') // thin space
+            .Replace('\u200B', ' '); // zero-width space
+
+        // Keep ASCII letters/numbers, convert others to hyphen
+        var sb2 = new StringBuilder();
+        foreach (var ch in cleaned)
+        {
+            if (ch >= 'a' && ch <= 'z') sb2.Append(ch);
+            else if (ch >= '0' && ch <= '9') sb2.Append(ch);
+            else if (char.IsWhiteSpace(ch) || ch == '-' || ch == '_') sb2.Append('-');
+            else sb2.Append('-');
+        }
+
+        var interim = sb2.ToString();
+
+        // Collapse multiple hyphens and trim, and remove any remaining unwanted chars listed originally
+        var collapsed = Regex.Replace(interim, "-{2,}", "-").Trim('-');
+
+        // Final pass to remove characters you explicitly stripped in the original (rare after above)
+        collapsed = collapsed
             .Replace("/", "-")
             .Replace("\\", "-")
             .Replace("?", "")
@@ -199,14 +241,17 @@ public class FarewellPersonController : Controller
             .Replace("~", "")
             .Replace("<", "")
             .Replace(">", "")
+            .Replace("…", "")
             .Replace("—", "-")
             .Replace("–", "-")
             .Replace("―", "-")
-            .Replace("…", "")
             .Replace("  ", " ")
             .Trim()
             .Replace(" ", "-");
+
+        return collapsed;
     }
+
 
     private bool IsValidMimeType(IFormFile file)
     {
