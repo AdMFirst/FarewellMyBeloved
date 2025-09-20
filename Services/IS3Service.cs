@@ -11,8 +11,14 @@ namespace FarewellMyBeloved.Services
 
     public interface IS3Service
     {
+        // Actual Function
         Task<string> UploadFileAsync(IFormFile file, S3UploadType type);
         Task<string> GetSignedUrlAsync(string key);
         Task DeleteFileAsync(string key);
+
+        // Helpers
+        Task DetectAndDeleteFileAsync(string? url);
+        Task<string> DetectAndGetSignedUrlAsync(string? imagePath);
+
     }
 }

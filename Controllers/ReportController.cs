@@ -66,7 +66,6 @@ public class ReportController : Controller
         {
             report.CreatedAt = DateTime.UtcNow;
         }
-        //Console.WriteLine($"New report submitted:[{report.Id}] - {report.FarewellPersonId} - {report.FarewellMessageId} - {report.Reason} - {report.Explanation}");
 
         // Add the report to the database
         _context.ContentReports.Add(report);

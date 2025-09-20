@@ -4,6 +4,7 @@ using FarewellMyBeloved.ViewModels;
 using FarewellMyBeloved.Services;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Jpeg;
+using Microsoft.EntityFrameworkCore;
 
 namespace FarewellMyBeloved.Controllers;
 
@@ -11,6 +12,17 @@ public class FarewellPersonController : Controller
 {
     private readonly ApplicationDbContext _context;
     private readonly IS3Service _s3Service;
+
+    private static readonly HashSet<string> AllowedMimeTypes = new()
+    {
+        "image/jpeg",
+        "image/png",
+        "image/gif",
+        "image/bmp",
+        "image/webp",
+        "image/svg+xml",
+        "image/tiff"
+    };
 
     public FarewellPersonController(ApplicationDbContext context, IS3Service s3Service)
     {
@@ -35,15 +47,30 @@ public class FarewellPersonController : Controller
         if (ModelState.IsValid)
         {
             // Server-side file size validation
-            if (!viewModel.UsePortraitUrl && viewModel.PortraitFile != null && viewModel.PortraitFile.Length > maxFileSize)
+            if (!viewModel.UsePortraitUrl && viewModel.PortraitFile != null)
             {
-                ModelState.AddModelError("PortraitFile", "Portrait file size must be less than 5MB.");
+                if (viewModel.PortraitFile.Length > maxFileSize)
+                {
+                    ModelState.AddModelError("PortraitFile", "Portrait file size must be less than 5MB.");
+                }
+                if (!IsValidMimeType(viewModel.PortraitFile))
+                {
+                    ModelState.AddModelError("PortraitFile", "Portrait file must be an image");
+                }
             }
 
-            if (!viewModel.UseBackgroundUrl && viewModel.BackgroundFile != null && viewModel.BackgroundFile.Length > maxFileSize)
+            if (!viewModel.UseBackgroundUrl && viewModel.BackgroundFile != null)
             {
-                ModelState.AddModelError("BackgroundFile", "Background file size must be less than 5MB.");
+                if (viewModel.BackgroundFile.Length > maxFileSize)
+                {
+                    ModelState.AddModelError("BackgroundFile", "Background file size must be less than 5MB.");
+                }
+                if (!IsValidMimeType(viewModel.BackgroundFile))
+                {
+                    ModelState.AddModelError("BackgroundFile", "Background file must be an image");
+                }
             }
+            
 
             if (!ModelState.IsValid)
             {
@@ -112,6 +139,32 @@ public class FarewellPersonController : Controller
         return View(viewModel);
     }
 
+    public async Task<IActionResult> Search(string searchTerm)
+    {
+        if (string.IsNullOrWhiteSpace(searchTerm))
+        {
+            return View();
+        }
+
+        var searchResults = await _context.FarewellPeople
+            .Where(p => p.IsPublic &&
+                       (p.Name.Contains(searchTerm) ||
+                        p.Description.Contains(searchTerm)))
+            .OrderByDescending(p => p.CreatedAt)
+            .ToListAsync();
+
+        // Sign the image before displaying
+        foreach (var person in searchResults)
+        {
+            person.PortraitUrl = await _s3Service.DetectAndGetSignedUrlAsync(person.PortraitUrl);
+            person.BackgroundUrl = await _s3Service.DetectAndGetSignedUrlAsync(person.BackgroundUrl);
+        }
+
+        ViewBag.SearchTerm = searchTerm;
+        return View("Search", searchResults);
+    }
+
+
     private string GenerateSlug(string name)
     {
         return name.ToLowerInvariant()
@@ -153,6 +206,14 @@ public class FarewellPersonController : Controller
             .Replace("  ", " ")
             .Trim()
             .Replace(" ", "-");
+    }
+
+    private bool IsValidMimeType(IFormFile file)
+    {
+        if (file == null)
+            return false;
+
+        return AllowedMimeTypes.Contains(file.ContentType.ToLowerInvariant());
     }
 
 }

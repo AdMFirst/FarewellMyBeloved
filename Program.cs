@@ -6,11 +6,29 @@ using AspNet.Security.OAuth.GitHub;
 using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Allow the usage of env in AppConfig
+builder.Configuration.AddEnvironmentVariables();
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// Add session services for state parameter storage
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    options.Cookie.SameSite = SameSiteMode.Strict;
+});
+
+// Add HttpContextAccessor
+builder.Services.AddHttpContextAccessor();
 
 // Add S3 Service
 var awsConfig = builder.Configuration.GetSection("S3");
@@ -30,6 +48,9 @@ var s3Client = new AmazonS3Client(accessKeyId, secretAccessKey, config);
 builder.Services.AddSingleton<IAmazonS3>(s3Client);
 builder.Services.AddScoped<IS3Service, S3Service>();
 
+// Register state parameter service
+builder.Services.AddScoped<IStateParameterService, StateParameterService>();
+
 // Add Entity Framework services
 builder.Services.AddDbContext<FarewellMyBeloved.Models.ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -41,7 +62,14 @@ builder.Services
         options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
         options.DefaultChallengeScheme = GitHubAuthenticationDefaults.AuthenticationScheme; // "GitHub"
     })
-    .AddCookie()
+    .AddCookie(options =>
+    {
+        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+        options.Cookie.SameSite = SameSiteMode.Strict;
+        options.SlidingExpiration = true;
+        // Expire the authentication cookie after 30 minutes of inactivity
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+    })
     .AddGitHub(options =>
     {
         options.ClientId = builder.Configuration["Authentication:GitHub:ClientId"]!;
@@ -90,6 +118,12 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseRouting();
+
+// Enable caching
+app.UseResponseCaching(); 
+
+// Use session middleware before authentication
+app.UseSession();
 
 app.UseAuthentication();
 

@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using System.Globalization;
 
+
 namespace FarewellMyBeloved.Controllers;
 
 [Route("Admin")]
@@ -20,11 +21,16 @@ public class AdminController : Controller
     private readonly IConfiguration _configuration;
 
 
-    public AdminController(ApplicationDbContext context, IS3Service s3Service, IConfiguration configuration)
+    private readonly IStateParameterService _stateParameterService;
+    private readonly ILogger<AdminController> _logger;
+
+    public AdminController(ApplicationDbContext context, IS3Service s3Service, IConfiguration configuration, IStateParameterService stateParameterService, ILogger<AdminController> logger)
     {
         _context = context;
         _configuration = configuration;
         _s3Service = s3Service;
+        _stateParameterService = stateParameterService;
+        _logger = logger;
     }
 
     [Authorize(Policy = "AdminsOnly")]
@@ -126,105 +132,6 @@ public class AdminController : Controller
     private int GetWeekNumber(DateTime date)
     {
         return CultureInfo.InvariantCulture.Calendar.GetWeekOfYear(date, CalendarWeekRule.FirstDay, DayOfWeek.Monday);
-    }
-
-    /// <summary>
-    /// Extracts the object key from a full S3 URL.
-    /// </summary>
-    /// <param name="url">
-    /// The full S3 URL. Can be <c>null</c> or empty.  
-    /// Expected format: {endpoint}/{bucket}/{key}
-    /// </param>
-    /// <returns>
-    /// - If <paramref name="url"/> is <c>null</c> or empty → <c>string.Empty</c>  
-    /// - If <paramref name="url"/> starts with the configured endpoint and bucket → the extracted key  
-    /// - Otherwise, returns the original <paramref name="url"/> (meaning it's not an S3 URL).
-    /// </returns>
-    private string ExtractS3KeyFromUrl(string url)
-    {
-        if (string.IsNullOrEmpty(url))
-        {
-            return string.Empty;
-        }
-
-        // Remove the endpoint and bucket name to get the key
-        // URL format: {endpoint}/{bucket}/{key}
-        var endpoint = _configuration.GetSection("S3")["Endpoint"];
-        var bucketName = _configuration.GetSection("S3")["Bucket"];
-
-        if (url.StartsWith($"{endpoint}/{bucketName}/"))
-        {
-            var key = url.Substring($"{endpoint}/{bucketName}/".Length);
-            return key;
-        }
-
-        return url;
-    }
-
-    /// <summary>
-    /// Validates if the URL points to the configured S3 bucket.  
-    /// If yes, returns the object key; otherwise returns <c>null</c>.
-    /// </summary>
-    /// <param name="url">The input URL (nullable).</param>
-    /// <returns>
-    /// - Extracted key if URL belongs to S3 bucket  
-    /// - <c>null</c> if the URL is null, empty, non-http, or not an S3 URL
-    /// </returns>
-    private string? ExtractS3KeyIfValid(string? url)
-    {
-        if (string.IsNullOrEmpty(url))
-            return null;
-
-        if (!url.StartsWith("http"))
-            return null;
-
-        var key = ExtractS3KeyFromUrl(url);
-
-        // if nothing changed, it's not an S3 URL
-        return key == url ? null : key;
-    }
-
-    /// <summary>
-    /// Generates a signed preview URL if the input is a valid S3 URL.  
-    /// Returns the original URL for external links, or empty string for invalid/non-URL input.
-    /// </summary>
-    /// <param name="url">The input URL (nullable).</param>
-    /// <returns>
-    /// - Signed S3 URL if input points to S3  
-    /// - Original URL if input is external but valid (http)  
-    /// - <c>string.Empty</c> if input is null, empty, or non-URL string
-    /// </returns>
-    private async Task<string> MakePreviewUrlAsync(string? url)
-    {
-        if (string.IsNullOrEmpty(url))
-            return string.Empty;
-
-        var key = ExtractS3KeyIfValid(url);
-        if (key == null)
-        {
-            // Not S3: if it's an external http URL, return as-is
-            // otherwise (non-URL string) return empty
-            return url.StartsWith("http") ? url : string.Empty;
-        }
-
-        return await _s3Service.GetSignedUrlAsync(key);
-    }
-
-    /// <summary>
-    /// Detects if the input URL is an S3 object. If yes, deletes the corresponding file.  
-    /// Otherwise does nothing.
-    /// </summary>
-    /// <param name="url">The input URL (nullable).</param>
-    private async Task DetectAndDeleteS3ImageAsync(string? url)
-    {
-        if (string.IsNullOrEmpty(url))
-            return;
-
-        var key = ExtractS3KeyIfValid(url);
-        if (key == null)
-            return;
-
-        await _s3Service.DeleteFileAsync(key);
     }
 
 
@@ -365,14 +272,97 @@ public class AdminController : Controller
 
     [HttpGet("login")]
     [AllowAnonymous] // must allow anyone
-    public IActionResult Login()
+    public async Task<IActionResult> Login()
     {
+        _logger.LogInformation("GitHub OAuth login initiated");
+        
+        // Generate and store state parameter for CSRF protection
+        var state = _stateParameterService.GenerateStateParameter();
+        await _stateParameterService.StoreStateParameterAsync(state);
+
+        _logger.LogInformation("Redirecting to GitHub OAuth with state parameter");
+        return Challenge(new AuthenticationProperties
+        {
+            RedirectUri = $"/Admin/callback?state={state}" // go here after successful login with state parameter
+        }, "GitHub");
+    }
+
+
+    [HttpGet("callback")]
+    [AllowAnonymous]
+    public async Task<IActionResult> Callback(string? state, string? error, string? error_description)
+    {
+        _logger.LogInformation("GitHub OAuth callback received");
+        
+        // Handle error response from GitHub
+        if (!string.IsNullOrEmpty(error))
+        {
+            _logger.LogError("GitHub OAuth error: {Error} - {ErrorDescription}", error, error_description ?? "No description");
+            
+            return RedirectToAction("OAuthError", new {
+                error = "oauth_error",
+                error_description = error_description ?? "Authentication failed"
+            });
+        }
+
+        // Validate state parameter to prevent CSRF attacks
+        if (string.IsNullOrEmpty(state))
+        {
+            _logger.LogWarning("OAuth callback received without state parameter - potential CSRF attack");
+            return RedirectToAction("OAuthError", new {
+                error = "missing_state",
+                error_description = "Invalid authentication request"
+            });
+        }
+
+        _logger.LogDebug("Validating OAuth state parameter");
+        var isValidState = await _stateParameterService.ValidateStateParameterAsync(state);
+        if (!isValidState)
+        {
+            _logger.LogWarning("OAuth callback received with invalid state parameter - potential CSRF attack");
+            return RedirectToAction("OAuthError", new {
+                error = "invalid_state",
+                error_description = "Invalid authentication request"
+            });
+        }
+
+        // State is valid, remove it from storage
+        await _stateParameterService.RemoveStateParameterAsync(state);
+        _logger.LogInformation("OAuth state parameter validated successfully, proceeding with authentication");
+
+        // Proceed with the authentication challenge
         return Challenge(new AuthenticationProperties
         {
             RedirectUri = "/Admin" // go here after successful login
         }, "GitHub");
     }
 
+    [HttpGet("error")]
+    [AllowAnonymous]
+    public IActionResult OAuthError(string? error, string? error_description)
+    {
+        _logger.LogWarning("OAuth error page accessed with error: {Error}", error ?? "unknown");
+        
+        if (error == "oauth_error")
+        {
+            ViewBag.ErrorMessage = "Authentication failed";
+            ViewBag.DetailedMessage = error_description ?? "An error occurred during GitHub authentication.";
+        }
+        else if (error == "missing_state" || error == "invalid_state")
+        {
+            _logger.LogWarning("Potential CSRF attack detected: {Error}", error);
+            ViewBag.ErrorMessage = "Invalid authentication request";
+            ViewBag.DetailedMessage = "The authentication request appears to be invalid or tampered with. Please try again.";
+        }
+        else
+        {
+            ViewBag.ErrorMessage = "Authentication error";
+            ViewBag.DetailedMessage = "An unknown error occurred during authentication.";
+        }
+        
+        ViewBag.RequestId = HttpContext.TraceIdentifier;
+        return View("OAuthError");
+    }
 
     [HttpGet("logout")]
     [Authorize] // any logged-in user
@@ -422,8 +412,8 @@ public class AdminController : Controller
         };
 
         // Generate Preview image URLs
-        viewModel.PortraitImageUrl = await MakePreviewUrlAsync(farewellPerson.PortraitUrl);
-        viewModel.BackgroundImageUrl = await MakePreviewUrlAsync(farewellPerson.BackgroundUrl);
+        viewModel.PortraitImageUrl = await _s3Service.DetectAndGetSignedUrlAsync(farewellPerson.PortraitUrl);
+        viewModel.BackgroundImageUrl = await _s3Service.DetectAndGetSignedUrlAsync(farewellPerson.BackgroundUrl);
 
         return View(viewModel);
     }
@@ -492,13 +482,12 @@ public class AdminController : Controller
             {
                 try
                 {
-                    var oldPortraitKey = ExtractS3KeyFromUrl(farewellPerson.PortraitUrl);
-                    await _s3Service.DeleteFileAsync(oldPortraitKey);
+                    await _s3Service.DetectAndDeleteFileAsync(farewellPerson.PortraitUrl);
                 }
                 catch (Exception ex)
                 {
                     // Log error but continue with the operation
-                    Console.WriteLine($"Failed to delete old portrait image: {ex.Message}");
+                    _logger.LogError(ex, "Failed to delete old portrait image for FarewellPerson ID {FarewellPersonId}", farewellPerson.Id);
                 }
             }
 
@@ -506,13 +495,12 @@ public class AdminController : Controller
             {
                 try
                 {
-                    var oldBackgroundKey = ExtractS3KeyFromUrl(farewellPerson.BackgroundUrl);
-                    await _s3Service.DeleteFileAsync(oldBackgroundKey);
+                    await _s3Service.DetectAndDeleteFileAsync(farewellPerson.BackgroundUrl);
                 }
                 catch (Exception ex)
                 {
                     // Log error but continue with the operation
-                    Console.WriteLine($"Failed to delete old background image: {ex.Message}");
+                    _logger.LogError(ex, "Failed to delete old background image for FarewellPerson ID {FarewellPersonId}", farewellPerson.Id);
                 }
             }
 
@@ -774,7 +762,7 @@ public class AdminController : Controller
         catch (Exception ex)
         {
             // Log the error
-            Console.WriteLine($"Error deleting farewell message: {ex.Message}");
+            _logger.LogError(ex, "Error deleting farewell message ID {FarewellMessageId}", id);
             
             // Re-populate the view model for error display
             var relatedReports = await _context.ContentReports
@@ -815,8 +803,8 @@ public class AdminController : Controller
             Name = farewellPerson.Name,
             Slug = farewellPerson.Slug,
             Description = farewellPerson.Description,
-            PortraitUrl = await MakePreviewUrlAsync(farewellPerson.PortraitUrl),
-            BackgroundUrl = await MakePreviewUrlAsync(farewellPerson.BackgroundUrl),
+            PortraitUrl = await _s3Service.DetectAndGetSignedUrlAsync(farewellPerson.PortraitUrl),
+            BackgroundUrl = await _s3Service.DetectAndGetSignedUrlAsync(farewellPerson.BackgroundUrl),
             FarewellMessages = farewellPerson.Messages.ToList(),
             RelatedContentReports = relatedReports
         };
@@ -847,8 +835,8 @@ public class AdminController : Controller
         try
         {
             // Delete old images from S3 if they exist
-            await DetectAndDeleteS3ImageAsync(farewellPerson.PortraitUrl);
-            await DetectAndDeleteS3ImageAsync(farewellPerson.BackgroundUrl);
+            await _s3Service.DetectAndDeleteFileAsync(farewellPerson.PortraitUrl);
+            await _s3Service.DetectAndDeleteFileAsync(farewellPerson.BackgroundUrl);
 
             // Remove the farewell person
             _context.FarewellPeople.Remove(farewellPerson);
@@ -887,7 +875,7 @@ public class AdminController : Controller
         catch (Exception ex)
         {
             // Log the error
-            Console.WriteLine($"Error deleting farewell person: {ex.Message}");
+            _logger.LogError(ex, "Error deleting farewell person ID {FarewellPersonId}", id);
             
             // Re-populate the view model for error display
             var relatedReports = await _context.ContentReports
