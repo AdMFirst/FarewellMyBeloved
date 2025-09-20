@@ -6,7 +6,7 @@
 
 @if (!string.IsNullOrEmpty(Model.BackgroundUrl))
 {
-    <div class="jumbotron jumbotron-fluid mb-0" style="background-image: url('@Model.BackgroundUrl'); background-size: cover; background-position: center; height: 250px;">
+    <div class="jumbotron jumbotron-fluid mb-0 rounded-top" style="background-image: url('@Model.BackgroundUrl'); background-size: cover; background-position: center; height: 250px;">
         <div class="container">
             <!-- Optional: Add an overlay or content here if needed -->
         </div>
@@ -14,7 +14,7 @@
 }
 else
 {
-    <div class="jumbotron jumbotron-fluid bg-light mb-0" style="height: 250px;">
+    <div class="jumbotron jumbotron-fluid bg-dark mb-0 rounded-top" style="height: 250px;">
         <div class="container d-flex align-items-center justify-content-center h-100">
             <span class="text-muted">No Background Image</span>
         </div>
@@ -24,7 +24,7 @@ else
 <div class="container mt-n5"> @* mt-n5 pulls the container up by 5 units, overlapping the jumbotron *@
     <div class="row justify-content-center">
         <div class="col-12 px-0"> @* Main card now spans full width *@
-            <div class="card shadow-lg">
+            <div class="card shadow-lg rounded-bottom" style="border-top-left-radius: 0; border-top-right-radius: 0; border-top: 0;">
                 @if (!string.IsNullOrEmpty(Model.PortraitUrl))
                 {
                     <img src="@Model.PortraitUrl" class="card-img-top rounded-circle border border-white shadow mx-auto d-block" alt="@Model.Name" style="width: 150px; height: 150px; object-fit: cover; margin-top: -75px;">

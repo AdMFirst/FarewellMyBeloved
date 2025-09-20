@@ -83,4 +83,18 @@
             }
         </div>
     }
+        @if (string.IsNullOrEmpty(ViewBag.SearchTerm)){
+            <div style="min-height: 50dvh"></div>
+        }
 </div>
+
+@section Scripts  {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var el = document.getElementById('nav-find');
+            if (el) el.classList.add('active');
+        });
+    </script>
+}

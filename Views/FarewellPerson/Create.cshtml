@@ -155,5 +155,10 @@
                 }
             }
         }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var el = document.getElementById('nav-create');
+            if (el) el.classList.add('active');
+        });
     </script>
 }

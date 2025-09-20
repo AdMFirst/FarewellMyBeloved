@@ -42,3 +42,14 @@
         Made with ❤️ for the community
     </footer>
 </section>
+
+@section Scripts  {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var el = document.getElementById('nav-about');
+            if (el) el.classList.add('active');
+        });
+    </script>
+}
