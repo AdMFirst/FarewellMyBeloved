@@ -2,6 +2,7 @@ using Amazon.S3;
 using Amazon.S3.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -12,11 +13,13 @@ namespace FarewellMyBeloved.Services
     {
         private readonly IAmazonS3 _s3Client;
         private readonly IConfiguration _configuration;
+        private readonly ILogger<S3Service> _logger;
 
-        public S3Service(IAmazonS3 s3Client, IConfiguration configuration)
+        public S3Service(IAmazonS3 s3Client, IConfiguration configuration, ILogger<S3Service> logger)
         {
             _s3Client = s3Client;
             _configuration = configuration;
+            _logger = logger;
         }
 
         public async Task<string> UploadFileAsync(IFormFile file, S3UploadType type)
@@ -116,7 +119,7 @@ namespace FarewellMyBeloved.Services
             {
                 // Log the error but don't throw - we don't want to fail the entire operation
                 // if S3 deletion fails for some reason
-                Console.WriteLine($"Failed to delete S3 object {key}: {ex.Message}");
+                _logger.LogError(ex, "Failed to delete S3 object {Key}", key);
             }
         }
 

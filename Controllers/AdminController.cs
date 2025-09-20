@@ -487,7 +487,7 @@ public class AdminController : Controller
                 catch (Exception ex)
                 {
                     // Log error but continue with the operation
-                    Console.WriteLine($"Failed to delete old portrait image: {ex.Message}");
+                    _logger.LogError(ex, "Failed to delete old portrait image for FarewellPerson ID {FarewellPersonId}", farewellPerson.Id);
                 }
             }
 
@@ -500,7 +500,7 @@ public class AdminController : Controller
                 catch (Exception ex)
                 {
                     // Log error but continue with the operation
-                    Console.WriteLine($"Failed to delete old background image: {ex.Message}");
+                    _logger.LogError(ex, "Failed to delete old background image for FarewellPerson ID {FarewellPersonId}", farewellPerson.Id);
                 }
             }
 
@@ -762,7 +762,7 @@ public class AdminController : Controller
         catch (Exception ex)
         {
             // Log the error
-            Console.WriteLine($"Error deleting farewell message: {ex.Message}");
+            _logger.LogError(ex, "Error deleting farewell message ID {FarewellMessageId}", id);
             
             // Re-populate the view model for error display
             var relatedReports = await _context.ContentReports
@@ -875,7 +875,7 @@ public class AdminController : Controller
         catch (Exception ex)
         {
             // Log the error
-            Console.WriteLine($"Error deleting farewell person: {ex.Message}");
+            _logger.LogError(ex, "Error deleting farewell person ID {FarewellPersonId}", id);
             
             // Re-populate the view model for error display
             var relatedReports = await _context.ContentReports
