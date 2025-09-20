@@ -66,7 +66,7 @@
                                 <span asp-validation-for="PortraitUrl" class="text-danger small"></span>
                             </div>
                             <div id="portraitFileInput" style="display: none;">
-                                <input asp-for="PortraitFile" class="form-control" type="file" accept="image/*" onchange="validateImageSize(this, 'PortraitFile')" />
+                                <input asp-for="PortraitFile" class="form-control" type="file" accept="image/png, image/jpeg, image/gif, image/webp, image/svg+xml, image/bmp, image/tiff" onchange="validateImageSize(this, 'PortraitFile')" />
                                 <span asp-validation-for="PortraitFile" class="text-danger small"></span>
                                 <span id="portraitFileSizeError" class="text-danger small" style="display: none;"></span>
                             </div>
@@ -93,7 +93,7 @@
                                 <span asp-validation-for="BackgroundUrl" class="text-danger small"></span>
                             </div>
                             <div id="backgroundFileInput" style="display: none;">
-                                <input asp-for="BackgroundFile" class="form-control" type="file" accept="image/*" onchange="validateImageSize(this, 'BackgroundFile')" />
+                                <input asp-for="BackgroundFile" class="form-control" type="file" accept="image/png, image/jpeg, image/gif, image/webp, image/svg+xml, image/bmp, image/tiff" onchange="validateImageSize(this, 'BackgroundFile')" />
                                 <span asp-validation-for="BackgroundFile" class="text-danger small"></span>
                                 <span id="backgroundFileSizeError" class="text-danger small" style="display: none;"></span>
                             </div>

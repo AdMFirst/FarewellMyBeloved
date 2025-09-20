@@ -4,6 +4,7 @@ using FarewellMyBeloved.ViewModels;
 using FarewellMyBeloved.Services;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Jpeg;
+using Microsoft.EntityFrameworkCore;
 
 namespace FarewellMyBeloved.Controllers;
 
@@ -11,6 +12,17 @@ public class FarewellPersonController : Controller
 {
     private readonly ApplicationDbContext _context;
     private readonly IS3Service _s3Service;
+
+    private static readonly HashSet<string> AllowedMimeTypes = new()
+    {
+        "image/jpeg",
+        "image/png",
+        "image/gif",
+        "image/bmp",
+        "image/webp",
+        "image/svg+xml",
+        "image/tiff"
+    };
 
     public FarewellPersonController(ApplicationDbContext context, IS3Service s3Service)
     {
@@ -35,15 +47,30 @@ public class FarewellPersonController : Controller
         if (ModelState.IsValid)
         {
             // Server-side file size validation
-            if (!viewModel.UsePortraitUrl && viewModel.PortraitFile != null && viewModel.PortraitFile.Length > maxFileSize)
+            if (!viewModel.UsePortraitUrl && viewModel.PortraitFile != null)
             {
-                ModelState.AddModelError("PortraitFile", "Portrait file size must be less than 5MB.");
+                if (viewModel.PortraitFile.Length > maxFileSize)
+                {
+                    ModelState.AddModelError("PortraitFile", "Portrait file size must be less than 5MB.");
+                }
+                if (!IsValidMimeType(viewModel.PortraitFile))
+                {
+                    ModelState.AddModelError("PortraitFile", "Portrait file must be an image");
+                }
             }
 
-            if (!viewModel.UseBackgroundUrl && viewModel.BackgroundFile != null && viewModel.BackgroundFile.Length > maxFileSize)
+            if (!viewModel.UseBackgroundUrl && viewModel.BackgroundFile != null)
             {
-                ModelState.AddModelError("BackgroundFile", "Background file size must be less than 5MB.");
+                if (viewModel.BackgroundFile.Length > maxFileSize)
+                {
+                    ModelState.AddModelError("BackgroundFile", "Background file size must be less than 5MB.");
+                }
+                if (!IsValidMimeType(viewModel.BackgroundFile))
+                {
+                    ModelState.AddModelError("BackgroundFile", "Background file must be an image");
+                }
             }
+            
 
             if (!ModelState.IsValid)
             {
@@ -129,66 +156,14 @@ public class FarewellPersonController : Controller
         // Sign the image before displaying
         foreach (var person in searchResults)
         {
-            if (!string.IsNullOrEmpty(person.PortraitUrl))
-            {
-                person.PortraitUrl = await SignImage(person.PortraitUrl);
-            }
-            if (!string.IsNullOrEmpty(person.BackgroundUrl))
-            {
-                person.BackgroundUrl = await SignImage(person.BackgroundUrl);
-            }
+            person.PortraitUrl = await _s3Service.DetectAndGetSignedUrlAsync(person.PortraitUrl);
+            person.BackgroundUrl = await _s3Service.DetectAndGetSignedUrlAsync(person.BackgroundUrl);
         }
 
         ViewBag.SearchTerm = searchTerm;
         return View("Search", searchResults);
     }
 
-    private async Task<string> SignImage(string imagePath)
-    {
-        // check if image is a valid image url
-        if (!IsValidImagePath(imagePath))
-        {
-            if (imagePath.Equals("DELETED BY ADMIN"))
-            {
-                return _configuration.GetSection("Image")["DeletedUrl"] ?? "https://s6.imgcdn.dev/YQkM7y.jpg";
-            }
-            return _configuration.GetSection("Image")["DefaultUrl"] ?? "https://s6.imgcdn.dev/YQO8MN.webp";
-        }
-
-        // Extract key from the image path
-        var endpoint = _configuration.GetSection("S3")["Endpoint"];
-        var bucketName = _configuration.GetSection("S3")["Bucket"];
-
-        if (imagePath.StartsWith($"{endpoint}/{bucketName}/"))
-        {
-            var key = imagePath.Substring($"{endpoint}/{bucketName}/".Length);
-            return await _s3Service.GetSignedUrlAsync(key);
-        }
-
-        return imagePath;
-    }
-    
-    private bool IsValidImagePath(string imagePath)
-    {
-        if (string.IsNullOrWhiteSpace(imagePath)) return false;
-
-        var lower = imagePath.ToLowerInvariant().Trim();
-
-        // common image extensions
-        return Uri.IsWellFormedUriString(imagePath, UriKind.Absolute)
-            || lower.EndsWith(".jpg")
-            || lower.EndsWith(".jpeg")
-            || lower.EndsWith(".png")
-            || lower.EndsWith(".gif")
-            || lower.EndsWith(".bmp")
-            || lower.EndsWith(".tiff")
-            || lower.EndsWith(".tif")
-            || lower.EndsWith(".webp")
-            || lower.EndsWith(".svg")
-            || lower.EndsWith(".ico")
-            || lower.EndsWith(".heic")
-            || lower.EndsWith(".heif");
-    }
 
     private string GenerateSlug(string name)
     {
@@ -231,6 +206,14 @@ public class FarewellPersonController : Controller
             .Replace("  ", " ")
             .Trim()
             .Replace(" ", "-");
+    }
+
+    private bool IsValidMimeType(IFormFile file)
+    {
+        if (file == null)
+            return false;
+
+        return AllowedMimeTypes.Contains(file.ContentType.ToLowerInvariant());
     }
 
 }

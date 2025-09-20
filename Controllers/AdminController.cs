@@ -134,105 +134,6 @@ public class AdminController : Controller
         return CultureInfo.InvariantCulture.Calendar.GetWeekOfYear(date, CalendarWeekRule.FirstDay, DayOfWeek.Monday);
     }
 
-    /// <summary>
-    /// Extracts the object key from a full S3 URL.
-    /// </summary>
-    /// <param name="url">
-    /// The full S3 URL. Can be <c>null</c> or empty.  
-    /// Expected format: {endpoint}/{bucket}/{key}
-    /// </param>
-    /// <returns>
-    /// - If <paramref name="url"/> is <c>null</c> or empty → <c>string.Empty</c>  
-    /// - If <paramref name="url"/> starts with the configured endpoint and bucket → the extracted key  
-    /// - Otherwise, returns the original <paramref name="url"/> (meaning it's not an S3 URL).
-    /// </returns>
-    private string ExtractS3KeyFromUrl(string url)
-    {
-        if (string.IsNullOrEmpty(url))
-        {
-            return string.Empty;
-        }
-
-        // Remove the endpoint and bucket name to get the key
-        // URL format: {endpoint}/{bucket}/{key}
-        var endpoint = _configuration.GetSection("S3")["Endpoint"];
-        var bucketName = _configuration.GetSection("S3")["Bucket"];
-
-        if (url.StartsWith($"{endpoint}/{bucketName}/"))
-        {
-            var key = url.Substring($"{endpoint}/{bucketName}/".Length);
-            return key;
-        }
-
-        return url;
-    }
-
-    /// <summary>
-    /// Validates if the URL points to the configured S3 bucket.  
-    /// If yes, returns the object key; otherwise returns <c>null</c>.
-    /// </summary>
-    /// <param name="url">The input URL (nullable).</param>
-    /// <returns>
-    /// - Extracted key if URL belongs to S3 bucket  
-    /// - <c>null</c> if the URL is null, empty, non-http, or not an S3 URL
-    /// </returns>
-    private string? ExtractS3KeyIfValid(string? url)
-    {
-        if (string.IsNullOrEmpty(url))
-            return null;
-
-        if (!url.StartsWith("http"))
-            return null;
-
-        var key = ExtractS3KeyFromUrl(url);
-
-        // if nothing changed, it's not an S3 URL
-        return key == url ? null : key;
-    }
-
-    /// <summary>
-    /// Generates a signed preview URL if the input is a valid S3 URL.  
-    /// Returns the original URL for external links, or empty string for invalid/non-URL input.
-    /// </summary>
-    /// <param name="url">The input URL (nullable).</param>
-    /// <returns>
-    /// - Signed S3 URL if input points to S3  
-    /// - Original URL if input is external but valid (http)  
-    /// - <c>string.Empty</c> if input is null, empty, or non-URL string
-    /// </returns>
-    private async Task<string> MakePreviewUrlAsync(string? url)
-    {
-        if (string.IsNullOrEmpty(url))
-            return string.Empty;
-
-        var key = ExtractS3KeyIfValid(url);
-        if (key == null)
-        {
-            // Not S3: if it's an external http URL, return as-is
-            // otherwise (non-URL string) return empty
-            return url.StartsWith("http") ? url : string.Empty;
-        }
-
-        return await _s3Service.GetSignedUrlAsync(key);
-    }
-
-    /// <summary>
-    /// Detects if the input URL is an S3 object. If yes, deletes the corresponding file.  
-    /// Otherwise does nothing.
-    /// </summary>
-    /// <param name="url">The input URL (nullable).</param>
-    private async Task DetectAndDeleteS3ImageAsync(string? url)
-    {
-        if (string.IsNullOrEmpty(url))
-            return;
-
-        var key = ExtractS3KeyIfValid(url);
-        if (key == null)
-            return;
-
-        await _s3Service.DeleteFileAsync(key);
-    }
-
 
     [Authorize(Policy = "AdminsOnly")]
     [HttpGet("FarewellPeople")]
@@ -511,8 +412,8 @@ public class AdminController : Controller
         };
 
         // Generate Preview image URLs
-        viewModel.PortraitImageUrl = await MakePreviewUrlAsync(farewellPerson.PortraitUrl);
-        viewModel.BackgroundImageUrl = await MakePreviewUrlAsync(farewellPerson.BackgroundUrl);
+        viewModel.PortraitImageUrl = await _s3Service.DetectAndGetSignedUrlAsync(farewellPerson.PortraitUrl);
+        viewModel.BackgroundImageUrl = await _s3Service.DetectAndGetSignedUrlAsync(farewellPerson.BackgroundUrl);
 
         return View(viewModel);
     }
@@ -581,8 +482,7 @@ public class AdminController : Controller
             {
                 try
                 {
-                    var oldPortraitKey = ExtractS3KeyFromUrl(farewellPerson.PortraitUrl);
-                    await _s3Service.DeleteFileAsync(oldPortraitKey);
+                    await _s3Service.DetectAndDeleteFileAsync(farewellPerson.PortraitUrl);
                 }
                 catch (Exception ex)
                 {
@@ -595,8 +495,7 @@ public class AdminController : Controller
             {
                 try
                 {
-                    var oldBackgroundKey = ExtractS3KeyFromUrl(farewellPerson.BackgroundUrl);
-                    await _s3Service.DeleteFileAsync(oldBackgroundKey);
+                    await _s3Service.DetectAndDeleteFileAsync(farewellPerson.BackgroundUrl);
                 }
                 catch (Exception ex)
                 {
@@ -904,8 +803,8 @@ public class AdminController : Controller
             Name = farewellPerson.Name,
             Slug = farewellPerson.Slug,
             Description = farewellPerson.Description,
-            PortraitUrl = await MakePreviewUrlAsync(farewellPerson.PortraitUrl),
-            BackgroundUrl = await MakePreviewUrlAsync(farewellPerson.BackgroundUrl),
+            PortraitUrl = await _s3Service.DetectAndGetSignedUrlAsync(farewellPerson.PortraitUrl),
+            BackgroundUrl = await _s3Service.DetectAndGetSignedUrlAsync(farewellPerson.BackgroundUrl),
             FarewellMessages = farewellPerson.Messages.ToList(),
             RelatedContentReports = relatedReports
         };
@@ -936,8 +835,8 @@ public class AdminController : Controller
         try
         {
             // Delete old images from S3 if they exist
-            await DetectAndDeleteS3ImageAsync(farewellPerson.PortraitUrl);
-            await DetectAndDeleteS3ImageAsync(farewellPerson.BackgroundUrl);
+            await _s3Service.DetectAndDeleteFileAsync(farewellPerson.PortraitUrl);
+            await _s3Service.DetectAndDeleteFileAsync(farewellPerson.BackgroundUrl);
 
             // Remove the farewell person
             _context.FarewellPeople.Remove(farewellPerson);
