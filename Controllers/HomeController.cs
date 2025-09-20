@@ -40,9 +40,10 @@ public class HomeController : Controller
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 
-    
+
 
     [HttpGet("/{slug:minlength(1)}")]
+    [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any)]
     public async Task<IActionResult> Slug(string slug)
     {
         if (slug == "index")

@@ -119,6 +119,9 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseRouting();
 
+// Enable caching
+app.UseResponseCaching(); 
+
 // Use session middleware before authentication
 app.UseSession();
 
