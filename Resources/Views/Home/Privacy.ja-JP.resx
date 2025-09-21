@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="PrivacyPolicy" xml:space="preserve"><value>プライバシーポリシー</value></data>
+  <data name="PrivacyIntro1" xml:space="preserve"><value>このサイトはコミュニティのためのプロジェクトです。お別れメッセージの投稿やページ作成ができます。私たちはプライバシーを尊重し、シンプルで透明性のある運用を心がけています。</value></data>
+  <data name="WhatWeCollect" xml:space="preserve"><value>収集する情報</value></data>
+  <data name="WhenLeavingMessage" xml:space="preserve"><value>メッセージ投稿時:</value></data>
+  <data name="NameOptional" xml:space="preserve"><value>名前（任意）: 入力した場合はメッセージに表示されます。</value></data>
+  <data name="EmailOptional" xml:space="preserve"><value>メール（任意）: 必要に応じてモデレーション/連絡にのみ使用し、公開はしません。</value></data>
+  <data name="FarewellMessagePublic" xml:space="preserve"><value>お別れメッセージ: 送信後は公開されます。</value></data>
+  <data name="WhenCreatingPage" xml:space="preserve"><value>ページ作成時:</value></data>
+  <data name="DisplayNameReq" xml:space="preserve"><value>表示名: 必須。ページに公開されます。</value></data>
+  <data name="DescriptionReq" xml:space="preserve"><value>説明: 必須。ページに公開されます。</value></data>
+  <data name="ImageReq" xml:space="preserve"><value>画像（背景・ポートレート）: ページ作成時に画像が必要です。アップロードにより、公開表示およびホスティングを許可したものとみなします。</value></data>
+  <data name="HowYourDataUsed" xml:space="preserve"><value>データの利用方法</value></data>
+  <data name="PubliclyVisible" xml:space="preserve"><value>名前、メッセージ、ページタイトル、説明、画像は公開されます。</value></data>
+  <data name="EmailsPrivate" xml:space="preserve"><value>メール（入力した場合）は非公開で、管理者のモデレーション目的のみに使用します。</value></data>
+  <data name="ImagesThirdParty" xml:space="preserve"><value>画像は第三者のホスティング/CDNサービスに保存・配信されます。</value></data>
+  <data name="CookiesAnalytics" xml:space="preserve"><value>クッキーと分析</value></data>
+  <data name="EssentialCookies" xml:space="preserve"><value>サイトの安全性と基本機能のために必要最小限の必須クッキーのみを使用します。追跡には使用せず、同意も不要です。</value></data>
+  <data name="CFAnalytics" xml:space="preserve"><value>Cloudflare Web Analytics を利用して、基本的なトラフィック（PV、リファラ、デバイスなど）を把握します。これはクッキーレスでプライバシー重視の分析です。</value></data>
+  <data name="NoAdsTrackers" xml:space="preserve"><value>広告や追跡クッキーは使用しません。</value></data>
+  <data name="CFAnalyticsLinkPrefix" xml:space="preserve"><value>Cloudflare Web Analytics とプライバシーについての詳細はこちら:</value></data>
+  <data name="CFLinkText" xml:space="preserve"><value>Cloudflare Web Analytics</value></data>
+  <data name="YourChoices" xml:space="preserve"><value>あなたの選択肢</value></data>
+  <data name="PostAnonymously" xml:space="preserve"><value>メッセージは匿名でも投稿できます（名前/メール不要）。</value></data>
+  <data name="RemovalRequest" xml:space="preserve"><value>投稿したメッセージやページ、関連情報の削除を依頼できます。</value></data>
+  <data name="CreatingPageAgreement" xml:space="preserve"><value>ページを作成することで、表示名・説明・画像を公開することに同意したものとみなします。</value></data>
+  <data name="OtherThings" xml:space="preserve"><value>その他の注意点</value></data>
+  <data name="DontSell" xml:space="preserve"><value>データの売買は行いません。</value></data>
+  <data name="NoAdsBeyondLogs" xml:space="preserve"><value>基本的なサーバーログ以外の広告・トラッキングは行いません。</value></data>
+  <data name="OpenSourceNote" xml:space="preserve"><value>このサイトはコミュニティのためのオープンソース（GPL-3）プロジェクトです。</value></data>
+  <data name="AgreementPara" xml:space="preserve"><value>本サイトの利用により、メッセージやページを公開すること、（ページ作成時には）アップロードした画像の表示・ホスティングを許可することに同意したものとします。</value></data>
+</root>

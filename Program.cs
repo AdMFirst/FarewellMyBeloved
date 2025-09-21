@@ -29,7 +29,8 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
     var supportedCultures = new[]
     {
         new CultureInfo("en-US"),
-        new CultureInfo("id-ID")
+        new CultureInfo("id-ID"),
+        new CultureInfo("ja-JP")
     };
 
     options.DefaultRequestCulture = new RequestCulture("en-US");

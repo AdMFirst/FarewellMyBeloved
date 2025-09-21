@@ -40,8 +40,8 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="SearchFarewellPeople" xml:space="preserve">
-    <value>Search Farewell People</value>
+  <data name="SearchFarewellPage" xml:space="preserve">
+    <value>Search Farewell Page</value>
   </data>
   <data name="SearchByNameDesc" xml:space="preserve">
     <value>Search by name or description...</value>
@@ -64,17 +64,17 @@
   <data name="NoResultsFound" xml:space="preserve">
     <value>No results found</value>
   </data>
-  <data name="NoFarewellPeopleFound" xml:space="preserve">
-    <value>No farewell people found</value>
+  <data name="NoFarewellPagesFound" xml:space="preserve">
+    <value>No farewell pages found</value>
   </data>
   <data name="NoResultsForTerm" xml:space="preserve">
-    <value>We couldn't find any farewell people matching "{0}".</value>
+    <value>We couldn't find any farewell pages matching "{0}".</value>
   </data>
-  <data name="CreateFirstFarewellPerson" xml:space="preserve">
-    <value>Create your first farewell person to get started.</value>
+  <data name="CreateFirstFarewellPage" xml:space="preserve">
+    <value>Create your first farewell page to get started.</value>
   </data>
-  <data name="CreateNewFarewellPerson" xml:space="preserve">
-    <value>Create New Farewell Person</value>
+  <data name="CreateNewFarewellPage" xml:space="preserve">
+    <value>Create New Farewell Page</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>Search</value>

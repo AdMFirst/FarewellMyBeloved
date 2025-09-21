@@ -58,6 +58,15 @@
   <data name="Privacy" xml:space="preserve">
     <value>Kebijakan Privasi</value>
   </data>
+  <data name="CreatePage" xml:space="preserve">
+    <value>Buat Halaman</value>
+  </data>
+  <data name="FindPage" xml:space="preserve">
+    <value>Cari Halaman</value>
+  </data>
+  <data name="Japanese" xml:space="preserve">
+    <value>Bahasa Jepang</value>
+  </data>
   <data name="Home" xml:space="preserve">
     <value>Beranda</value>
   </data>

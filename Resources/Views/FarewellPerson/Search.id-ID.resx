@@ -40,8 +40,8 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="SearchFarewellPeople" xml:space="preserve">
-    <value>Cari Orang Perpisahan</value>
+  <data name="SearchFarewellPage" xml:space="preserve">
+    <value>Cari Halaman Perpisahan</value>
   </data>
   <data name="SearchByNameDesc" xml:space="preserve">
     <value>Cari berdasarkan nama atau deskripsi...</value>
@@ -64,17 +64,17 @@
   <data name="NoResultsFound" xml:space="preserve">
     <value>Tidak ada hasil</value>
   </data>
-  <data name="NoFarewellPeopleFound" xml:space="preserve">
-    <value>Tidak ada orang perpisahan ditemukan</value>
+  <data name="NoFarewellPagesFound" xml:space="preserve">
+    <value>Tidak ada halaman perpisahan ditemukan</value>
   </data>
   <data name="NoResultsForTerm" xml:space="preserve">
-    <value>Kami tidak menemukan orang perpisahan yang cocok dengan "{0}".</value>
+    <value>Kami tidak menemukan halaman perpisahan yang cocok dengan "{0}".</value>
   </data>
-  <data name="CreateFirstFarewellPerson" xml:space="preserve">
-    <value>Buat orang perpisahan pertama Anda untuk memulai.</value>
+  <data name="CreateFirstFarewellPage" xml:space="preserve">
+    <value>Buat halaman perpisahan pertama Anda untuk memulai.</value>
   </data>
-  <data name="CreateNewFarewellPerson" xml:space="preserve">
-    <value>Buat Orang Perpisahan Baru</value>
+  <data name="CreateNewFarewellPage" xml:space="preserve">
+    <value>Buat Halaman Perpisahan Baru</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>Cari</value>

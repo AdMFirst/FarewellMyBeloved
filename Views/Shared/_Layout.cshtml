@@ -38,10 +38,10 @@
                     <ul class="navbar-nav flex-grow-1">
                         
                         <li class="nav-item">
-                            <a class="nav-link" id="nav-create" asp-controller="FarewellPerson" asp-action="Create">@Localizer["Create"]</a>
+                            <a class="nav-link" id="nav-create" asp-controller="FarewellPerson" asp-action="Create">@Localizer["CreatePage"]</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link " id="nav-find" asp-controller="FarewellPerson" asp-action="Search">@Localizer["Search"]</a>
+                            <a class="nav-link " id="nav-find" asp-controller="FarewellPerson" asp-action="Search">@Localizer["FindPage"]</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link " id="nav-about" asp-controller="AboutUs" asp-action="Index">@Localizer["AboutUs"]</a>
@@ -76,6 +76,15 @@
                                        asp-route-culture="id-ID"
                                        asp-route-returnUrl="@((Context?.Request?.Path + Context?.Request?.QueryString).ToString())">
                                         @Localizer["Indonesian"]
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item"
+                                       asp-controller="Language"
+                                       asp-action="SetCulture"
+                                       asp-route-culture="ja-JP"
+                                       asp-route-returnUrl="@((Context?.Request?.Path + Context?.Request?.QueryString).ToString())">
+                                        @Localizer["Japanese"]
                                     </a>
                                 </li>
                             </ul>
