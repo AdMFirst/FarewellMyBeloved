@@ -1,5 +1,5 @@
 @{
-    ViewData["Title"] = "Report Content";
+    ViewData["Title"] = Localizer["ReportContent"];
 }
 
 <div class="container mt-5">
@@ -7,18 +7,18 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Report Content</h3>
+                    <h3 class="card-title">@Localizer["ReportContent"]</h3>
                 </div>
                 <div class="card-body">
                     <form asp-action="Index" method="post">
                         <div class="mb-3">
-                            <label for="Email" class="form-label">Email Address</label>
+                            <label for="Email" class="form-label">@Localizer["EmailAddress"]</label>
                             <input type="email" class="form-control" id="Email" name="Email" required>
-                            <div class="form-text">We'll never share your email with anyone else.</div>
+                            <div class="form-text">@Localizer["EmailNeverShare"]</div>
                         </div>
 
                         <div class="mb-3">
-                            <label for="Reason" class="form-label">Reason</label>
+                            <label for="Reason" class="form-label">@Localizer["Reason"]</label>
                             <select class="form-select" id="Reason" name="Reason" required>
                                 @foreach(var option in (IEnumerable<SelectListItem>)ViewBag.Reasons)
                                 {
@@ -28,8 +28,8 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="Explanation" class="form-label">Explanation</label>
-                            <textarea class="form-control" id="Explanation" name="Explanation" rows="4" placeholder="Please provide a detailed explanation of your report..."></textarea>
+                            <label for="Explanation" class="form-label">@Localizer["Explanation"]</label>
+                            <textarea class="form-control" id="Explanation" name="Explanation" rows="4" placeholder="@Localizer["ExplanationPlaceholder"]"></textarea>
                         </div>
 
                         <div class="mb-3">
@@ -38,8 +38,8 @@
                         </div>
 
                         <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-primary">Submit Report</button>
-                            <a href="@ViewBag.Referer" class="btn btn-secondary">Cancel</a>
+                            <button type="submit" class="btn btn-primary">@Localizer["SubmitReport"]</button>
+                            <a href="@ViewBag.Referer" class="btn btn-secondary">@Localizer["Cancel"]</a>
                         </div>
                     </form>
                 </div>

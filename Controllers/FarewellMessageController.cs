@@ -4,16 +4,19 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using FarewellMyBeloved.Models;
 using FarewellMyBeloved.ViewModels;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Localization;
 
 namespace FarewellMyBeloved.Controllers;
 
 public class FarewellMessageController : Controller
 {
     private readonly ApplicationDbContext _context;
+    private readonly IStringLocalizer<FarewellMessageController> _localizer;
 
-    public FarewellMessageController(ApplicationDbContext context)
+    public FarewellMessageController(ApplicationDbContext context, IStringLocalizer<FarewellMessageController> localizer)
     {
         _context = context;
+        _localizer = localizer;
     }
 
     // GET: FarewellMessage/Create
@@ -44,6 +47,7 @@ public class FarewellMessageController : Controller
                                            .ToListAsync();
         ViewBag.FarewellPeople = farewellPeople;
         
+        ViewData["Create"] = _localizer["Create"];
         return View(viewModel);
     }
 

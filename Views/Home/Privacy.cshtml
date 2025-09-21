@@ -1,68 +1,56 @@
 ﻿@{
-    ViewData["Title"] = "Privacy Policy";
+    ViewData["Title"] = Localizer["PrivacyPolicy"];
 }
-<h1>@ViewData["Title"]</h1>
+<h1>@Localizer["PrivacyPolicy"]</h1>
 
-<p>
-    This website is a community project where people can share farewell messages or create a page 
-    for someone to be remembered. We respect your privacy and keep things simple and transparent.
-</p>
+<p>@Localizer["PrivacyIntro1"]</p>
 
-<h2>What We Collect</h2>
+<h2>@Localizer["WhatWeCollect"]</h2>
 <ul>
-    <li><strong>When leaving a message:</strong> 
+    <li><strong>@Localizer["WhenLeavingMessage"]</strong> 
         <ul>
-            <li><em>Name (optional):</em> Shown with your message if provided.</li>
-            <li><em>Email (optional):</em> Used privately for moderation/contact if needed. Never shown publicly.</li>
-            <li><em>Farewell Message:</em> Publicly visible once submitted.</li>
+            <li><em>@Localizer["NameOptional"]</em></li>
+            <li><em>@Localizer["EmailOptional"]</em></li>
+            <li><em>@Localizer["FarewellMessagePublic"]</em></li>
         </ul>
     </li>
-    <li><strong>When creating a page:</strong>
+    <li><strong>@Localizer["WhenCreatingPage"]</strong>
         <ul>
-            <li><em>Display Name:</em> Required, shown publicly on the page.</li>
-            <li><em>Description:</em> Required, shown publicly on the page.</li>
-            <li><em>Image (Background & Potrait):</em> You must upload an image when creating a page. By uploading, you give us permission to display it publicly and store/share it with our image hosting provider.</li>
+            <li><em>@Localizer["DisplayNameReq"]</em></li>
+            <li><em>@Localizer["DescriptionReq"]</em></li>
+            <li><em>@Localizer["ImageReq"]</em></li>
         </ul>
     </li>
 </ul>
 
-<h2>How Your Data Is Used</h2>
+<h2>@Localizer["HowYourDataUsed"]</h2>
 <ul>
-    <li>Names, messages, page titles, descriptions, and images are shown publicly.</li>
-    <li>Emails (if provided) stay private and are only used by admins for moderation purposes.</li>
-    <li>Images are stored on and delivered by third-party hosting services/CDNs.</li>
+    <li>@Localizer["PubliclyVisible"]</li>
+    <li>@Localizer["EmailsPrivate"]</li>
+    <li>@Localizer["ImagesThirdParty"]</li>
 </ul>
 
-<h2>Cookies and Analytics</h2>
+<h2>@Localizer["CookiesAnalytics"]</h2>
 <ul>
-    <li>We use a small number of <strong>essential cookies</strong> that are required for the site's security and basic functionality. These do not track you and do not require consent.</li>
-    <li>We use <strong>Cloudflare Web Analytics</strong> to understand basic traffic (page views, referrers, device type). This analytics service is cookie-less and privacy-focused.</li>
-    <li>No advertising or tracking cookies are used.</li>
+    <li>@Localizer["EssentialCookies"]</li>
+    <li>@Localizer["CFAnalytics"]</li>
+    <li>@Localizer["NoAdsTrackers"]</li>
 </ul>
-<p>
-    You can read more about Cloudflare Web Analytics and privacy here: 
-    <a href="https://www.cloudflare.com/web-analytics/" target="_blank" rel="noopener">
-        Cloudflare Web Analytics
-    </a>.
-</p>
+<p>@Localizer["CFAnalyticsLinkPrefix"] <a href="https://www.cloudflare.com/web-analytics/" target="_blank" rel="noopener">@Localizer["CFLinkText"]</a>.</p>
 
 
-<h2>Your Choices</h2>
+<h2>@Localizer["YourChoices"]</h2>
 <ul>
-    <li>You can post farewell messages anonymously (no name/email required).</li>
-    <li>You can request to have your message, page, or any associated info removed.</li>
-    <li>Creating a page means you agree to publicly share the display name, description, and image you provide.</li>
+    <li>@Localizer["PostAnonymously"]</li>
+    <li>@Localizer["RemovalRequest"]</li>
+    <li>@Localizer["CreatingPageAgreement"]</li>
 </ul>
 
-<h2>Other Things You Should Know</h2>
+<h2>@Localizer["OtherThings"]</h2>
 <ul>
-    <li>We don't sell or trade your data.</li>
-    <li>We don't run ads or trackers beyond basic server logs.</li>
-    <li>This is an open-source project (GPL-3), built for the community.</li>
+    <li>@Localizer["DontSell"]</li>
+    <li>@Localizer["NoAdsBeyondLogs"]</li>
+    <li>@Localizer["OpenSourceNote"]</li>
 </ul>
 
-<p>
-    By using this site, you're agreeing to share your farewell messages or pages publicly, 
-    and (if creating a page) to let us display and host the image you upload.  
-    That's all—no hidden stuff.
-</p>
+<p>@Localizer["AgreementPara"]</p>

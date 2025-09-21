@@ -9,6 +9,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using Microsoft.Extensions.Localization;
 
 namespace FarewellMyBeloved.Controllers;
 
@@ -16,6 +17,7 @@ public class FarewellPersonController : Controller
 {
     private readonly ApplicationDbContext _context;
     private readonly IS3Service _s3Service;
+    private readonly IStringLocalizer<FarewellPersonController> _localizer;
 
     private static readonly HashSet<string> AllowedMimeTypes = new()
     {
@@ -28,10 +30,11 @@ public class FarewellPersonController : Controller
         "image/tiff"
     };
 
-    public FarewellPersonController(ApplicationDbContext context, IS3Service s3Service)
+    public FarewellPersonController(ApplicationDbContext context, IS3Service s3Service, IStringLocalizer<FarewellPersonController> localizer)
     {
         _context = context;
         _s3Service = s3Service;
+        _localizer = localizer;
     }
 
 
@@ -147,6 +150,7 @@ public class FarewellPersonController : Controller
     {
         if (string.IsNullOrWhiteSpace(searchTerm))
         {
+            ViewData["Search"] = _localizer["Search"];
             return View();
         }
 
