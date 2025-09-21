@@ -60,8 +60,24 @@
                                 <i class="fas fa-globe"></i>
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="?culture=en-US">@Localizer["English"]</a></li>
-                                <li><a class="dropdown-item" href="?culture=id-ID">@Localizer["Indonesian"]</a></li>
+                                <li>
+                                    <a class="dropdown-item"
+                                       asp-controller="Language"
+                                       asp-action="SetCulture"
+                                       asp-route-culture="en-US"
+                                       asp-route-returnUrl="@((Context?.Request?.Path + Context?.Request?.QueryString).ToString())">
+                                        @Localizer["English"]
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item"
+                                       asp-controller="Language"
+                                       asp-action="SetCulture"
+                                       asp-route-culture="id-ID"
+                                       asp-route-returnUrl="@((Context?.Request?.Path + Context?.Request?.QueryString).ToString())">
+                                        @Localizer["Indonesian"]
+                                    </a>
+                                </li>
                             </ul>
                         </li>
                         <li class="nav-item">
