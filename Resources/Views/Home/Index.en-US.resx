@@ -53,10 +53,10 @@
     <value>Each person has their own dedicated page where friends and family can share their thoughts, memories, and farewells. It's a beautiful way to create a lasting legacy for those we've lost.</value>
   </data>
   <data name="FindFarewellPage" xml:space="preserve">
-    <value>Find Farewell Page</value>
+    <value>Find Memorial Page</value>
   </data>
   <data name="SearchOrCreate" xml:space="preserve">
-    <value>Search for someone's farewell page or create a new one</value>
+    <value>Search for someone's memorial page or create a new one</value>
   </data>
   <data name="SearchPlaceholder" xml:space="preserve">
     <value>Enter name to search...</value>
@@ -68,9 +68,9 @@
     <value>Not finding what you're looking for?</value>
   </data>
   <data name="CantFindCreate" xml:space="preserve">
-    <value>If you can't find a farewell page, you can create a new one to honor your loved one and share their legacy with others. The page will be set up right away so you and others can start sharing memories and paying tribute to their life.</value>
+    <value>If you can't find a memorial page, you can create a new one to honor your loved one and share their legacy with others. The page will be set up right away so you and others can start sharing memories and paying tribute to their life.</value>
   </data>
   <data name="CreateNewFarewellPage" xml:space="preserve">
-    <value>Create New Farewell Page</value>
+    <value>Create New Memorial Page</value>
   </data>
 </root>

@@ -53,10 +53,10 @@
     <value>Setiap orang memiliki halaman khusus tempat keluarga dan teman dapat berbagi pikiran, kenangan, dan salam perpisahan. Ini adalah cara yang indah untuk menciptakan warisan bagi mereka yang telah pergi.</value>
   </data>
   <data name="FindFarewellPage" xml:space="preserve">
-    <value>Cari Halaman Perpisahan</value>
+    <value>Cari Halaman Kenangan</value>
   </data>
   <data name="SearchOrCreate" xml:space="preserve">
-    <value>Cari halaman perpisahan seseorang atau buat yang baru</value>
+    <value>Cari halaman kenangan seseorang atau buat yang baru</value>
   </data>
   <data name="SearchPlaceholder" xml:space="preserve">
     <value>Masukkan nama untuk dicari...</value>
@@ -68,9 +68,9 @@
     <value>Tidak menemukan yang Anda cari?</value>
   </data>
   <data name="CantFindCreate" xml:space="preserve">
-    <value>Jika Anda tidak menemukan halaman perpisahan, Anda dapat membuat yang baru untuk menghormati orang tercinta dan berbagi warisan mereka dengan orang lain. Halaman akan langsung dibuat sehingga Anda dan orang lain dapat mulai berbagi kenangan.</value>
+    <value>Jika Anda tidak menemukan halaman kenangan, Anda dapat membuat yang baru untuk menghormati orang tercinta dan berbagi warisan mereka dengan orang lain. Halaman akan langsung dibuat sehingga Anda dan orang lain dapat mulai berbagi kenangan.</value>
   </data>
   <data name="CreateNewFarewellPage" xml:space="preserve">
-    <value>Buat Halaman Perpisahan Baru</value>
+    <value>Buat Halaman Kenangan Baru</value>
   </data>
 </root>

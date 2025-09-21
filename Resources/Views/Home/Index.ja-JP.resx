@@ -28,19 +28,27 @@
       </xsd:complexType>
     </xsd:element>
   </xsd:schema>
-  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
-  <resheader name="version"><value>2.0</value></resheader>
-  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
-  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
   <data name="HomeTitle" xml:space="preserve"><value>ホーム</value></data>
-  <data name="WelcomeHeading" xml:space="preserve"><value>{0} - FarewellMyBeloved へ</value></data>
-  <data name="IntroLead" xml:space="preserve"><value>大切な人を偲び、想いを伝えるためのデジタルスペース。思い出やメッセージを共有して、その生きた証を心に刻み続けましょう。</value></data>
-  <data name="IntroP2" xml:space="preserve"><value>ひとりひとりに専用のページがあり、家族や友人が思い出やメッセージを寄せられます。大切な人へのささやかなレガシーを形にします。</value></data>
-  <data name="FindFarewellPage" xml:space="preserve"><value>お別れページを探す</value></data>
-  <data name="SearchOrCreate" xml:space="preserve"><value>ページを探すか、新しく作成しましょう</value></data>
-  <data name="SearchPlaceholder" xml:space="preserve"><value>名前で検索...</value></data>
+  <data name="WelcomeHeading" xml:space="preserve"><value>{0} - FarewellMyBeloved へようこそ</value></data>
+  <data name="IntroLead" xml:space="preserve"><value>大切な方を偲び、思い出を残すための場所です。メッセージや思い出、追悼の言葉を分かち合い、その生涯を讃えましょう。</value></data>
+  <data name="IntroP2" xml:space="preserve"><value>それぞれの方に専用のページ（メモリアルページ）があり、家族や友人が想いを共有できます。美しい追悼の場を一緒に作りましょう。</value></data>
+  <data name="FindFarewellPage" xml:space="preserve"><value>メモリアルページを探す</value></data>
+  <data name="SearchOrCreate" xml:space="preserve"><value>誰かのメモリアルページを検索、または新規作成</value></data>
+  <data name="SearchPlaceholder" xml:space="preserve"><value>名前を入力して検索...</value></data>
   <data name="Search" xml:space="preserve"><value>検索</value></data>
   <data name="NotFinding" xml:space="preserve"><value>お探しのページが見つかりませんか？</value></data>
-  <data name="CantFindCreate" xml:space="preserve"><value>見つからない場合は、新しいお別れページを作成して、思い出やメッセージを共有しましょう。</value></data>
-  <data name="CreateNewFarewellPage" xml:space="preserve"><value>新しいお別れページを作成</value></data>
+  <data name="CantFindCreate" xml:space="preserve"><value>見つからない場合は、新しいメモリアルページを作成して大切な方を称え、その軌跡を共有できます。ページはすぐに作成され、思い出や追悼の言葉を寄せられます。</value></data>
+  <data name="CreateNewFarewellPage" xml:space="preserve"><value>新しいメモリアルページを作成</value></data>
 </root>

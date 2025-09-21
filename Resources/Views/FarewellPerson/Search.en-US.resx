@@ -41,7 +41,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="SearchFarewellPage" xml:space="preserve">
-    <value>Search Farewell Page</value>
+    <value>Search Memorial Pages</value>
   </data>
   <data name="SearchByNameDesc" xml:space="preserve">
     <value>Search by name or description...</value>
@@ -65,16 +65,16 @@
     <value>No results found</value>
   </data>
   <data name="NoFarewellPagesFound" xml:space="preserve">
-    <value>No farewell pages found</value>
+    <value>No memorial pages found</value>
   </data>
   <data name="NoResultsForTerm" xml:space="preserve">
-    <value>We couldn't find any farewell pages matching "{0}".</value>
+    <value>We couldn't find any memorial pages matching "{0}".</value>
   </data>
   <data name="CreateFirstFarewellPage" xml:space="preserve">
-    <value>Create your first farewell page to get started.</value>
+    <value>Create your first memorial page to get started.</value>
   </data>
   <data name="CreateNewFarewellPage" xml:space="preserve">
-    <value>Create New Farewell Page</value>
+    <value>Create New Memorial Page</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>Search</value>

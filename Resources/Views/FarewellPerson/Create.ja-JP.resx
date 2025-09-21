@@ -28,23 +28,32 @@
       </xsd:complexType>
     </xsd:element>
   </xsd:schema>
-  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
-  <resheader name="version"><value>2.0</value></resheader>
-  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
-  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
-  <data name="CreateFarewellPage" xml:space="preserve"><value>お別れページを作成</value></data>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CreateFarewellPerson" xml:space="preserve"><value>メモリアルページを作成</value></data>
+  <data name="CreateFarewellPage" xml:space="preserve"><value>メモリアルページを作成</value></data>
   <data name="Name" xml:space="preserve"><value>名前</value></data>
   <data name="NamePlaceholder" xml:space="preserve"><value>名前を入力</value></data>
   <data name="Description" xml:space="preserve"><value>説明</value></data>
-  <data name="DescriptionPlaceholder" xml:space="preserve"><value>この方についての説明を入力...</value></data>
-  <data name="YourEmail" xml:space="preserve"><value>メールアドレス</value></data>
+  <data name="DescriptionPlaceholder" xml:space="preserve"><value>この方についての説明を入力してください...</value></data>
+  <data name="YourEmail" xml:space="preserve"><value>あなたのメールアドレス</value></data>
   <data name="EmailPlaceholder" xml:space="preserve"><value>メールアドレスを入力（任意）</value></data>
-  <data name="EmailHelp" xml:space="preserve"><value>必要に応じてモデレーションのためにご連絡します。</value></data>
+  <data name="EmailHelp" xml:space="preserve"><value>ページの審査が必要な場合にご連絡します。</value></data>
   <data name="Portrait" xml:space="preserve"><value>ポートレート</value></data>
-  <data name="UseUrl" xml:space="preserve"><value>URL を使用</value></data>
+  <data name="UseUrl" xml:space="preserve"><value>URLを使用</value></data>
   <data name="UploadFile" xml:space="preserve"><value>ファイルをアップロード</value></data>
   <data name="Background" xml:space="preserve"><value>背景</value></data>
   <data name="Create" xml:space="preserve"><value>作成</value></data>
   <data name="Cancel" xml:space="preserve"><value>キャンセル</value></data>
-  <data name="FileTooLarge" xml:space="preserve"><value>ファイルサイズは 5MB 未満である必要があります。</value></data>
+  <data name="FileTooLarge" xml:space="preserve"><value>ファイルサイズは5MB未満にしてください。</value></data>
 </root>

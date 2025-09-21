@@ -32,17 +32,17 @@
   <resheader name="version"><value>2.0</value></resheader>
   <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
   <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
-  <data name="SearchFarewellPage" xml:space="preserve"><value>お別れページを検索</value></data>
+  <data name="SearchFarewellPage" xml:space="preserve"><value>メモリアルページを検索</value></data>
   <data name="SearchByNameDesc" xml:space="preserve"><value>名前または説明で検索...</value></data>
   <data name="Clear" xml:space="preserve"><value>クリア</value></data>
-  <data name="SearchResultsFor" xml:space="preserve"><value>検索結果: 「{0}」</value></data>
-  <data name="NoPortrait" xml:space="preserve"><value>画像なし</value></data>
+  <data name="SearchResultsFor" xml:space="preserve"><value>検索結果: "{0}"</value></data>
+  <data name="NoPortrait" xml:space="preserve"><value>ポートレートなし</value></data>
   <data name="ViewDetails" xml:space="preserve"><value>詳細を見る</value></data>
-  <data name="CreatedLabel" xml:space="preserve"><value>作成日:</value></data>
-  <data name="NoResultsFound" xml:space="preserve"><value>該当する結果はありません</value></data>
-  <data name="NoFarewellPagesFound" xml:space="preserve"><value>お別れページが見つかりませんでした</value></data>
-  <data name="NoResultsForTerm" xml:space="preserve"><value>「{0}」に一致するお別れページは見つかりませんでした。</value></data>
-  <data name="CreateFirstFarewellPage" xml:space="preserve"><value>まずは最初のページを作成しましょう。</value></data>
-  <data name="CreateNewFarewellPage" xml:space="preserve"><value>新しいお別れページを作成</value></data>
+  <data name="CreatedLabel" xml:space="preserve"><value>作成日時:</value></data>
+  <data name="NoResultsFound" xml:space="preserve"><value>結果が見つかりません</value></data>
+  <data name="NoFarewellPagesFound" xml:space="preserve"><value>メモリアルページが見つかりません</value></data>
+  <data name="NoResultsForTerm" xml:space="preserve"><value>"{0}" に一致するメモリアルページは見つかりませんでした。</value></data>
+  <data name="CreateFirstFarewellPage" xml:space="preserve"><value>最初のメモリアルページを作成して始めましょう。</value></data>
+  <data name="CreateNewFarewellPage" xml:space="preserve"><value>新しいメモリアルページを作成</value></data>
   <data name="Search" xml:space="preserve"><value>検索</value></data>
 </root>

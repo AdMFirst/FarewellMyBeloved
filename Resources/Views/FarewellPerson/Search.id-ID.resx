@@ -41,7 +41,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="SearchFarewellPage" xml:space="preserve">
-    <value>Cari Halaman Perpisahan</value>
+    <value>Cari Halaman Kenangan</value>
   </data>
   <data name="SearchByNameDesc" xml:space="preserve">
     <value>Cari berdasarkan nama atau deskripsi...</value>
@@ -65,16 +65,16 @@
     <value>Tidak ada hasil</value>
   </data>
   <data name="NoFarewellPagesFound" xml:space="preserve">
-    <value>Tidak ada halaman perpisahan ditemukan</value>
+    <value>Tidak ada halaman kenangan ditemukan</value>
   </data>
   <data name="NoResultsForTerm" xml:space="preserve">
-    <value>Kami tidak menemukan halaman perpisahan yang cocok dengan "{0}".</value>
+    <value>Kami tidak menemukan halaman kenangan yang cocok dengan "{0}".</value>
   </data>
   <data name="CreateFirstFarewellPage" xml:space="preserve">
-    <value>Buat halaman perpisahan pertama Anda untuk memulai.</value>
+    <value>Buat halaman kenangan pertama Anda untuk memulai.</value>
   </data>
   <data name="CreateNewFarewellPage" xml:space="preserve">
-    <value>Buat Halaman Perpisahan Baru</value>
+    <value>Buat Halaman Kenangan Baru</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>Cari</value>
