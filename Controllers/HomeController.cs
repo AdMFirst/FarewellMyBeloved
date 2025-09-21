@@ -47,7 +47,6 @@ public class HomeController : Controller
 
 
     [HttpGet("/{slug:minlength(1)}")]
-    [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any)]
     public async Task<IActionResult> Slug(string slug)
     {
         if (slug == "index")
