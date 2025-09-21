@@ -43,4 +43,7 @@
   <data name="Search" xml:space="preserve">
     <value>検索</value>
   </data>
+  <data name="SlugAlreadyExists" xml:space="preserve">
+    <value>このURLの追悼ページは既に存在します。別の名前をお試しください。</value>
+  </data>
 </root>

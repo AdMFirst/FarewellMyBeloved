@@ -43,4 +43,7 @@
   <data name="Search" xml:space="preserve">
     <value>Cari</value>
   </data>
+  <data name="SlugAlreadyExists" xml:space="preserve">
+    <value>Halaman peringatan dengan URL ini sudah ada. Coba nama lain.</value>
+  </data>
 </root>

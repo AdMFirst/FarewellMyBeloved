@@ -52,99 +52,127 @@ public class FarewellPersonController : Controller
     {
         const long maxFileSize = 5 * 1024 * 1024; // 5MB
 
-        if (ModelState.IsValid)
+        // Server-side file validations (size + MIME)
+        if (!viewModel.UsePortraitUrl && viewModel.PortraitFile != null)
         {
-            // Server-side file size validation
-            if (!viewModel.UsePortraitUrl && viewModel.PortraitFile != null)
+            if (viewModel.PortraitFile.Length > maxFileSize)
             {
-                if (viewModel.PortraitFile.Length > maxFileSize)
-                {
-                    ModelState.AddModelError("PortraitFile", "Portrait file size must be less than 5MB.");
-                }
-                if (!IsValidMimeType(viewModel.PortraitFile))
-                {
-                    ModelState.AddModelError("PortraitFile", "Portrait file must be an image");
-                }
+                ModelState.AddModelError("PortraitFile", "Portrait file size must be less than 5MB.");
             }
-
-            if (!viewModel.UseBackgroundUrl && viewModel.BackgroundFile != null)
+            if (!IsValidMimeType(viewModel.PortraitFile))
             {
-                if (viewModel.BackgroundFile.Length > maxFileSize)
-                {
-                    ModelState.AddModelError("BackgroundFile", "Background file size must be less than 5MB.");
-                }
-                if (!IsValidMimeType(viewModel.BackgroundFile))
-                {
-                    ModelState.AddModelError("BackgroundFile", "Background file must be an image");
-                }
+                ModelState.AddModelError("PortraitFile", "Portrait file must be an image");
             }
-            
-
-            if (!ModelState.IsValid)
-            {
-                return View(viewModel);
-            }
-
-            var farewellPerson = new FarewellPerson
-            {
-                Name = viewModel.Name,
-                Description = viewModel.Description,
-                Slug = GenerateSlug(viewModel.Name),
-                Email = viewModel.Email,
-                IsPublic = true,
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow
-            };
-
-            if (viewModel.UsePortraitUrl)
-            {
-                farewellPerson.PortraitUrl = viewModel.PortraitUrl;
-            }
-            else if (viewModel.PortraitFile != null)
-            {
-                // Compress and upload portrait
-                using var compressedPortraitStream = new MemoryStream();
-                using var image = Image.Load(viewModel.PortraitFile.OpenReadStream());
-                await image.SaveAsJpegAsync(compressedPortraitStream, new JpegEncoder
-                {
-                    Quality = 85
-                });
-                compressedPortraitStream.Position = 0;
-                var compressedPortraitFile = new FormFile(compressedPortraitStream, 0, compressedPortraitStream.Length, "PortraitFile", viewModel.PortraitFile.FileName)
-                {
-                    Headers = viewModel.PortraitFile.Headers,
-                    ContentType = viewModel.PortraitFile.ContentType
-                };
-                farewellPerson.PortraitUrl = await _s3Service.UploadFileAsync(compressedPortraitFile, S3UploadType.Portrait);
-            }
-
-            if (viewModel.UseBackgroundUrl)
-            {
-                farewellPerson.BackgroundUrl = viewModel.BackgroundUrl;
-            }
-            else if (viewModel.BackgroundFile != null)
-            {
-                // Compress and upload background
-                using var compressedBackgroundStream = new MemoryStream();
-                using var image = Image.Load(viewModel.BackgroundFile.OpenReadStream());
-                await image.SaveAsJpegAsync(compressedBackgroundStream, new JpegEncoder
-                {
-                    Quality = 85
-                });
-                compressedBackgroundStream.Position = 0;
-                var compressedBackgroundFile = new FormFile(compressedBackgroundStream, 0, compressedBackgroundStream.Length, "BackgroundFile", viewModel.BackgroundFile.FileName)
-                {
-                    Headers = viewModel.BackgroundFile.Headers,
-                    ContentType = viewModel.BackgroundFile.ContentType
-                };
-                farewellPerson.BackgroundUrl = await _s3Service.UploadFileAsync(compressedBackgroundFile, S3UploadType.Background);
-            }
-
-            _context.Add(farewellPerson);
-            await _context.SaveChangesAsync();
-            return Redirect($"/{farewellPerson.Slug}");
         }
-        return View(viewModel);
+
+        if (!viewModel.UseBackgroundUrl && viewModel.BackgroundFile != null)
+        {
+            if (viewModel.BackgroundFile.Length > maxFileSize)
+            {
+                ModelState.AddModelError("BackgroundFile", "Background file size must be less than 5MB.");
+            }
+            if (!IsValidMimeType(viewModel.BackgroundFile))
+            {
+                ModelState.AddModelError("BackgroundFile", "Background file must be an image");
+            }
+        }
+
+        // Generate slug and ensure uniqueness before any uploads
+        var slug = GenerateSlug(viewModel.Name);
+        if (await _context.FarewellPeople.AnyAsync(p => p.Slug == slug))
+        {
+            ModelState.AddModelError(nameof(viewModel.Name), _localizer["SlugAlreadyExists"]);
+        }
+
+        // If any validation failed, return early without uploading to S3
+        if (!ModelState.IsValid)
+        {
+            return View(viewModel);
+        }
+
+        // Build entity after validation passes
+        var farewellPerson = new FarewellPerson
+        {
+            Name = viewModel.Name,
+            Description = viewModel.Description,
+            Slug = slug,
+            Email = viewModel.Email,
+            IsPublic = true,
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow
+        };
+
+        string? uploadedPortraitUrl = null;
+        string? uploadedBackgroundUrl = null;
+
+        if (viewModel.UsePortraitUrl)
+        {
+            farewellPerson.PortraitUrl = viewModel.PortraitUrl;
+        }
+        else if (viewModel.PortraitFile != null)
+        {
+            // Compress and upload portrait AFTER validation passes
+            using var compressedPortraitStream = new MemoryStream();
+            using var image = Image.Load(viewModel.PortraitFile.OpenReadStream());
+            await image.SaveAsJpegAsync(compressedPortraitStream, new JpegEncoder
+            {
+                Quality = 85
+            });
+            compressedPortraitStream.Position = 0;
+            var compressedPortraitFile = new FormFile(compressedPortraitStream, 0, compressedPortraitStream.Length, "PortraitFile", viewModel.PortraitFile.FileName)
+            {
+                Headers = viewModel.PortraitFile.Headers,
+                ContentType = viewModel.PortraitFile.ContentType
+            };
+            uploadedPortraitUrl = await _s3Service.UploadFileAsync(compressedPortraitFile, S3UploadType.Portrait);
+            farewellPerson.PortraitUrl = uploadedPortraitUrl;
+        }
+
+        if (viewModel.UseBackgroundUrl)
+        {
+            farewellPerson.BackgroundUrl = viewModel.BackgroundUrl;
+        }
+        else if (viewModel.BackgroundFile != null)
+        {
+            // Compress and upload background AFTER validation passes
+            using var compressedBackgroundStream = new MemoryStream();
+            using var image = Image.Load(viewModel.BackgroundFile.OpenReadStream());
+            await image.SaveAsJpegAsync(compressedBackgroundStream, new JpegEncoder
+            {
+                Quality = 85
+            });
+            compressedBackgroundStream.Position = 0;
+            var compressedBackgroundFile = new FormFile(compressedBackgroundStream, 0, compressedBackgroundStream.Length, "BackgroundFile", viewModel.BackgroundFile.FileName)
+            {
+                Headers = viewModel.BackgroundFile.Headers,
+                ContentType = viewModel.BackgroundFile.ContentType
+            };
+            uploadedBackgroundUrl = await _s3Service.UploadFileAsync(compressedBackgroundFile, S3UploadType.Background);
+            farewellPerson.BackgroundUrl = uploadedBackgroundUrl;
+        }
+
+        _context.Add(farewellPerson);
+        try
+        {
+            await _context.SaveChangesAsync();
+        }
+        catch (DbUpdateException)
+        {
+            // Clean up uploaded files if DB save fails (e.g., slug race condition)
+            if (!string.IsNullOrEmpty(uploadedPortraitUrl))
+            {
+                await _s3Service.DetectAndDeleteFileAsync(uploadedPortraitUrl);
+            }
+            if (!string.IsNullOrEmpty(uploadedBackgroundUrl))
+            {
+                await _s3Service.DetectAndDeleteFileAsync(uploadedBackgroundUrl);
+            }
+
+            ModelState.AddModelError(nameof(viewModel.Name), _localizer["SlugAlreadyExists"]);
+            return View(viewModel);
+        }
+
+        return Redirect($"/{farewellPerson.Slug}");
     }
 
     public async Task<IActionResult> Search(string searchTerm)

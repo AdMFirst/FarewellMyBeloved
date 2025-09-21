@@ -43,4 +43,7 @@
   <data name="Search" xml:space="preserve">
     <value>Search</value>
   </data>
+  <data name="SlugAlreadyExists" xml:space="preserve">
+    <value>A memorial with this URL already exists. Try a different name.</value>
+  </data>
 </root>
