@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using Microsoft.Extensions.Localization;
+using ICU4N.Text;
 
 namespace FarewellMyBeloved.Controllers;
 
@@ -173,9 +174,26 @@ public class FarewellPersonController : Controller
     }
 
 
+    
+
+
     private string GenerateSlug(string name)
     {
-        if (string.IsNullOrWhiteSpace(name)) return Guid.NewGuid().ToString();;
+        if (string.IsNullOrWhiteSpace(name)) return Guid.NewGuid().ToString("n");
+
+        // ICU4N transliteration for robust, multilingual slugs
+        var transliterator = Transliterator.GetInstance("Any-Latin; Latin-ASCII; NFD; [:Nonspacing Mark:] Remove; NFC");
+        var latin = transliterator.Transliterate(name);
+        var sbSlug = new StringBuilder(latin.Length);
+        foreach (var ch in latin.ToLowerInvariant())
+        {
+            if (char.IsLetterOrDigit(ch)) sbSlug.Append(ch);
+            else if (char.IsWhiteSpace(ch) || ch == '-' || ch == '_') sbSlug.Append('-');
+            else if (ch < 128) sbSlug.Append('-');
+        }
+        var slug = Regex.Replace(sbSlug.ToString(), "-{2,}", "-").Trim('-');
+        if (string.IsNullOrEmpty(slug)) slug = Guid.NewGuid().ToString("n");
+        return slug;
 
         // Normalize and remove diacritics
         var normalized = name.Normalize(NormalizationForm.FormKD);

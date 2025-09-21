@@ -43,7 +43,7 @@
   <data name="CreateFarewellPerson" xml:space="preserve"><value>メモリアルページを作成</value></data>
   <data name="CreateFarewellPage" xml:space="preserve"><value>メモリアルページを作成</value></data>
   <data name="Name" xml:space="preserve"><value>名前</value></data>
-  <data name="NamePlaceholder" xml:space="preserve"><value>名前を入力</value></data>
+  <data name="NamePlaceholder" xml:space="preserve"><value>名前をローマ字かひらがなで入力してください</value></data>
   <data name="Description" xml:space="preserve"><value>説明</value></data>
   <data name="DescriptionPlaceholder" xml:space="preserve"><value>この方についての説明を入力してください...</value></data>
   <data name="YourEmail" xml:space="preserve"><value>あなたのメールアドレス</value></data>
