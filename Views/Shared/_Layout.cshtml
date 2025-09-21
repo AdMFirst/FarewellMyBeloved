@@ -12,6 +12,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - FarewellMyBeloved</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
     @if (!isAdmin) {
         <link rel="stylesheet" href="~/css/bootstrap.min.css" />
     } 
@@ -24,11 +28,10 @@
     <script src="https://cdn.jsdelivr.net/npm/%40floating-ui/core@1.7.3"></script>
     <script src="https://cdn.jsdelivr.net/npm/%40floating-ui/dom@1.7.3"></script>
     <link rel="stylesheet" href="~/FarewellMyBeloved.styles.css" asp-append-version="true" />
-
 </head>
 <body>
     <header>
-        <nav data-bs-theme="dark" class="navbar navbar-expand-sm navbar-toggleable-sm bg-primary border-bottom box-shadow mb-3">
+        <nav data-bs-theme="dark" class="navbar navbar-expand-md navbar-toggleable-md bg-primary border-bottom box-shadow mb-3">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">@Localizer["BrandName"]</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
