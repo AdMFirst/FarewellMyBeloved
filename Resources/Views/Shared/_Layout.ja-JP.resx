@@ -36,14 +36,15 @@
   <data name="English" xml:space="preserve"><value>英語</value></data>
   <data name="Indonesian" xml:space="preserve"><value>インドネシア語</value></data>
   <data name="Japanese" xml:space="preserve"><value>日本語</value></data>
-  <data name="SupportMe" xml:space="preserve"><value>SociaBuzzで支援する</value></data>
-  <data name="Contribute" xml:space="preserve"><value>貢献する</value></data>
+  <data name="Korean" xml:space="preserve"><value>韓国語</value></data>
+  <data name="SupportMe" xml:space="preserve"><value>SociaBuzzで支援</value></data>
+  <data name="Contribute" xml:space="preserve"><value>貢献</value></data>
   <data name="Privacy" xml:space="preserve"><value>プライバシー</value></data>
-  <data name="CreatePage" xml:space="preserve"><value>ページを作成</value></data>
-  <data name="FindPage" xml:space="preserve"><value>ページを探す</value></data>
   <data name="Home" xml:space="preserve"><value>ホーム</value></data>
   <data name="AboutUs" xml:space="preserve"><value>私たちについて</value></data>
   <data name="Search" xml:space="preserve"><value>検索</value></data>
   <data name="Create" xml:space="preserve"><value>作成</value></data>
-  <data name="Korean" xml:space="preserve"><value>韓国語</value></data>
+  <data name="CreatePage" xml:space="preserve"><value>ページを作成</value></data>
+  <data name="FindPage" xml:space="preserve"><value>ページを探す</value></data>
 </root>
+
