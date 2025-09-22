@@ -40,46 +40,44 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="BrandName" xml:space="preserve">
-    <value>FarewellMyBeloved</value>
+  <data name="SearchFarewellPage" xml:space="preserve">
+    <value>추모 페이지 검색</value>
   </data>
-  <data name="English" xml:space="preserve">
-    <value>English</value>
+  <data name="SearchByNameDesc" xml:space="preserve">
+    <value>이름 또는 설명으로 검색...</value>
   </data>
-  <data name="Indonesian" xml:space="preserve">
-    <value>Bahasa Indonesia</value>
+  <data name="Clear" xml:space="preserve">
+    <value>지우기</value>
   </data>
-  <data name="SupportMe" xml:space="preserve">
-    <value>Dukung saya di SociaBuzz</value>
+  <data name="SearchResultsFor" xml:space="preserve">
+    <value>검색 결과: "{0}"</value>
   </data>
-  <data name="Contribute" xml:space="preserve">
-    <value>Kontribusi</value>
+  <data name="NoPortrait" xml:space="preserve">
+    <value>초상 없음</value>
   </data>
-  <data name="Privacy" xml:space="preserve">
-    <value>Kebijakan Privasi</value>
+  <data name="ViewDetails" xml:space="preserve">
+    <value>자세히 보기</value>
   </data>
-  <data name="CreatePage" xml:space="preserve">
-    <value>Buat Halaman</value>
+  <data name="CreatedLabel" xml:space="preserve">
+    <value>생성일:</value>
   </data>
-  <data name="FindPage" xml:space="preserve">
-    <value>Cari Halaman</value>
+  <data name="NoResultsFound" xml:space="preserve">
+    <value>결과가 없습니다</value>
   </data>
-  <data name="Japanese" xml:space="preserve">
-    <value>Bahasa Jepang</value>
+  <data name="NoFarewellPagesFound" xml:space="preserve">
+    <value>추모 페이지를 찾을 수 없습니다</value>
   </data>
-  <data name="Home" xml:space="preserve">
-    <value>Beranda</value>
+  <data name="NoResultsForTerm" xml:space="preserve">
+    <value>"{0}"와(과) 일치하는 추모 페이지를 찾지 못했습니다.</value>
   </data>
-  <data name="AboutUs" xml:space="preserve">
-    <value>Tentang Kami</value>
+  <data name="CreateFirstFarewellPage" xml:space="preserve">
+    <value>첫 추모 페이지를 만들어 시작해 보세요.</value>
+  </data>
+  <data name="CreateNewFarewellPage" xml:space="preserve">
+    <value>새 추모 페이지 만들기</value>
   </data>
   <data name="Search" xml:space="preserve">
-    <value>Cari</value>
-  </data>
-  <data name="Create" xml:space="preserve">
-    <value>Buat</value>
-  </data>
-  <data name="Korean" xml:space="preserve">
-    <value>Bahasa Korea</value>
+    <value>검색</value>
   </data>
 </root>
+

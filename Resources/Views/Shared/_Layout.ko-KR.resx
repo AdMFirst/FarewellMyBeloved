@@ -44,42 +44,43 @@
     <value>FarewellMyBeloved</value>
   </data>
   <data name="English" xml:space="preserve">
-    <value>English</value>
+    <value>영어</value>
   </data>
   <data name="Indonesian" xml:space="preserve">
-    <value>Bahasa Indonesia</value>
-  </data>
-  <data name="SupportMe" xml:space="preserve">
-    <value>Dukung saya di SociaBuzz</value>
-  </data>
-  <data name="Contribute" xml:space="preserve">
-    <value>Kontribusi</value>
-  </data>
-  <data name="Privacy" xml:space="preserve">
-    <value>Kebijakan Privasi</value>
-  </data>
-  <data name="CreatePage" xml:space="preserve">
-    <value>Buat Halaman</value>
-  </data>
-  <data name="FindPage" xml:space="preserve">
-    <value>Cari Halaman</value>
+    <value>인도네시아어</value>
   </data>
   <data name="Japanese" xml:space="preserve">
-    <value>Bahasa Jepang</value>
-  </data>
-  <data name="Home" xml:space="preserve">
-    <value>Beranda</value>
-  </data>
-  <data name="AboutUs" xml:space="preserve">
-    <value>Tentang Kami</value>
-  </data>
-  <data name="Search" xml:space="preserve">
-    <value>Cari</value>
-  </data>
-  <data name="Create" xml:space="preserve">
-    <value>Buat</value>
+    <value>일본어</value>
   </data>
   <data name="Korean" xml:space="preserve">
-    <value>Bahasa Korea</value>
+    <value>한국어</value>
+  </data>
+  <data name="SupportMe" xml:space="preserve">
+    <value>SociaBuzz에서 후원하기</value>
+  </data>
+  <data name="Contribute" xml:space="preserve">
+    <value>기여하기</value>
+  </data>
+  <data name="Privacy" xml:space="preserve">
+    <value>개인정보 처리방침</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>홈</value>
+  </data>
+  <data name="AboutUs" xml:space="preserve">
+    <value>소개</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>검색</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>만들기</value>
+  </data>
+  <data name="CreatePage" xml:space="preserve">
+    <value>페이지 만들기</value>
+  </data>
+  <data name="FindPage" xml:space="preserve">
+    <value>페이지 찾기</value>
   </data>
 </root>
+

@@ -40,46 +40,47 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="BrandName" xml:space="preserve">
-    <value>FarewellMyBeloved</value>
+  <data name="CreateFarewellMessage" xml:space="preserve">
+    <value>작별 메시지 작성</value>
   </data>
-  <data name="English" xml:space="preserve">
-    <value>English</value>
+  <data name="AddFarewellMessage" xml:space="preserve">
+    <value>작별 메시지 추가</value>
   </data>
-  <data name="Indonesian" xml:space="preserve">
-    <value>Bahasa Indonesia</value>
+  <data name="For" xml:space="preserve">
+    <value>대상</value>
   </data>
-  <data name="SupportMe" xml:space="preserve">
-    <value>Dukung saya di SociaBuzz</value>
+  <data name="ForWhom" xml:space="preserve">
+    <value>누구에게</value>
   </data>
-  <data name="Contribute" xml:space="preserve">
-    <value>Kontribusi</value>
+  <data name="SelectPerson" xml:space="preserve">
+    <value>-- 사람을 선택하세요 --</value>
   </data>
-  <data name="Privacy" xml:space="preserve">
-    <value>Kebijakan Privasi</value>
+  <data name="YourMessage" xml:space="preserve">
+    <value>메시지</value>
   </data>
-  <data name="CreatePage" xml:space="preserve">
-    <value>Buat Halaman</value>
+  <data name="MessagePlaceholder" xml:space="preserve">
+    <value>진심 어린 작별 메시지를 여기에 작성하세요...</value>
   </data>
-  <data name="FindPage" xml:space="preserve">
-    <value>Cari Halaman</value>
+  <data name="AuthorName" xml:space="preserve">
+    <value>작성자 이름</value>
   </data>
-  <data name="Japanese" xml:space="preserve">
-    <value>Bahasa Jepang</value>
+  <data name="AuthorNamePlaceholder" xml:space="preserve">
+    <value>이름을 입력하세요(선택)</value>
   </data>
-  <data name="Home" xml:space="preserve">
-    <value>Beranda</value>
+  <data name="AuthorNameInfo" xml:space="preserve">
+    <value>선택 사항 - 메시지와 함께 이름이 표시됩니다</value>
   </data>
-  <data name="AboutUs" xml:space="preserve">
-    <value>Tentang Kami</value>
+  <data name="AuthorEmail" xml:space="preserve">
+    <value>작성자 이메일</value>
   </data>
-  <data name="Search" xml:space="preserve">
-    <value>Cari</value>
+  <data name="AuthorEmailPlaceholder" xml:space="preserve">
+    <value>이메일을 입력하세요(선택)</value>
   </data>
-  <data name="Create" xml:space="preserve">
-    <value>Buat</value>
+  <data name="AuthorEmailInfo" xml:space="preserve">
+    <value>선택 사항 - 메시지를 관리해야 할 경우 연락드릴 수 있습니다.</value>
   </data>
-  <data name="Korean" xml:space="preserve">
-    <value>Bahasa Korea</value>
+  <data name="Cancel" xml:space="preserve">
+    <value>취소</value>
   </data>
 </root>
+

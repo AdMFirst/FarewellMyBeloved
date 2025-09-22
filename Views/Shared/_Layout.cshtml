@@ -91,6 +91,15 @@
                                         @Localizer["Japanese"]
                                     </a>
                                 </li>
+                                <li>
+                                    <a class="dropdown-item"
+                                       asp-controller="Language"
+                                       asp-action="SetCulture"
+                                       asp-route-culture="ko-KR"
+                                       asp-route-returnUrl="@((Context?.Request?.Path + Context?.Request?.QueryString).ToString())">
+                                        @Localizer["Korean"]
+                                    </a>
+                                </li>
                             </ul>
                         </li>
                         <li class="nav-item">

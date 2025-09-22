@@ -40,46 +40,38 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="BrandName" xml:space="preserve">
-    <value>FarewellMyBeloved</value>
+  <data name="HomeTitle" xml:space="preserve">
+    <value>홈</value>
   </data>
-  <data name="English" xml:space="preserve">
-    <value>English</value>
+  <data name="WelcomeHeading" xml:space="preserve">
+    <value>FarewellMyBeloved에 {0}</value>
   </data>
-  <data name="Indonesian" xml:space="preserve">
-    <value>Bahasa Indonesia</value>
+  <data name="IntroLead" xml:space="preserve">
+    <value>사랑하는 이를 기리고 기억할 수 있는 디지털 공간입니다. 작별 인사, 추억, 헌사를 남겨 그들의 삶을 기리고 마음속에 오래 기억하세요.</value>
   </data>
-  <data name="SupportMe" xml:space="preserve">
-    <value>Dukung saya di SociaBuzz</value>
+  <data name="IntroP2" xml:space="preserve">
+    <value>각 사람은 전용 페이지가 있으며 가족과 친구들이 생각, 추억, 작별 인사를 공유할 수 있습니다. 우리 곁을 떠난 이들을 위한 오래 남는 추모를 만들 수 있는 아름다운 방법입니다.</value>
   </data>
-  <data name="Contribute" xml:space="preserve">
-    <value>Kontribusi</value>
+  <data name="FindFarewellPage" xml:space="preserve">
+    <value>추모 페이지 찾기</value>
   </data>
-  <data name="Privacy" xml:space="preserve">
-    <value>Kebijakan Privasi</value>
+  <data name="SearchOrCreate" xml:space="preserve">
+    <value>누군가의 추모 페이지를 검색하거나 새로 만들기</value>
   </data>
-  <data name="CreatePage" xml:space="preserve">
-    <value>Buat Halaman</value>
-  </data>
-  <data name="FindPage" xml:space="preserve">
-    <value>Cari Halaman</value>
-  </data>
-  <data name="Japanese" xml:space="preserve">
-    <value>Bahasa Jepang</value>
-  </data>
-  <data name="Home" xml:space="preserve">
-    <value>Beranda</value>
-  </data>
-  <data name="AboutUs" xml:space="preserve">
-    <value>Tentang Kami</value>
+  <data name="SearchPlaceholder" xml:space="preserve">
+    <value>이름을 입력하여 검색...</value>
   </data>
   <data name="Search" xml:space="preserve">
-    <value>Cari</value>
+    <value>검색</value>
   </data>
-  <data name="Create" xml:space="preserve">
-    <value>Buat</value>
+  <data name="NotFinding" xml:space="preserve">
+    <value>원하는 결과가 없나요?</value>
   </data>
-  <data name="Korean" xml:space="preserve">
-    <value>Bahasa Korea</value>
+  <data name="CantFindCreate" xml:space="preserve">
+    <value>찾는 추모 페이지가 없다면, 새 페이지를 만들어 사랑하는 이를 기리고 그들의 이야기를 다른 사람들과 나눌 수 있습니다. 페이지는 즉시 생성되어 누구나 추억을 공유하고 삶을 기릴 수 있습니다.</value>
+  </data>
+  <data name="CreateNewFarewellPage" xml:space="preserve">
+    <value>새 추모 페이지 만들기</value>
   </data>
 </root>
+

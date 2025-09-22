@@ -40,46 +40,38 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="BrandName" xml:space="preserve">
-    <value>FarewellMyBeloved</value>
+  <data name="NoBackgroundImage" xml:space="preserve">
+    <value>배경 이미지 없음</value>
   </data>
-  <data name="English" xml:space="preserve">
-    <value>English</value>
+  <data name="NoPortrait" xml:space="preserve">
+    <value>초상 없음</value>
   </data>
-  <data name="Indonesian" xml:space="preserve">
-    <value>Bahasa Indonesia</value>
+  <data name="FarewellMessages" xml:space="preserve">
+    <value>작별 메시지</value>
   </data>
-  <data name="SupportMe" xml:space="preserve">
-    <value>Dukung saya di SociaBuzz</value>
+  <data name="Anonymous" xml:space="preserve">
+    <value>익명</value>
   </data>
-  <data name="Contribute" xml:space="preserve">
-    <value>Kontribusi</value>
+  <data name="Public" xml:space="preserve">
+    <value>공개</value>
   </data>
-  <data name="Privacy" xml:space="preserve">
-    <value>Kebijakan Privasi</value>
+  <data name="Private" xml:space="preserve">
+    <value>비공개</value>
   </data>
-  <data name="CreatePage" xml:space="preserve">
-    <value>Buat Halaman</value>
+  <data name="ReportThisPage" xml:space="preserve">
+    <value>이 페이지 신고</value>
   </data>
-  <data name="FindPage" xml:space="preserve">
-    <value>Cari Halaman</value>
+  <data name="ReportThisMessage" xml:space="preserve">
+    <value>이 메시지 신고</value>
   </data>
-  <data name="Japanese" xml:space="preserve">
-    <value>Bahasa Jepang</value>
+  <data name="AddMessage" xml:space="preserve">
+    <value>메시지 추가</value>
   </data>
-  <data name="Home" xml:space="preserve">
-    <value>Beranda</value>
+  <data name="NoMessagesYet" xml:space="preserve">
+    <value>아직 메시지가 없습니다.</value>
   </data>
-  <data name="AboutUs" xml:space="preserve">
-    <value>Tentang Kami</value>
-  </data>
-  <data name="Search" xml:space="preserve">
-    <value>Cari</value>
-  </data>
-  <data name="Create" xml:space="preserve">
-    <value>Buat</value>
-  </data>
-  <data name="Korean" xml:space="preserve">
-    <value>Bahasa Korea</value>
+  <data name="AddFirstMessage" xml:space="preserve">
+    <value>첫 메시지 남기기</value>
   </data>
 </root>
+

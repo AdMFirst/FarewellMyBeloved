@@ -45,4 +45,5 @@
   <data name="AboutUs" xml:space="preserve"><value>私たちについて</value></data>
   <data name="Search" xml:space="preserve"><value>検索</value></data>
   <data name="Create" xml:space="preserve"><value>作成</value></data>
+  <data name="Korean" xml:space="preserve"><value>韓国語</value></data>
 </root>

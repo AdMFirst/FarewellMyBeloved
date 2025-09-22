@@ -79,4 +79,7 @@
   <data name="Japanese" xml:space="preserve">
     <value>Japanese</value>
   </data>
+  <data name="Korean" xml:space="preserve">
+    <value>Korean</value>
+  </data>
 </root>

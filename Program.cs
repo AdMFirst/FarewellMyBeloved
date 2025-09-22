@@ -30,7 +30,8 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
     {
         new CultureInfo("en-US"),
         new CultureInfo("id-ID"),
-        new CultureInfo("ja-JP")
+        new CultureInfo("ja-JP"),
+        new CultureInfo("ko-KR")
     };
 
     options.DefaultRequestCulture = new RequestCulture("en-US");
