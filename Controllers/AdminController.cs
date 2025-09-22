@@ -35,6 +35,7 @@ public class AdminController : Controller
 
     [Authorize(Policy = "AdminsOnly")]
     [HttpGet("")]
+    [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any)]
     public async Task<IActionResult> Index()
     {
         var viewModel = new AdminIndexViewModel();

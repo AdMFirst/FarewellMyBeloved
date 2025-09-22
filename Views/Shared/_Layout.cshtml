@@ -1,4 +1,6 @@
-﻿@inject Microsoft.AspNetCore.Authorization.IAuthorizationService AuthorizationService
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@inject Microsoft.AspNetCore.Authorization.IAuthorizationService AuthorizationService
 @{
     var isAdmin = User.Identity?.IsAuthenticated == true &&
         (await AuthorizationService.AuthorizeAsync(User, null, "AdminsOnly")).Succeeded;
@@ -10,6 +12,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - FarewellMyBeloved</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
     @if (!isAdmin) {
         <link rel="stylesheet" href="~/css/bootstrap.min.css" />
     } 
@@ -25,9 +31,9 @@
 </head>
 <body>
     <header>
-        <nav data-bs-theme="dark" class="navbar navbar-expand-sm navbar-toggleable-sm bg-primary border-bottom box-shadow mb-3">
+        <nav data-bs-theme="dark" class="navbar navbar-expand-md navbar-toggleable-md bg-primary border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">FarewellMyBeloved</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">@Localizer["BrandName"]</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -36,13 +42,13 @@
                     <ul class="navbar-nav flex-grow-1">
                         
                         <li class="nav-item">
-                            <a class="nav-link" id="nav-create" asp-controller="FarewellPerson" asp-action="Create">Create Page</a>
+                            <a class="nav-link" id="nav-create" asp-controller="FarewellPerson" asp-action="Create">@Localizer["CreatePage"]</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link " id="nav-find" asp-controller="FarewellPerson" asp-action="Search">Find Page</a>
+                            <a class="nav-link " id="nav-find" asp-controller="FarewellPerson" asp-action="Search">@Localizer["FindPage"]</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link " id="nav-about" asp-controller="AboutUs" asp-action="Index">About Us</a>
+                            <a class="nav-link " id="nav-about" asp-controller="AboutUs" asp-action="Index">@Localizer["AboutUs"]</a>
                         </li>
                         @if (isAdmin)
                         {
@@ -53,11 +59,54 @@
                         
                     </ul>
                     <ul class="navbar-nav ms-auto">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-globe"></i>
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li>
+                                    <a class="dropdown-item"
+                                       asp-controller="Language"
+                                       asp-action="SetCulture"
+                                       asp-route-culture="en-US"
+                                       asp-route-returnUrl="@((Context?.Request?.Path + Context?.Request?.QueryString).ToString())">
+                                        @Localizer["English"]
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item"
+                                       asp-controller="Language"
+                                       asp-action="SetCulture"
+                                       asp-route-culture="id-ID"
+                                       asp-route-returnUrl="@((Context?.Request?.Path + Context?.Request?.QueryString).ToString())">
+                                        @Localizer["Indonesian"]
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item"
+                                       asp-controller="Language"
+                                       asp-action="SetCulture"
+                                       asp-route-culture="ja-JP"
+                                       asp-route-returnUrl="@((Context?.Request?.Path + Context?.Request?.QueryString).ToString())">
+                                        @Localizer["Japanese"]
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item"
+                                       asp-controller="Language"
+                                       asp-action="SetCulture"
+                                       asp-route-culture="ko-KR"
+                                       asp-route-returnUrl="@((Context?.Request?.Path + Context?.Request?.QueryString).ToString())">
+                                        @Localizer["Korean"]
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
                         <li class="nav-item">
                             @if (!isAdmin)
                             {
                                 <a class="btn btn-outline-primary" href="https://sociabuzz.com/admfirst/tribe" target="_blank" style="background-color: #77cd10; color: white; border-color: #77cd10;">
-                                    <i class="fas fa-coffee"></i> Support me on SociaBuzz
+                                    <i class="fas fa-coffee"></i> @Localizer["SupportMe"]
                                 </a>
                             }
                             @if (isAdmin)
@@ -78,8 +127,8 @@
     </div>
 
     <footer class="border-top footer text-muted">
-        <div class="container  m-3">
-            &copy; 2025 - AdMFirst - <a href="https://github.com/AdMFirst/FarewellMyBeloved" target="_blank">Contribute</a> - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        <div class="container my-3">
+            &copy; 2025 - AdMFirst - <a href="https://github.com/AdMFirst/FarewellMyBeloved" target="_blank">@Localizer["Contribute"]</a> - <a asp-area="" asp-controller="Home" asp-action="Privacy">@Localizer["Privacy"]</a>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

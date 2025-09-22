@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="PrivacyPolicy" xml:space="preserve">
+    <value>Privacy Policy</value>
+  </data>
+  <data name="PrivacyIntro1" xml:space="preserve">
+    <value>This website is a community project where people can share farewell messages or create a page for someone to be remembered. We respect your privacy and keep things simple and transparent.</value>
+  </data>
+  <data name="WhatWeCollect" xml:space="preserve">
+    <value>What We Collect</value>
+  </data>
+  <data name="WhenLeavingMessage" xml:space="preserve">
+    <value>When leaving a message:</value>
+  </data>
+  <data name="NameOptional" xml:space="preserve">
+    <value>Name (optional): Shown with your message if provided.</value>
+  </data>
+  <data name="EmailOptional" xml:space="preserve">
+    <value>Email (optional): Used privately for moderation/contact if needed. Never shown publicly.</value>
+  </data>
+  <data name="FarewellMessagePublic" xml:space="preserve">
+    <value>Farewell Message: Publicly visible once submitted.</value>
+  </data>
+  <data name="WhenCreatingPage" xml:space="preserve">
+    <value>When creating a page:</value>
+  </data>
+  <data name="DisplayNameReq" xml:space="preserve">
+    <value>Display Name: Required, shown publicly on the page.</value>
+  </data>
+  <data name="DescriptionReq" xml:space="preserve">
+    <value>Description: Required, shown publicly on the page.</value>
+  </data>
+  <data name="ImageReq" xml:space="preserve">
+    <value>Image (Background &amp; Portrait): You must upload an image when creating a page. By uploading, you give us permission to display it publicly and store/share it with our image hosting provider.</value>
+  </data>
+  <data name="HowYourDataUsed" xml:space="preserve">
+    <value>How Your Data Is Used</value>
+  </data>
+  <data name="PubliclyVisible" xml:space="preserve">
+    <value>Names, messages, page titles, descriptions, and images are shown publicly.</value>
+  </data>
+  <data name="EmailsPrivate" xml:space="preserve">
+    <value>Emails (if provided) stay private and are only used by admins for moderation purposes.</value>
+  </data>
+  <data name="ImagesThirdParty" xml:space="preserve">
+    <value>Images are stored on and delivered by third-party hosting services/CDNs.</value>
+  </data>
+  <data name="CookiesAnalytics" xml:space="preserve">
+    <value>Cookies and Analytics</value>
+  </data>
+  <data name="EssentialCookies" xml:space="preserve">
+    <value>We use a small number of essential cookies that are required for the site's security and basic functionality. These do not track you and do not require consent.</value>
+  </data>
+  <data name="CFAnalytics" xml:space="preserve">
+    <value>We use Cloudflare Web Analytics to understand basic traffic (page views, referrers, device type). This analytics service is cookie-less and privacy-focused.</value>
+  </data>
+  <data name="NoAdsTrackers" xml:space="preserve">
+    <value>No advertising or tracking cookies are used.</value>
+  </data>
+  <data name="CFAnalyticsLinkPrefix" xml:space="preserve">
+    <value>You can read more about Cloudflare Web Analytics and privacy here:</value>
+  </data>
+  <data name="CFLinkText" xml:space="preserve">
+    <value>Cloudflare Web Analytics</value>
+  </data>
+  <data name="YourChoices" xml:space="preserve">
+    <value>Your Choices</value>
+  </data>
+  <data name="PostAnonymously" xml:space="preserve">
+    <value>You can post farewell messages anonymously (no name/email required).</value>
+  </data>
+  <data name="RemovalRequest" xml:space="preserve">
+    <value>You can request to have your message, page, or any associated info removed.</value>
+  </data>
+  <data name="CreatingPageAgreement" xml:space="preserve">
+    <value>Creating a page means you agree to publicly share the display name, description, and image you provide.</value>
+  </data>
+  <data name="OtherThings" xml:space="preserve">
+    <value>Other Things You Should Know</value>
+  </data>
+  <data name="DontSell" xml:space="preserve">
+    <value>We don't sell or trade your data.</value>
+  </data>
+  <data name="NoAdsBeyondLogs" xml:space="preserve">
+    <value>We don't run ads or trackers beyond basic server logs.</value>
+  </data>
+  <data name="OpenSourceNote" xml:space="preserve">
+    <value>This is an open-source project (GPL-3), built for the community.</value>
+  </data>
+  <data name="AgreementPara" xml:space="preserve">
+    <value>By using this site, you're agreeing to share your farewell messages or pages publicly, and (if creating a page) to let us display and host the image you upload. That's all—no hidden stuff.</value>
+  </data>
+</root>

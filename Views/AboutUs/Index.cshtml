@@ -1,41 +1,21 @@
 @{
-    ViewData["Title"] = "About Farewell My Beloved";
+    ViewData["Title"] = ViewData["AboutUs"];
 }
 
 <section class="container" style="max-width:700px;margin:2rem auto;padding:1rem;">
     <h1>@ViewData["Title"]</h1>
-    <p class="lead">
-        <em>Farewell My Beloved</em> is a small personal project I created while learning ASP.NET.
-    </p>
+    <p class="lead">@Localizer["IntroLead"]</p>
 
-    <p>
-        The idea comes from my love for <strong>Hololive</strong> and the community around it.
-        Over time, I&apos;ve seen members graduate and leave, but I&apos;ve also seen how fans come
-        together to say goodbye with love, gratitude, and respect.
-    </p>
+    <p>@Localizer["P2"]</p>
 
-    <p>
-        This app is a space where anyone can do the same
-        whether it&apos;s for their oshi, a favorite creator, or anyone they want to honor with a farewell.
-    </p>
+    <p>@Localizer["P3"]</p>
 
     <hr />
 
-    <h2>Who's Behind This Project?</h2>
-    <p>
-        Hi, I'm a Software Engineering graduate with a passion for clean design,
-        thoughtful systems, and building useful tools.
-    </p>
-    <p>
-        After a few years working in IT and exploring software development projects,
-        I found myself fascinated by how smart processes can shape real outcomes.
-        This platform is a side project born from that curiosity, combined with my love for
-        minimalism, user-centered design, and a bit of gamification theory I picked up back in university.
-    </p>
-    <p>
-        I believe great technology should be simple, fair, and even a little bit fun.  
-        Thanks for being here. I hope you find it meaningful and refreshing!
-    </p>
+    <h2>@Localizer["WhoBehind"]</h2>
+    <p>@Localizer["P4"]</p>
+    <p>@Localizer["P5"]</p>
+    <p>@Localizer["P6"]</p>
 
     <hr />
     <footer style="margin-top:1rem;font-size:.9rem;color:#666;">

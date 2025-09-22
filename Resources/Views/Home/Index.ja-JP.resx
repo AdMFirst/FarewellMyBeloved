@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="HomeTitle" xml:space="preserve"><value>ホーム</value></data>
+  <data name="WelcomeHeading" xml:space="preserve"><value>{0} - FarewellMyBeloved へようこそ</value></data>
+  <data name="IntroLead" xml:space="preserve"><value>大切な方を偲び、思い出を残すための場所です。メッセージや思い出、追悼の言葉を分かち合い、その生涯を讃えましょう。</value></data>
+  <data name="IntroP2" xml:space="preserve"><value>それぞれの方に専用のページ（メモリアルページ）があり、家族や友人が想いを共有できます。美しい追悼の場を一緒に作りましょう。</value></data>
+  <data name="FindFarewellPage" xml:space="preserve"><value>メモリアルページを探す</value></data>
+  <data name="SearchOrCreate" xml:space="preserve"><value>誰かのメモリアルページを検索、または新規作成</value></data>
+  <data name="SearchPlaceholder" xml:space="preserve"><value>名前を入力して検索...</value></data>
+  <data name="Search" xml:space="preserve"><value>検索</value></data>
+  <data name="NotFinding" xml:space="preserve"><value>お探しのページが見つかりませんか？</value></data>
+  <data name="CantFindCreate" xml:space="preserve"><value>見つからない場合は、新しいメモリアルページを作成して大切な方を称え、その軌跡を共有できます。ページはすぐに作成され、思い出や追悼の言葉を寄せられます。</value></data>
+  <data name="CreateNewFarewellPage" xml:space="preserve"><value>新しいメモリアルページを作成</value></data>
+</root>

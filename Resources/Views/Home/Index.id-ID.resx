@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="HomeTitle" xml:space="preserve">
+    <value>Beranda</value>
+  </data>
+  <data name="WelcomeHeading" xml:space="preserve">
+    <value>{0} ke FarewellMyBeloved</value>
+  </data>
+  <data name="IntroLead" xml:space="preserve">
+    <value>Ruang digital untuk menghormati dan mengenang orang-orang tercinta yang telah tiada. Buat dan bagikan pesan perpisahan, kenangan, dan penghormatan untuk merayakan hidup mereka dan menjaga semangat mereka tetap hidup di hati kita.</value>
+  </data>
+  <data name="IntroP2" xml:space="preserve">
+    <value>Setiap orang memiliki halaman khusus tempat keluarga dan teman dapat berbagi pikiran, kenangan, dan salam perpisahan. Ini adalah cara yang indah untuk menciptakan warisan bagi mereka yang telah pergi.</value>
+  </data>
+  <data name="FindFarewellPage" xml:space="preserve">
+    <value>Cari Halaman Kenangan</value>
+  </data>
+  <data name="SearchOrCreate" xml:space="preserve">
+    <value>Cari halaman kenangan seseorang atau buat yang baru</value>
+  </data>
+  <data name="SearchPlaceholder" xml:space="preserve">
+    <value>Masukkan nama untuk dicari...</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Cari</value>
+  </data>
+  <data name="NotFinding" xml:space="preserve">
+    <value>Tidak menemukan yang Anda cari?</value>
+  </data>
+  <data name="CantFindCreate" xml:space="preserve">
+    <value>Jika Anda tidak menemukan halaman kenangan, Anda dapat membuat yang baru untuk menghormati orang tercinta dan berbagi warisan mereka dengan orang lain. Halaman akan langsung dibuat sehingga Anda dan orang lain dapat mulai berbagi kenangan.</value>
+  </data>
+  <data name="CreateNewFarewellPage" xml:space="preserve">
+    <value>Buat Halaman Kenangan Baru</value>
+  </data>
+</root>

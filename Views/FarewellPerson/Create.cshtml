@@ -1,7 +1,7 @@
 @model FarewellMyBeloved.ViewModels.CreateFarewellPersonViewModel
 
 @{
-    ViewData["Title"] = "Create Farewell Person";
+    ViewData["Title"] = Localizer["CreateFarewellPage"];
 }
 
 <div class="container py-5">
@@ -11,7 +11,7 @@
                 <div class="card-header bg-primary text-white">
                     <h2 class="card-title mb-0 text-center">
                         <i class="fas fa-user-plus me-2"></i>
-                        Create Farewell Page
+                        @Localizer["CreateFarewellPage"]
                     </h2>
                 </div>
                 <div class="card-body p-4">
@@ -20,45 +20,45 @@
                         
                         <div class="mb-4">
                             <label asp-for="Name" class="form-label fw-bold">
-                                <i class="fas fa-user me-2"></i>Name
+                                <i class="fas fa-user me-2"></i>@Localizer["Name"]
                             </label>
-                            <input asp-for="Name" class="form-control form-control-lg" placeholder="Enter person's name" />
+                            <input asp-for="Name" class="form-control form-control-lg" placeholder="@Localizer["NamePlaceholder"]" />
                             <span asp-validation-for="Name" class="text-danger small"></span>
                         </div>
                         
                         <div class="mb-4">
                             <label asp-for="Description" class="form-label fw-bold">
-                                <i class="fas fa-align-left me-2"></i>Description
+                                <i class="fas fa-align-left me-2"></i>@Localizer["Description"]
                             </label>
-                            <textarea asp-for="Description" class="form-control" rows="5" placeholder="Enter a description about this person..."></textarea>
+                            <textarea asp-for="Description" class="form-control" rows="5" placeholder="@Localizer["DescriptionPlaceholder"]"></textarea>
                             <span asp-validation-for="Description" class="text-danger small"></span>
                         </div>
 
                         <div class="mb-4">
                             <label asp-for="Email" class="form-label fw-bold">
-                                <i class="fas fa-envelope me-2"></i>Your Email
+                                <i class="fas fa-envelope me-2"></i>@Localizer["YourEmail"]
                             </label>
-                            <input asp-for="Email" class="form-control" placeholder="Enter email address (Optional)" />
+                            <input asp-for="Email" class="form-control" placeholder="@Localizer["EmailPlaceholder"]" />
                             <span asp-validation-for="Email" class="text-danger small"></span>
                             <div class="form-text text-muted">
-                                We'll reach out if we need to moderate your page.
+                                @Localizer["EmailHelp"]
                             </div>
                         </div>
                         
                         <div class="mb-4">
                             <label class="form-label fw-bold">
-                                <i class="fas fa-image me-2"></i>Portrait
+                                <i class="fas fa-image me-2"></i>@Localizer["Portrait"]
                             </label>
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="UsePortraitUrl" id="portraitUrlRadio" value=true checked>
                                 <label class="form-check-label" for="portraitUrlRadio">
-                                    Use URL
+                                    @Localizer["UseUrl"]
                                 </label>
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="UsePortraitUrl" id="portraitFileRadio" value=false>
                                 <label class="form-check-label" for="portraitFileRadio">
-                                    Upload File
+                                    @Localizer["UploadFile"]
                                 </label>
                             </div>
                             <div id="portraitUrlInput">
@@ -74,18 +74,18 @@
                         
                         <div class="mb-5">
                             <label class="form-label fw-bold">
-                                <i class="fas fa-photo-video me-2"></i>Background
+                                <i class="fas fa-photo-video me-2"></i>@Localizer["Background"]
                             </label>
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="UseBackgroundUrl" id="backgroundUrlRadio" value=true checked>
                                 <label class="form-check-label" for="backgroundUrlRadio">
-                                    Use URL
+                                    @Localizer["UseUrl"]
                                 </label>
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="UseBackgroundUrl" id="backgroundFileRadio" value=false>
                                 <label class="form-check-label" for="backgroundFileRadio">
-                                    Upload File
+                                    @Localizer["UploadFile"]
                                 </label>
                             </div>
                             <div id="backgroundUrlInput">
@@ -101,10 +101,10 @@
                         
                         <div class="d-grid gap-2 d-md-flex justify-content-md-center">
                             <button type="submit" class="btn btn-primary btn-lg px-4 py-2" style="min-width: 250px;">
-                                <i class="fas fa-save me-2"></i>Create
+                                <i class="fas fa-save me-2"></i>@Localizer["Create"]
                             </button>
                             <a href="/" class="btn btn-outline-secondary btn-lg px-4 py-2" style="min-width: 250px;">
-                                <i class="fas fa-times me-2"></i>Cancel
+                                <i class="fas fa-times me-2"></i>@Localizer["Cancel"]
                             </a>
                         </div>
                     </form>
@@ -147,7 +147,7 @@
             
             if (input.files && input.files[0]) {
                 if (input.files[0].size > maxSize) {
-                    fileSizeError.textContent = 'File size must be less than 5MB.';
+                    fileSizeError.textContent = '@Localizer["FileTooLarge"]';
                     fileSizeError.style.display = 'block';
                     input.value = ''; // Clear the file input
                 } else {

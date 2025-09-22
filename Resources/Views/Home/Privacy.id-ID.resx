@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="PrivacyPolicy" xml:space="preserve">
+    <value>Kebijakan Privasi</value>
+  </data>
+  <data name="PrivacyIntro1" xml:space="preserve">
+    <value>Situs ini adalah proyek komunitas tempat orang dapat berbagi pesan perpisahan atau membuat halaman untuk mengenang seseorang. Kami menghormati privasi Anda dan menjaga semuanya sederhana dan transparan.</value>
+  </data>
+  <data name="WhatWeCollect" xml:space="preserve">
+    <value>Data yang Kami Kumpulkan</value>
+  </data>
+  <data name="WhenLeavingMessage" xml:space="preserve">
+    <value>Saat meninggalkan pesan:</value>
+  </data>
+  <data name="NameOptional" xml:space="preserve">
+    <value>Nama (opsional): Akan ditampilkan bersama pesan Anda jika diisi.</value>
+  </data>
+  <data name="EmailOptional" xml:space="preserve">
+    <value>Email (opsional): Digunakan secara privat untuk moderasi/kontak jika diperlukan. Tidak pernah ditampilkan publik.</value>
+  </data>
+  <data name="FarewellMessagePublic" xml:space="preserve">
+    <value>Pesan Perpisahan: Terlihat publik setelah dikirim.</value>
+  </data>
+  <data name="WhenCreatingPage" xml:space="preserve">
+    <value>Saat membuat halaman:</value>
+  </data>
+  <data name="DisplayNameReq" xml:space="preserve">
+    <value>Nama Tampilan: Wajib, ditampilkan publik di halaman.</value>
+  </data>
+  <data name="DescriptionReq" xml:space="preserve">
+    <value>Deskripsi: Wajib, ditampilkan publik di halaman.</value>
+  </data>
+  <data name="ImageReq" xml:space="preserve">
+    <value>Gambar (Latar &amp; Potret): Anda harus mengunggah gambar saat membuat halaman. Dengan mengunggah, Anda memberi izin untuk menampilkannya secara publik dan menyimpan/membagikannya dengan penyedia hosting gambar kami.</value>
+  </data>
+  <data name="HowYourDataUsed" xml:space="preserve">
+    <value>Bagaimana Data Anda Digunakan</value>
+  </data>
+  <data name="PubliclyVisible" xml:space="preserve">
+    <value>Nama, pesan, judul halaman, deskripsi, dan gambar ditampilkan secara publik.</value>
+  </data>
+  <data name="EmailsPrivate" xml:space="preserve">
+    <value>Email (jika diisi) tetap privat dan hanya digunakan admin untuk keperluan moderasi.</value>
+  </data>
+  <data name="ImagesThirdParty" xml:space="preserve">
+    <value>Gambar disimpan dan disajikan oleh layanan hosting/CDN pihak ketiga.</value>
+  </data>
+  <data name="CookiesAnalytics" xml:space="preserve">
+    <value>Kuki dan Analitik</value>
+  </data>
+  <data name="EssentialCookies" xml:space="preserve">
+    <value>Kami menggunakan sedikit kuki penting untuk keamanan dan fungsi dasar situs. Kuki ini tidak melacak Anda dan tidak memerlukan persetujuan.</value>
+  </data>
+  <data name="CFAnalytics" xml:space="preserve">
+    <value>Kami menggunakan Cloudflare Web Analytics untuk memahami trafik dasar (tayangan halaman, perujuk, jenis perangkat). Layanan ini tanpa kuki dan berfokus pada privasi.</value>
+  </data>
+  <data name="NoAdsTrackers" xml:space="preserve">
+    <value>Tidak ada iklan atau kuki pelacak yang digunakan.</value>
+  </data>
+  <data name="CFAnalyticsLinkPrefix" xml:space="preserve">
+    <value>Anda dapat membaca lebih lanjut tentang Cloudflare Web Analytics dan privasi di sini:</value>
+  </data>
+  <data name="CFLinkText" xml:space="preserve">
+    <value>Cloudflare Web Analytics</value>
+  </data>
+  <data name="YourChoices" xml:space="preserve">
+    <value>Pilihan Anda</value>
+  </data>
+  <data name="PostAnonymously" xml:space="preserve">
+    <value>Anda dapat mengirim pesan perpisahan secara anonim (tanpa nama/email).</value>
+  </data>
+  <data name="RemovalRequest" xml:space="preserve">
+    <value>Anda dapat meminta pesan, halaman, atau info terkait dihapus.</value>
+  </data>
+  <data name="CreatingPageAgreement" xml:space="preserve">
+    <value>Membuat halaman berarti Anda setuju untuk berbagi nama tampilan, deskripsi, dan gambar yang Anda berikan secara publik.</value>
+  </data>
+  <data name="OtherThings" xml:space="preserve">
+    <value>Hal Lain yang Perlu Diketahui</value>
+  </data>
+  <data name="DontSell" xml:space="preserve">
+    <value>Kami tidak menjual atau memperdagangkan data Anda.</value>
+  </data>
+  <data name="NoAdsBeyondLogs" xml:space="preserve">
+    <value>Kami tidak menayangkan iklan atau pelacak selain log server dasar.</value>
+  </data>
+  <data name="OpenSourceNote" xml:space="preserve">
+    <value>Ini adalah proyek sumber terbuka (GPL-3), dibuat untuk komunitas.</value>
+  </data>
+  <data name="AgreementPara" xml:space="preserve">
+    <value>Dengan menggunakan situs ini, Anda setuju untuk membagikan pesan perpisahan atau halaman Anda secara publik, dan (jika membuat halaman) mengizinkan kami menampilkan dan meng-host gambar yang Anda unggah. Itu saja—tidak ada yang disembunyikan.</value>
+  </data>
+</root>

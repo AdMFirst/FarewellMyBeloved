@@ -5,6 +5,7 @@ using FarewellMyBeloved.ViewModels;
 using FarewellMyBeloved.Services;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 
 namespace FarewellMyBeloved.Controllers;
 
@@ -14,17 +15,20 @@ public class HomeController : Controller
     private readonly ApplicationDbContext _context;
     private readonly IS3Service _s3Service;
     private readonly IConfiguration _configuration;
+    private readonly IStringLocalizer<HomeController> _localizer;
 
-    public HomeController(ILogger<HomeController> logger, ApplicationDbContext context, IS3Service s3Service, IConfiguration configuration)
+    public HomeController(ILogger<HomeController> logger, ApplicationDbContext context, IS3Service s3Service, IConfiguration configuration, IStringLocalizer<HomeController> localizer)
     {
         _logger = logger;
         _context = context;
         _s3Service = s3Service;
         _configuration = configuration;
+        _localizer = localizer;
     }
 
     public IActionResult Index()
     {
+        ViewData["Welcome"] = _localizer["Welcome"];
         return View();
     }
 
@@ -43,7 +47,6 @@ public class HomeController : Controller
 
 
     [HttpGet("/{slug:minlength(1)}")]
-    [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any)]
     public async Task<IActionResult> Slug(string slug)
     {
         if (slug == "index")

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="IntroLead" xml:space="preserve">
+    <value><em>さようなら、愛する人たちへ</em>は、ASP.NETを学びながら作った私個人の小さなプロジェクトです。</value>
+  </data>
+  <data name="P2" xml:space="preserve">
+    <value>このアイデアは、Hololiveとそのコミュニティへの愛から生まれました。時間が経つにつれて、メンバーが卒業したり去ったりするのを見てきましたが、ファンたちが愛、感謝、敬意をもって別れを告げる姿も見てきました。</value>
+  </data>
+  <data name="P3" xml:space="preserve">
+    <value>このアプリは、誰でも同じことができる場所です。推し、お気に入りのクリエイター、または別れを祝いたい誰かを称えるための場所として。</value>
+  </data>
+  <data name="WhoBehind" xml:space="preserve">
+    <value>このプロジェクトの裏にいるのは誰ですか？</value>
+  </data>
+  <data name="P4" xml:space="preserve">
+    <value>こんにちは、私はクリーンなデザイン、考え抜かれたシステム、役立つツールの構築に情熱を注ぐソフトウェア工学の卒業生です。</value>
+  </data>
+  <data name="P5" xml:space="preserve">
+    <value>IT業界で数年過ごし、ソフトウェア開発プロジェクトを探求した後、スマートなプロセスが現実の結果を形作ることができることに魅了されました。このプラットフォームは、その好奇心から生まれたサイドプロジェクトです。ミニマリズム、ユーザーセンターなデザイン、そしてAIコーディングの実験を組み合わせて。心配しないでください、コードはオープンソースなので、アプリのセキュリティを確認できます。何か問題が見つかった場合は、Issueを開くか、リポジトリに貢献してください。</value>
+  </data>
+  <data name="P6" xml:space="preserve">
+    <value>素晴らしいテクノロジーは、シンプルで公平で、少し楽しいものであるべきだと信じています。ここにいてくれてありがとうございます。このプロジェクトが意味深く、心地よいものになれば幸いです！</value>
+  </data>
+  <data name="Footer" xml:space="preserve">
+    <value>コミュニティへの愛で作られました</value>
+  </data>
+</root>

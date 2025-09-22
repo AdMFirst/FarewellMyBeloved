@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="PrivacyPolicy" xml:space="preserve">
+    <value>개인정보 처리방침</value>
+  </data>
+  <data name="PrivacyIntro1" xml:space="preserve">
+    <value>이 웹사이트는 누구나 작별 메시지를 남기거나 누군가를 기억하기 위한 페이지를 만들 수 있는 커뮤니티 프로젝트입니다. 우리는 사용자의 프라이버시를 존중하며, 단순하고 투명하게 운영합니다.</value>
+  </data>
+  <data name="WhatWeCollect" xml:space="preserve">
+    <value>수집 항목</value>
+  </data>
+  <data name="WhenLeavingMessage" xml:space="preserve">
+    <value>메시지를 남길 때:</value>
+  </data>
+  <data name="NameOptional" xml:space="preserve">
+    <value>이름(선택): 제공한 경우 메시지와 함께 표시됩니다.</value>
+  </data>
+  <data name="EmailOptional" xml:space="preserve">
+    <value>이메일(선택): 필요한 경우 비공개적으로 관리/연락 용도로 사용합니다. 공개되지 않습니다.</value>
+  </data>
+  <data name="FarewellMessagePublic" xml:space="preserve">
+    <value>작별 메시지: 제출 후 공개됩니다.</value>
+  </data>
+  <data name="WhenCreatingPage" xml:space="preserve">
+    <value>페이지를 만들 때:</value>
+  </data>
+  <data name="DisplayNameReq" xml:space="preserve">
+    <value>표시 이름: 필수, 페이지에 공개됩니다.</value>
+  </data>
+  <data name="DescriptionReq" xml:space="preserve">
+    <value>설명: 필수, 페이지에 공개됩니다.</value>
+  </data>
+  <data name="ImageReq" xml:space="preserve">
+    <value>이미지(배경 &amp; 초상): 페이지 생성 시 이미지를 업로드해야 합니다. 업로드함으로써 이미지를 공개적으로 표시하고 이미지 호스팅 제공업체에 저장/전달하는 데 동의하게 됩니다.</value>
+  </data>
+  <data name="HowYourDataUsed" xml:space="preserve">
+    <value>데이터 사용 방식</value>
+  </data>
+  <data name="PubliclyVisible" xml:space="preserve">
+    <value>이름, 메시지, 페이지 제목, 설명, 이미지는 공개됩니다.</value>
+  </data>
+  <data name="EmailsPrivate" xml:space="preserve">
+    <value>이메일(제공한 경우)은 비공개로 유지되며 관리 목적에 한해 관리자만 사용합니다.</value>
+  </data>
+  <data name="ImagesThirdParty" xml:space="preserve">
+    <value>이미지는 서드파티 호스팅 서비스/CDN에 저장 및 제공됩니다.</value>
+  </data>
+  <data name="CookiesAnalytics" xml:space="preserve">
+    <value>쿠키 및 분석</value>
+  </data>
+  <data name="EssentialCookies" xml:space="preserve">
+    <value>사이트의 보안과 기본 기능을 위해 필수 쿠키 소량만 사용합니다. 추적을 하지 않으며 동의가 필요하지 않습니다.</value>
+  </data>
+  <data name="CFAnalytics" xml:space="preserve">
+    <value>기본 트래픽(페이지 조회, 리퍼러, 기기 종류)을 이해하기 위해 Cloudflare Web Analytics를 사용합니다. 이 분석은 쿠키를 사용하지 않으며 프라이버시 중심입니다.</value>
+  </data>
+  <data name="NoAdsTrackers" xml:space="preserve">
+    <value>광고 또는 추적 쿠키는 사용하지 않습니다.</value>
+  </data>
+  <data name="CFAnalyticsLinkPrefix" xml:space="preserve">
+    <value>Cloudflare Web Analytics와 프라이버시에 대해 자세히 알아보기:</value>
+  </data>
+  <data name="CFLinkText" xml:space="preserve">
+    <value>Cloudflare Web Analytics</value>
+  </data>
+  <data name="YourChoices" xml:space="preserve">
+    <value>선택 사항</value>
+  </data>
+  <data name="PostAnonymously" xml:space="preserve">
+    <value>작별 메시지는 익명으로 남길 수 있습니다(이름/이메일 불필요).</value>
+  </data>
+  <data name="RemovalRequest" xml:space="preserve">
+    <value>메시지, 페이지 또는 관련 정보를 삭제하도록 요청할 수 있습니다.</value>
+  </data>
+  <data name="CreatingPageAgreement" xml:space="preserve">
+    <value>페이지를 만들면 제공한 표시 이름, 설명, 이미지를 공개적으로 공유하는 데 동의하는 것입니다.</value>
+  </data>
+  <data name="OtherThings" xml:space="preserve">
+    <value>알아두면 좋은 기타 사항</value>
+  </data>
+  <data name="DontSell" xml:space="preserve">
+    <value>우리는 데이터를 판매하거나 거래하지 않습니다.</value>
+  </data>
+  <data name="NoAdsBeyondLogs" xml:space="preserve">
+    <value>기본 서버 로그를 넘어서는 광고나 추적을 하지 않습니다.</value>
+  </data>
+  <data name="OpenSourceNote" xml:space="preserve">
+    <value>이 프로젝트는 커뮤니티를 위한 오픈 소스(GPL-3)입니다.</value>
+  </data>
+  <data name="AgreementPara" xml:space="preserve">
+    <value>이 사이트를 사용함으로써, 작별 메시지나 페이지가 공개적으로 공유되는 것에 동의하며(페이지 생성 시) 업로드한 이미지를 표시하고 호스팅하는 것에 동의합니다. 그게 전부입니다 — 숨겨진 내용은 없습니다.</value>
+  </data>
+</root>
+

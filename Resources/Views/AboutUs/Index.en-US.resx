@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="IntroLead" xml:space="preserve">
+    <value><em>Farewell My Beloved</em> is a small personal project I created while learning ASP.NET.</value>
+  </data>
+  <data name="P2" xml:space="preserve">
+    <value>The idea comes from my love for Hololive and the community around it. Over time, I've seen members graduate and leave, but I've also seen how fans come together to say goodbye with love, gratitude, and respect.</value>
+  </data>
+  <data name="P3" xml:space="preserve">
+    <value>This app is a space where anyone can do the same—whether it's for their oshi, a favorite creator, or anyone they want to honor with a farewell.</value>
+  </data>
+  <data name="WhoBehind" xml:space="preserve">
+    <value>Who's Behind This Project?</value>
+  </data>
+  <data name="P4" xml:space="preserve">
+    <value>Hi, I'm a Software Engineering graduate with a passion for clean design, thoughtful systems, and building useful tools.</value>
+  </data>
+  <data name="P5" xml:space="preserve">
+    <value>After a few years being in IT and exploring software development projects, I found myself fascinated by how smart processes can shape real outcomes. This platform is a side project born from that curiosity, combined with my love for minimalism, user-centered design, and a bit of experimentation with AI vibe coding. Don't worry, I open sourced the code so you can check and verify the security of the app. If you find something wrong, please feel free to open an Issue or contribute to the repository.</value>
+  </data>
+  <data name="P6" xml:space="preserve">
+    <value>I believe great technology should be simple, fair, and even a little bit fun. Thanks for being here. I hope you find it meaningful and refreshing!</value>
+  </data>
+  <data name="Footer" xml:space="preserve">
+    <value>Made with love for the community</value>
+  </data>
+</root>
