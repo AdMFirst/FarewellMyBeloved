@@ -4,9 +4,11 @@ on:
   push:
     branches:
       - main
+
 permissions:
   contents: write
   packages: write
+
 jobs:
   build-and-release:
     runs-on: ubuntu-latest
@@ -24,10 +26,10 @@ jobs:
       run: dotnet restore
 
     - name: Build and publish
-      run: dotnet publish -c Release -o out
+      run: dotnet publish -c Release -o FarewellMyBeloved
 
     - name: Zip published output
-      run: zip -r published-app.zip out/
+      run: zip -r published-app.zip FarewellMyBeloved/
 
     - name: Set release tag
       run: echo "RELEASE_TAG=v1.0.0-beta-${GITHUB_SHA::7}" >> $GITHUB_ENV
