@@ -1,0 +1,35 @@
+name: Build, Publish and Release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Setup dotnet
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: Restore dependencies
+      run: dotnet restore
+
+    - name: Build and publish
+      run: dotnet publish -c Release -o out
+
+    - name: Zip published output
+      run: zip -r published-app.zip out/
+
+    - name: Create GitHub release and upload zip
+      uses: softprops/action-gh-release@v1
+      with:
+        files: published-app.zip
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
