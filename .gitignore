@@ -486,7 +486,11 @@ $RECYCLE.BIN/
 
 # development files
 appsettings.Development.json
+appsettings.Production.json
 .vscode/
 security report/
 out/
 Release/
+
+# We devide to just remove the migration all together since we support multiple database
+Migrations/

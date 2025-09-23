@@ -66,12 +66,17 @@ namespace FarewellMyBeloved.Services
                     InputStream = stream,
                     ContentType = file.ContentType ?? "application/octet-stream",
                     CannedACL = S3CannedACL.PublicRead,
-                    DisablePayloadSigning = true, // Disable chunked encoding signatures
-                    DisableDefaultChecksumValidation = true // Explicitly disable checksums
+
                 };
 
                 // Explicitly disable checksum algorithm
-                request.ChecksumAlgorithm = null;
+                // ✅ Only Filebase requires this tweak
+                if (endpoint.Contains("filebase", StringComparison.OrdinalIgnoreCase))
+                {
+                    request.DisablePayloadSigning = true;
+                    request.DisableDefaultChecksumValidation = true;
+                    request.ChecksumAlgorithm = null;
+                }
 
                 // Upload to S3
                 await _s3Client.PutObjectAsync(request);
