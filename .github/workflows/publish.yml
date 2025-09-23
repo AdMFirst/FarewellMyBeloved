@@ -29,10 +29,13 @@ jobs:
     - name: Zip published output
       run: zip -r published-app.zip out/
 
+    - name: Set release tag
+      run: echo "RELEASE_TAG=v1.0.0-beta-${GITHUB_SHA::7}" >> $GITHUB_ENV
+
     - name: Create GitHub release and upload zip
       uses: softprops/action-gh-release@v1
       with:
-        tag_name: ${{ github.sha }}
+        tag_name: ${{ env.RELEASE_TAG }}
         files: published-app.zip
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
