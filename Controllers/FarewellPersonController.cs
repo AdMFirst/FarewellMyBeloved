@@ -221,10 +221,11 @@ public class FarewellPersonController : Controller
         }
         var slug = Regex.Replace(sbSlug.ToString(), "-{2,}", "-").Trim('-');
         if (string.IsNullOrEmpty(slug)) slug = Guid.NewGuid().ToString("n");
-        return slug;
+
+        // Continue with further normalization and cleanup as below, instead of returning early.
 
         // Normalize and remove diacritics
-        var normalized = name.Normalize(NormalizationForm.FormKD);
+        var normalized = slug.Normalize(NormalizationForm.FormKD);
         var sb = new StringBuilder();
         foreach (var c in normalized)
         {
@@ -295,7 +296,7 @@ public class FarewellPersonController : Controller
             .Replace("—", "-")
             .Replace("–", "-")
             .Replace("―", "-")
-            .Replace("  ", " ")
+            .Replace("  ", " ")
             .Trim()
             .Replace(" ", "-");
 
