@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using System.Globalization;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Options;
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -77,9 +78,37 @@ builder.Services.AddScoped<IS3Service, S3Service>();
 // Register state parameter service
 builder.Services.AddScoped<IStateParameterService, StateParameterService>();
 
-// Add Entity Framework services
+// Add Entity Framework services with provider selection (SqlServer/MySql/Sqlite)
 builder.Services.AddDbContext<FarewellMyBeloved.Models.ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+{
+    var provider = builder.Configuration["Database:Provider"] ?? "SqlServer";
+
+    if (string.Equals(provider, "MySql", StringComparison.OrdinalIgnoreCase))
+    {
+        var mySqlConn = builder.Configuration.GetConnectionString("MySql")
+                         ?? builder.Configuration.GetConnectionString("DefaultConnection")
+                         ?? throw new InvalidOperationException("MySQL connection string not configured. Set ConnectionStrings:MySql or DefaultConnection.");
+
+        options.UseMySql(mySqlConn, ServerVersion.AutoDetect(mySqlConn));
+    }
+    else if (string.Equals(provider, "Sqlite", StringComparison.OrdinalIgnoreCase) ||
+             string.Equals(provider, "SQLite", StringComparison.OrdinalIgnoreCase))
+    {
+        var sqliteConn = builder.Configuration.GetConnectionString("Sqlite")
+                          ?? builder.Configuration.GetConnectionString("DefaultConnection")
+                          ?? "Data Source=fmb.db";
+
+        options.UseSqlite(sqliteConn);
+    }
+    else
+    {
+        var sqlServerConn = builder.Configuration.GetConnectionString("SqlServer")
+                           ?? builder.Configuration.GetConnectionString("DefaultConnection")
+                           ?? throw new InvalidOperationException("SQL Server connection string not configured. Set ConnectionStrings:SqlServer or DefaultConnection.");
+
+        options.UseSqlServer(sqlServerConn);
+    }
+});
 
 // Auth: cookie for local session, GitHub for challenges
 builder.Services
