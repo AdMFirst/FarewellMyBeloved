@@ -488,3 +488,5 @@ $RECYCLE.BIN/
 appsettings.Development.json
 .vscode/
 security report/
+out/
+Release/
