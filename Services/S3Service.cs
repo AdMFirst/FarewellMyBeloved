@@ -65,8 +65,6 @@ namespace FarewellMyBeloved.Services
                     Key = key,
                     InputStream = stream,
                     ContentType = file.ContentType ?? "application/octet-stream",
-                    CannedACL = S3CannedACL.PublicRead,
-
                 };
 
                 // Explicitly disable checksum algorithm
