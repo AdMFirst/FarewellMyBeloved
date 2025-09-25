@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /Admin
+Disallow: /Admin/
+Disallow: /Language
+Disallow: /Language/
+Sitemap: https://farewellmybeloved.admfirst.my.id/sitemap.xml
