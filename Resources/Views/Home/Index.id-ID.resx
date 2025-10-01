@@ -44,7 +44,7 @@
     <value>Beranda</value>
   </data>
   <data name="WelcomeHeading" xml:space="preserve">
-    <value>{0} ke FarewellMyBeloved</value>
+    <value>{0} ke Halaman Memorial FarewellMyBeloved</value>
   </data>
   <data name="IntroLead" xml:space="preserve">
     <value>Ruang digital untuk menghormati dan mengenang orang-orang tercinta yang telah tiada. Buat dan bagikan pesan perpisahan, kenangan, dan penghormatan untuk merayakan hidup mereka dan menjaga semangat mereka tetap hidup di hati kita.</value>
@@ -65,64 +65,67 @@
     <value>Cari</value>
   </data>
   <data name="NotFinding" xml:space="preserve">
-    <value>Tidak menemukan yang Anda cari?</value>
+    <value>Tidak menemukan halaman memorial yang Anda cari?</value>
   </data>
   <data name="CantFindCreate" xml:space="preserve">
-    <value>Jika Anda tidak menemukan halaman kenangan, Anda dapat membuat yang baru untuk menghormati orang tercinta dan berbagi warisan mereka dengan orang lain. Halaman akan langsung dibuat sehingga Anda dan orang lain dapat mulai berbagi kenangan.</value>
+    <value>Jika tidak menemukan halaman memorial, buat ruang baru untuk menghormati orang tercinta dan mengumpulkan kenangan bersama seketika.</value>
   </data>
   <data name="CreateNewFarewellPage" xml:space="preserve">
     <value>Buat Halaman Kenangan Baru</value>
   </data>
   <data name="HomeMetaTitle" xml:space="preserve">
-    <value>FarewellMyBeloved | Persembahan Perpisahan Personal Online</value>
+    <value>FarewellMyBeloved | Buat Halaman Memorial &amp; Bagikan Kenangan Perpisahan</value>
   </data>
   <data name="HomeMetaDescription" xml:space="preserve">
-    <value>Buat halaman memorial penuh makna, bagikan pesan perpisahan, dan ajak sahabat mengenang memori indah bersama di FarewellMyBeloved - platform tribut penuh empati.</value>
+    <value>Buat halaman memorial untuk menghormati orang tercinta, bagikan kenangan perpisahan, dan undang keluarga memberi tribut penuh makna di FarewellMyBeloved.</value>
   </data>
   <data name="HomeMetaKeywords" xml:space="preserve">
-    <value>platform tribut memorial, pesan perpisahan, rayakan orang tercinta</value>
+    <value>buat halaman memorial, bagikan kenangan perpisahan, hormati orang tercinta</value>
   </data>
   <data name="HomeStepsHeading" xml:space="preserve">
-    <value>Rayakan Setiap Kisah</value>
+    <value>Buat dan Bagikan Halaman Memorial</value>
   </data>
   <data name="HomeStepsIntro" xml:space="preserve">
-    <value>Ikuti langkah sederhana ini untuk membangun ruang bermakna tempat kenangan, dukungan, dan komunitas saling bertemu.</value>
+    <value>Ikuti setiap langkah untuk membangun halaman memorial, mengundang tribut, dan menjaga kenangan perpisahan tetap hidup.</value>
   </data>
   <data name="HomeStepsCreateHeading" xml:space="preserve">
     <value>Buat halaman memorial</value>
   </data>
   <data name="HomeStepsCreateCopy" xml:space="preserve">
-    <value>Ceritakan sosok terkasih dalam hitungan menit dengan cerita, foto, dan salam perpisahan pribadi.</value>
+    <value>Mulai halaman memorial khusus dengan cerita, foto, dan pesan perpisahan untuk menghormati orang terkasih.</value>
   </data>
   <data name="HomeStepsCreateLink" xml:space="preserve">
-    <value>Mulai halaman memorial</value>
+    <value>Buat halaman memorial Anda</value>
   </data>
   <data name="HomeStepsShareHeading" xml:space="preserve">
-    <value>Kumpulkan tribut penuh kasih</value>
+    <value>Bagikan kenangan bersama</value>
   </data>
   <data name="HomeStepsShareCopy" xml:space="preserve">
-    <value>Undang keluarga dan sahabat menambahkan pesan, kenang-kenangan, dan dukungan dari mana saja.</value>
+    <value>Bagikan tautan halaman memorial agar keluarga dan sahabat dapat menambahkan kenangan dan pesan perpisahan.</value>
   </data>
   <data name="HomeStepsShareLink" xml:space="preserve">
     <value>Cari halaman memorial</value>
   </data>
   <data name="HomeStepsRememberHeading" xml:space="preserve">
-    <value>Lestarikan setiap kenangan</value>
+    <value>Hormati setiap kenangan</value>
   </data>
   <data name="HomeStepsRememberCopy" xml:space="preserve">
-    <value>Pelajari cara FarewellMyBeloved menjaga setiap tribut dan memastikan warisan tetap dapat diakses.</value>
+    <value>Pelajari cara FarewellMyBeloved menjaga halaman memorial Anda agar kenangan tetap dapat diakses.</value>
   </data>
   <data name="HomeStepsRememberLink" xml:space="preserve">
-    <value>Lihat misi kami</value>
+    <value>Pelajari misi kami</value>
   </data>
   <data name="HomeSupportHeading" xml:space="preserve">
-    <value>Temukan dukungan duka yang hangat</value>
+    <value>Dukungan untuk perjalanan memorial Anda</value>
   </data>
   <data name="HomeSupportIntro" xml:space="preserve">
-    <value>Saat membutuhkan arahan tambahan, jelajahi sumber daya duka tepercaya pilihan profesional.</value>
+    <value>Temukan sumber daya konseling duka tepercaya saat Anda membuat dan membagikan halaman memorial.</value>
   </data>
   <data name="HomeSupportLinkText" xml:space="preserve">
     <value>Baca panduan HelpGuide tentang menghadapi duka dan kehilangan</value>
+  </data>
+  <data name="HomeCreateMemorialHeading" xml:space="preserve">
+    <value>Buat halaman memorial baru sekarang</value>
   </data>
 </root>
 

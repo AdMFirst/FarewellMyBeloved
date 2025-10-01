@@ -40,67 +40,92 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="HomeTitle" xml:space="preserve"><value>ãƒ›ãƒ¼ãƒ </value></data>
-  <data name="WelcomeHeading" xml:space="preserve"><value>{0} - FarewellMyBeloved ã¸ã‚ˆã†ã“ã</value></data>
-  <data name="IntroLead" xml:space="preserve"><value>å¤§åˆ‡ãªæ–¹ã‚’å²ã³ã€æ€ã„å‡ºã‚’æ®‹ã™ãŸã‚ã®å ´æ‰€ã§ã™ã€‚ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚„æ€ã„å‡ºã€è¿½æ‚¼ã®è¨€è‘‰ã‚’åˆ†ã‹ã¡åˆã„ã€ãã®ç”Ÿæ¶¯ã‚’è®ƒãˆã¾ã—ã‚‡ã†ã€‚</value></data>
-  <data name="IntroP2" xml:space="preserve"><value>ãã‚Œãžã‚Œã®æ–¹ã«å°‚ç”¨ã®ãƒšãƒ¼ã‚¸ï¼ˆãƒ¡ãƒ¢ãƒªã‚¢ãƒ«ãƒšãƒ¼ã‚¸ï¼‰ãŒã‚ã‚Šã€å®¶æ—ã‚„å‹äººãŒæƒ³ã„ã‚’å…±æœ‰ã§ãã¾ã™ã€‚ç¾Žã—ã„è¿½æ‚¼ã®å ´ã‚’ä¸€ç·’ã«ä½œã‚Šã¾ã—ã‚‡ã†ã€‚</value></data>
-  <data name="FindFarewellPage" xml:space="preserve"><value>ãƒ¡ãƒ¢ãƒªã‚¢ãƒ«ãƒšãƒ¼ã‚¸ã‚’æŽ¢ã™</value></data>
-  <data name="SearchOrCreate" xml:space="preserve"><value>èª°ã‹ã®ãƒ¡ãƒ¢ãƒªã‚¢ãƒ«ãƒšãƒ¼ã‚¸ã‚’æ¤œç´¢ã€ã¾ãŸã¯æ–°è¦ä½œæˆ</value></data>
-  <data name="SearchPlaceholder" xml:space="preserve"><value>åå‰ã‚’å…¥åŠ›ã—ã¦æ¤œç´¢...</value></data>
-  <data name="Search" xml:space="preserve"><value>æ¤œç´¢</value></data>
-  <data name="NotFinding" xml:space="preserve"><value>ãŠæŽ¢ã—ã®ãƒšãƒ¼ã‚¸ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã‹ï¼Ÿ</value></data>
-  <data name="CantFindCreate" xml:space="preserve"><value>è¦‹ã¤ã‹ã‚‰ãªã„å ´åˆã¯ã€æ–°ã—ã„ãƒ¡ãƒ¢ãƒªã‚¢ãƒ«ãƒšãƒ¼ã‚¸ã‚’ä½œæˆã—ã¦å¤§åˆ‡ãªæ–¹ã‚’ç§°ãˆã€ãã®è»Œè·¡ã‚’å…±æœ‰ã§ãã¾ã™ã€‚ãƒšãƒ¼ã‚¸ã¯ã™ãã«ä½œæˆã•ã‚Œã€æ€ã„å‡ºã‚„è¿½æ‚¼ã®è¨€è‘‰ã‚’å¯„ã›ã‚‰ã‚Œã¾ã™ã€‚</value></data>
-  <data name="CreateNewFarewellPage" xml:space="preserve"><value>æ–°ã—ã„ãƒ¡ãƒ¢ãƒªã‚¢ãƒ«ãƒšãƒ¼ã‚¸ã‚’ä½œæˆ</value></data>
+  <data name="HomeTitle" xml:space="preserve">
+    <value>ãƒ›ãƒ¼ãƒ </value>
+  </data>
+  <data name="WelcomeHeading" xml:space="preserve">
+    <value>{0} FarewellMyBelovedメモリアルページへ</value>
+  </data>
+  <data name="IntroLead" xml:space="preserve">
+    <value>å¤§åˆ‡ãªæ–¹ã‚’å²ã³ã€æ€ã„å‡ºã‚’æ®‹ã™ãŸã‚ã®å ´æ‰€ã§ã™ã€‚ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚„æ€ã„å‡ºã€è¿½æ‚¼ã®è¨€è‘‰ã‚’åˆ†ã‹ã¡åˆã„ã€ãã®ç”Ÿæ¶¯ã‚’è®ƒãˆã¾ã—ã‚‡ã†ã€‚</value>
+  </data>
+  <data name="IntroP2" xml:space="preserve">
+    <value>ãã‚Œãžã‚Œã®æ–¹ã«å°‚ç”¨ã®ãƒšãƒ¼ã‚¸ï¼ˆãƒ¡ãƒ¢ãƒªã‚¢ãƒ«ãƒšãƒ¼ã‚¸ï¼‰ãŒã‚ã‚Šã€å®¶æ—ã‚„å‹äººãŒæƒ³ã„ã‚’å…±æœ‰ã§ãã¾ã™ã€‚ç¾Žã—ã„è¿½æ‚¼ã®å ´ã‚’ä¸€ç·’ã«ä½œã‚Šã¾ã—ã‚‡ã†ã€‚</value>
+  </data>
+  <data name="FindFarewellPage" xml:space="preserve">
+    <value>ãƒ¡ãƒ¢ãƒªã‚¢ãƒ«ãƒšãƒ¼ã‚¸ã‚’æŽ¢ã™</value>
+  </data>
+  <data name="SearchOrCreate" xml:space="preserve">
+    <value>èª°ã‹ã®ãƒ¡ãƒ¢ãƒªã‚¢ãƒ«ãƒšãƒ¼ã‚¸ã‚’æ¤œç´¢ã€ã¾ãŸã¯æ–°è¦ä½œæˆ</value>
+  </data>
+  <data name="SearchPlaceholder" xml:space="preserve">
+    <value>åå‰ã‚’å…¥åŠ›ã—ã¦æ¤œç´¢...</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>æ¤œç´¢</value>
+  </data>
+  <data name="NotFinding" xml:space="preserve">
+    <value>お探しのメモリアルページが見つかりませんか？</value>
+  </data>
+  <data name="CantFindCreate" xml:space="preserve">
+    <value>該当するメモリアルページがない場合は、新しいページを作成して大切な人を称え、皆で想い出をすぐに集めましょう。</value>
+  </data>
+  <data name="CreateNewFarewellPage" xml:space="preserve">
+    <value>æ–°ã—ã„ãƒ¡ãƒ¢ãƒªã‚¢ãƒ«ãƒšãƒ¼ã‚¸ã‚’ä½œæˆ</value>
+  </data>
   <data name="HomeMetaTitle" xml:space="preserve">
-    <value>FarewellMyBeloved | 心温まるお別れのトリビュートサイト</value>
+    <value>FarewellMyBeloved | メモリアルページを作成して想い出を分かち合う</value>
   </data>
   <data name="HomeMetaDescription" xml:space="preserve">
-    <value>メモリアルページを作成し、別れのメッセージを共有して、FarewellMyBelovedで大切な人との思い出を皆で分かち合いましょう。</value>
+    <value>FarewellMyBelovedでメモリアルページを作成し、大切な人を偲ぶメッセージや想い出を共有しながら、ご家族やご友人の心温まるトリビュートを募りましょう。</value>
   </data>
   <data name="HomeMetaKeywords" xml:space="preserve">
-    <value>メモリアル, 別れのメッセージ, トリビュート, 愛する人を偲ぶ</value>
+    <value>メモリアルページ作成, 想い出を共有, 大切な人を偲ぶ</value>
   </data>
   <data name="HomeStepsHeading" xml:space="preserve">
-    <value>一人ひとりの物語を讃える</value>
+    <value>メモリアルページを作り、想い出を共有する</value>
   </data>
   <data name="HomeStepsIntro" xml:space="preserve">
-    <value>思い出・支え・コミュニティが集う意味のある場所を、以下のステップで簡単に作れます。</value>
+    <value>メモリアルページを作成し、トリビュートを招待し、別れの想い出を未来へつなぐための手順をご紹介します。</value>
   </data>
   <data name="HomeStepsCreateHeading" xml:space="preserve">
     <value>メモリアルページを作成</value>
   </data>
   <data name="HomeStepsCreateCopy" xml:space="preserve">
-    <value>ストーリーや写真、心のこもった言葉で大切な人の人生を数分で形にしましょう。</value>
+    <value>ストーリーや写真、別れのメッセージで大切な人を称える専用のメモリアルページを作りましょう。</value>
   </data>
   <data name="HomeStepsCreateLink" xml:space="preserve">
-    <value>メモリアルページを始める</value>
+    <value>メモリアルページを作成する</value>
   </data>
   <data name="HomeStepsShareHeading" xml:space="preserve">
-    <value>想いを寄せ合う</value>
+    <value>想い出をみんなで共有</value>
   </data>
   <data name="HomeStepsShareCopy" xml:space="preserve">
-    <value>家族や友人を招待して、どこからでも別れのメッセージや思い出を寄せてもらいましょう。</value>
+    <value>メモリアルページのリンクを届けて、ご家族や友人に想い出や別れのメッセージを投稿してもらいましょう。</value>
   </data>
   <data name="HomeStepsShareLink" xml:space="preserve">
     <value>メモリアルページを検索</value>
   </data>
   <data name="HomeStepsRememberHeading" xml:space="preserve">
-    <value>記憶を未来へ残す</value>
+    <value>すべての想い出を守る</value>
   </data>
   <data name="HomeStepsRememberCopy" xml:space="preserve">
-    <value>FarewellMyBelovedがトリビュートを守り、世代を超えて語り継げる仕組みをご紹介します。</value>
+    <value>FarewellMyBelovedがメモリアルページを守り、想い出をいつでも振り返れるよう支える仕組みをご紹介します。</value>
   </data>
   <data name="HomeStepsRememberLink" xml:space="preserve">
-    <value>私たちの想いを見る</value>
+    <value>私たちのミッションを見る</value>
   </data>
   <data name="HomeSupportHeading" xml:space="preserve">
-    <value>寄り添うグリーフサポート</value>
+    <value>メモリアルづくりを支えるサポート</value>
   </data>
   <data name="HomeSupportIntro" xml:space="preserve">
-    <value>専門家が選んだ信頼できるグリーフリソースで、心強いサポートを得ましょう。</value>
+    <value>メモリアルページを作成・共有する過程で役立つ信頼できるグリーフケアの情報をご覧ください。</value>
   </data>
   <data name="HomeSupportLinkText" xml:space="preserve">
     <value>HelpGuideの悲嘆と喪失への向き合い方を読む</value>
+  </data>
+  <data name="HomeCreateMemorialHeading" xml:space="preserve">
+    <value>今すぐ新しいメモリアルページを作成しましょう</value>
   </data>
 </root>
 
