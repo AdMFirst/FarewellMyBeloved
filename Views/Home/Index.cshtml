@@ -1,12 +1,12 @@
 ﻿@{
-    ViewData["Title"] = Localizer["HomeTitle"];
-    ViewData["MetaTitle"] = Localizer["HomeMetaTitle"];
-    ViewData["MetaDescription"] = Localizer["HomeMetaDescription"];
-    ViewData["MetaKeywords"] = Localizer["HomeMetaKeywords"];
+    ViewData["Title"] = Localizer["HomeTitle"].Value;
+    ViewData["MetaTitle"] = Localizer["HomeMetaTitle"].Value;
+    ViewData["MetaDescription"] = Localizer["HomeMetaDescription"].Value;
+    ViewData["MetaKeywords"] = Localizer["HomeMetaKeywords"].Value;
     var scheme = Context?.Request?.Scheme ?? "https";
     ViewData["CanonicalUrl"] = Url.Action("Index", "Home", null, scheme);
-    ViewData["OgTitle"] = Localizer["HomeMetaTitle"];
-    ViewData["OgDescription"] = Localizer["HomeMetaDescription"];
+    ViewData["OgTitle"] = Localizer["HomeMetaTitle"].Value;
+    ViewData["OgDescription"] = Localizer["HomeMetaDescription"].Value;
     ViewData["OgImage"] = Url.Content("~/android-chrome-512x512.png");
 }
 
@@ -83,6 +83,7 @@
         </div>
     </div>
 </div>
+
 
 
 
