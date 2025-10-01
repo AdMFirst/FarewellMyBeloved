@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
@@ -73,4 +73,56 @@
   <data name="CreateNewFarewellPage" xml:space="preserve">
     <value>Create New Memorial Page</value>
   </data>
+  <data name="HomeMetaTitle" xml:space="preserve">
+    <value>FarewellMyBeloved | Personalized Farewell Tributes Online</value>
+  </data>
+  <data name="HomeMetaDescription" xml:space="preserve">
+    <value>Create heartfelt memorial pages, share farewell messages, and invite friends to celebrate cherished memories together on FarewellMyBeloved - a compassionate tribute platform.</value>
+  </data>
+  <data name="HomeMetaKeywords" xml:space="preserve">
+    <value>memorial tribute platform, farewell messages, celebrate loved ones</value>
+  </data>
+  <data name="HomeStepsHeading" xml:space="preserve">
+    <value>Honor Every Story</value>
+  </data>
+  <data name="HomeStepsIntro" xml:space="preserve">
+    <value>Follow these simple steps to build a meaningful space where memories, comfort, and community come together.</value>
+  </data>
+  <data name="HomeStepsCreateHeading" xml:space="preserve">
+    <value>Create a memorial page</value>
+  </data>
+  <data name="HomeStepsCreateCopy" xml:space="preserve">
+    <value>Capture the essence of your loved one in minutes with stories, photos, and a personalized farewell.</value>
+  </data>
+  <data name="HomeStepsCreateLink" xml:space="preserve">
+    <value>Start a memorial page</value>
+  </data>
+  <data name="HomeStepsShareHeading" xml:space="preserve">
+    <value>Gather heartfelt tributes</value>
+  </data>
+  <data name="HomeStepsShareCopy" xml:space="preserve">
+    <value>Invite friends and family to add farewell messages, keepsakes, and support from anywhere.</value>
+  </data>
+  <data name="HomeStepsShareLink" xml:space="preserve">
+    <value>Search memorial pages</value>
+  </data>
+  <data name="HomeStepsRememberHeading" xml:space="preserve">
+    <value>Preserve every remembrance</value>
+  </data>
+  <data name="HomeStepsRememberCopy" xml:space="preserve">
+    <value>Learn how FarewellMyBeloved protects each tribute and keeps legacies accessible for generations.</value>
+  </data>
+  <data name="HomeStepsRememberLink" xml:space="preserve">
+    <value>See our mission</value>
+  </data>
+  <data name="HomeSupportHeading" xml:space="preserve">
+    <value>Find compassionate grief support</value>
+  </data>
+  <data name="HomeSupportIntro" xml:space="preserve">
+    <value>When you need extra guidance, explore trusted grief resources curated by professionals.</value>
+  </data>
+  <data name="HomeSupportLinkText" xml:space="preserve">
+    <value>Read HelpGuide advice on coping with grief and loss</value>
+  </data>
 </root>
+

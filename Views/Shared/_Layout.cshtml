@@ -1,9 +1,127 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Localization
+@using System.Collections.Generic
+@using System.Text.Json
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Http.Extensions
 @inject IViewLocalizer Localizer
-@inject Microsoft.AspNetCore.Authorization.IAuthorizationService AuthorizationService
+@inject IAuthorizationService AuthorizationService
 @{
     var isAdmin = User.Identity?.IsAuthenticated == true &&
         (await AuthorizationService.AuthorizeAsync(User, null, "AdminsOnly")).Succeeded;
+
+    var defaultTitleFragment = Convert.ToString(ViewData["Title"]);
+    if (string.IsNullOrWhiteSpace(defaultTitleFragment))
+    {
+        defaultTitleFragment = "FarewellMyBeloved";
+    }
+
+    var metaTitle = Convert.ToString(ViewData["MetaTitle"]);
+    if (string.IsNullOrWhiteSpace(metaTitle))
+    {
+        metaTitle = $"{defaultTitleFragment} | Farewell Tributes & Digital Memorials";
+    }
+
+    var metaDescription = Convert.ToString(ViewData["MetaDescription"]);
+    if (string.IsNullOrWhiteSpace(metaDescription))
+    {
+        metaDescription = "FarewellMyBeloved helps you craft heartfelt memorial pages, share farewell messages, and preserve the stories of loved ones with meaningful digital tributes.";
+    }
+
+    var metaKeywords = Convert.ToString(ViewData["MetaKeywords"]);
+    if (string.IsNullOrWhiteSpace(metaKeywords))
+    {
+        metaKeywords = "farewell messages, memorial pages, digital tributes, celebrate life";
+    }
+
+    var metaRobots = Convert.ToString(ViewData["MetaRobots"]);
+
+    var canonical = Convert.ToString(ViewData["CanonicalUrl"]);
+    if (string.IsNullOrWhiteSpace(canonical) && Context?.Request != null)
+    {
+        canonical = UriHelper.GetDisplayUrl(Context.Request);
+    }
+
+    var baseUrl = Context?.Request != null
+        ? $"{Context.Request.Scheme}://{Context.Request.Host.ToUriComponent()}{Context.Request.PathBase}"
+        : "https://farewellmybeloved.admfirst.my.id";
+
+    var ogTitle = Convert.ToString(ViewData["OgTitle"]);
+    if (string.IsNullOrWhiteSpace(ogTitle))
+    {
+        ogTitle = metaTitle;
+    }
+
+    var ogDescription = Convert.ToString(ViewData["OgDescription"]);
+    if (string.IsNullOrWhiteSpace(ogDescription))
+    {
+        ogDescription = metaDescription;
+    }
+
+    var ogType = Convert.ToString(ViewData["OgType"]);
+    if (string.IsNullOrWhiteSpace(ogType))
+    {
+        ogType = "website";
+    }
+
+    var ogUrl = Convert.ToString(ViewData["OgUrl"]);
+    if (string.IsNullOrWhiteSpace(ogUrl))
+    {
+        ogUrl = canonical;
+    }
+
+    var ogImage = Convert.ToString(ViewData["OgImage"]);
+    if (string.IsNullOrWhiteSpace(ogImage))
+    {
+        ogImage = Url.Content("~/android-chrome-512x512.png");
+    }
+    if (!string.IsNullOrWhiteSpace(ogImage) && Context?.Request != null)
+    {
+        if (ogImage.StartsWith("~/", StringComparison.Ordinal))
+        {
+            ogImage = $"{baseUrl}{ogImage.Substring(1)}";
+        }
+        else if (ogImage.StartsWith("/", StringComparison.Ordinal))
+        {
+            ogImage = $"{baseUrl}{ogImage}";
+        }
+    }
+
+    var twitterCard = Convert.ToString(ViewData["TwitterCard"]);
+    if (string.IsNullOrWhiteSpace(twitterCard))
+    {
+        twitterCard = "summary_large_image";
+    }
+
+    var twitterSite = Convert.ToString(ViewData["TwitterSite"]);
+    if (string.IsNullOrWhiteSpace(twitterSite))
+    {
+        twitterSite = "@FarewellMyBeloved";
+    }
+
+    var twitterCreator = Convert.ToString(ViewData["TwitterCreator"]);
+    var structuredData = Convert.ToString(ViewData["StructuredData"]);
+
+    if (string.IsNullOrWhiteSpace(structuredData))
+    {
+        var schemaCanonical = !string.IsNullOrWhiteSpace(canonical) ? canonical : baseUrl;
+        var structuredDataMap = new Dictionary<string, object>
+        {
+            ["@context"] = "https://schema.org",
+            ["@type"] = "WebSite",
+            ["name"] = "FarewellMyBeloved",
+            ["url"] = schemaCanonical,
+            ["potentialAction"] = new Dictionary<string, object>
+            {
+                ["@type"] = "SearchAction",
+                ["target"] = $"{baseUrl}/FarewellPerson/Search?searchTerm={{search_term_string}}",
+                ["query-input"] = "required name=search_term_string"
+            }
+        };
+        structuredData = JsonSerializer.Serialize(structuredDataMap, new JsonSerializerOptions
+        {
+            WriteIndented = true
+        });
+    }
 }
 
 <!DOCTYPE html>
@@ -11,7 +129,56 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - FarewellMyBeloved</title>
+    <title>@metaTitle</title>
+    <meta name="description" content="@metaDescription" />
+    @if (!string.IsNullOrWhiteSpace(metaKeywords))
+    {
+        <meta name="keywords" content="@metaKeywords" />
+    }
+    @if (!string.IsNullOrWhiteSpace(metaRobots))
+    {
+        <meta name="robots" content="@metaRobots" />
+    }
+    <meta property="og:site_name" content="FarewellMyBeloved" />
+    @if (!string.IsNullOrWhiteSpace(ogTitle))
+    {
+        <meta property="og:title" content="@ogTitle" />
+    }
+    @if (!string.IsNullOrWhiteSpace(ogDescription))
+    {
+        <meta property="og:description" content="@ogDescription" />
+    }
+    @if (!string.IsNullOrWhiteSpace(ogType))
+    {
+        <meta property="og:type" content="@ogType" />
+    }
+    @if (!string.IsNullOrWhiteSpace(ogUrl))
+    {
+        <meta property="og:url" content="@ogUrl" />
+    }
+    @if (!string.IsNullOrWhiteSpace(ogImage))
+    {
+        <meta property="og:image" content="@ogImage" />
+    }
+    <meta name="twitter:card" content="@twitterCard" />
+    @if (!string.IsNullOrWhiteSpace(twitterSite))
+    {
+        <meta name="twitter:site" content="@twitterSite" />
+    }
+    @if (!string.IsNullOrWhiteSpace(twitterCreator))
+    {
+        <meta name="twitter:creator" content="@twitterCreator" />
+    }
+    <meta name="twitter:title" content="@ogTitle" />
+    <meta name="twitter:description" content="@ogDescription" />
+    @if (!string.IsNullOrWhiteSpace(ogImage))
+    {
+        <meta name="twitter:image" content="@ogImage" />
+    }
+    @if (!string.IsNullOrWhiteSpace(canonical))
+    {
+        <link rel="canonical" href="@canonical" />
+    }
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -27,6 +194,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css"/>
     <script src="https://cdn.jsdelivr.net/npm/%40floating-ui/core@1.7.3"></script>
     <script src="https://cdn.jsdelivr.net/npm/%40floating-ui/dom@1.7.3"></script>
+    <script type="application/ld+json">
+        @Html.Raw(structuredData)
+    </script>
     
 </head>
 <body>
@@ -38,7 +208,7 @@
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                <div class="navbar-collapse collapse d-md-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         
                         <li class="nav-item">
@@ -139,4 +309,3 @@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
-
