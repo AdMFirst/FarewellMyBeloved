@@ -1,17 +1,48 @@
 ﻿@{
-    ViewData["Title"] = Localizer["HomeTitle"];
+    ViewData["Title"] = Localizer["HomeTitle"].Value;
+    ViewData["MetaTitle"] = Localizer["HomeMetaTitle"].Value;
+    ViewData["MetaDescription"] = Localizer["HomeMetaDescription"].Value;
+    ViewData["MetaKeywords"] = Localizer["HomeMetaKeywords"].Value;
+    var scheme = Context?.Request?.Scheme ?? "https";
+    ViewData["CanonicalUrl"] = Url.Action("Index", "Home", null, scheme);
+    ViewData["OgTitle"] = Localizer["HomeMetaTitle"].Value;
+    ViewData["OgDescription"] = Localizer["HomeMetaDescription"].Value;
+    ViewData["OgImage"] = Url.Content("~/android-chrome-512x512.png");
 }
 
 <div class="container py-5">
-    <div class="row py-3">
-        <div class="col-lg-8 mx-auto text-center">
-            <h1 class="display-4 mb-4">@Localizer["WelcomeHeading", (ViewData["Welcome"] ?? "")]</h1>
+    <div class="row justify-content-center text-center mb-5">
+        <div class="col-lg-10 col-xl-8">
+            <h1 class="display-4 fw-semibold mb-4">@Localizer["WelcomeHeading", (ViewData["Welcome"] ?? "")]</h1>
             <p class="lead mb-4">@Localizer["IntroLead"]</p>
-            <p class="mb-5">@Localizer["IntroP2"]</p>
+            <p class="text-secondary">@Localizer["IntroP2"]</p>
         </div>
     </div>
 
-    <div class="row py-5">
+    <div class="row py-4 mb-5">
+        <div class="col-lg-8 mx-auto text-center">
+            <h2 class="h2 mb-3">@Localizer["HomeStepsHeading"]</h2>
+            <p class="text-muted mb-4">@Localizer["HomeStepsIntro"]</p>
+        </div>
+        <div class="col-lg-10 mx-auto">
+            <ul class="list-unstyled row g-4">
+                <li class="col-md-4">
+                    <h3 class="h5">@Localizer["HomeStepsCreateHeading"]</h3>
+                    <p class="mb-0">@Localizer["HomeStepsCreateCopy"] <a asp-controller="FarewellPerson" asp-action="Create" class="link-primary">@Localizer["HomeStepsCreateLink"]</a>.</p>
+                </li>
+                <li class="col-md-4">
+                    <h3 class="h5">@Localizer["HomeStepsShareHeading"]</h3>
+                    <p class="mb-0">@Localizer["HomeStepsShareCopy"] <a asp-controller="FarewellPerson" asp-action="Search" class="link-primary">@Localizer["HomeStepsShareLink"]</a>.</p>
+                </li>
+                <li class="col-md-4">
+                    <h3 class="h5">@Localizer["HomeStepsRememberHeading"]</h3>
+                    <p class="mb-0">@Localizer["HomeStepsRememberCopy"] <a asp-controller="AboutUs" asp-action="Index" class="link-primary">@Localizer["HomeStepsRememberLink"]</a>.</p>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="row py-4 mb-5">
         <div class="col-lg-6 mx-auto">
             <div class="card shadow-sm">
                 <div class="card-body p-4">
@@ -31,16 +62,28 @@
         </div>
     </div>
 
+    <div class="row py-4 mb-5">
+        <div class="col-lg-8 mx-auto text-center">
+            <h2 class="h2 mb-3">@Localizer["HomeSupportHeading"]</h2>
+            <p class="mb-3">@Localizer["HomeSupportIntro"]</p>
+            <a class="link-primary" href="https://www.helpguide.org/articles/grief/coping-with-grief-and-loss.htm" target="_blank" rel="noopener noreferrer">@Localizer["HomeSupportLinkText"]</a>
+        </div>
+    </div>
+
     <div class="row py-3"> 
         <div class="col-lg-8 mx-auto text-center">
-            <p class="mb-3 lead">@Localizer["NotFinding"]</p>
+            <h2 class="mb-3 h2">@Localizer["NotFinding"]</h2>
             <p class="mb-4">@Localizer["CantFindCreate"]</p>
             <div class="text-center">
                 <a asp-controller="FarewellPerson" asp-action="Create"
-                    class="btn btn-secondary">
+                    class="btn btn-secondary text-white">
                     <i class="bi bi-plus-circle"></i> @Localizer["CreateNewFarewellPage"]
                 </a>
             </div>
         </div>
     </div>
 </div>
+
+
+
+

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
@@ -41,37 +41,91 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="HomeTitle" xml:space="preserve">
-    <value>홈</value>
+    <value>í™ˆ</value>
   </data>
   <data name="WelcomeHeading" xml:space="preserve">
-    <value>FarewellMyBeloved에 {0}</value>
+    <value>{0} FarewellMyBeloved 추모 페이지에 오신 것을 환영합니다</value>
   </data>
   <data name="IntroLead" xml:space="preserve">
-    <value>사랑하는 이를 기리고 기억할 수 있는 디지털 공간입니다. 작별 인사, 추억, 헌사를 남겨 그들의 삶을 기리고 마음속에 오래 기억하세요.</value>
+    <value>ì‚¬ëž‘í•˜ëŠ” ì´ë¥¼ ê¸°ë¦¬ê³  ê¸°ì–µí•  ìˆ˜ ìžˆëŠ” ë””ì§€í„¸ ê³µê°„ìž…ë‹ˆë‹¤. ìž‘ë³„ ì¸ì‚¬, ì¶”ì–µ, í—Œì‚¬ë¥¼ ë‚¨ê²¨ ê·¸ë“¤ì˜ ì‚¶ì„ ê¸°ë¦¬ê³  ë§ˆìŒì†ì— ì˜¤ëž˜ ê¸°ì–µí•˜ì„¸ìš”.</value>
   </data>
   <data name="IntroP2" xml:space="preserve">
-    <value>각 사람은 전용 페이지가 있으며 가족과 친구들이 생각, 추억, 작별 인사를 공유할 수 있습니다. 우리 곁을 떠난 이들을 위한 오래 남는 추모를 만들 수 있는 아름다운 방법입니다.</value>
+    <value>ê° ì‚¬ëžŒì€ ì „ìš© íŽ˜ì´ì§€ê°€ ìžˆìœ¼ë©° ê°€ì¡±ê³¼ ì¹œêµ¬ë“¤ì´ ìƒê°, ì¶”ì–µ, ìž‘ë³„ ì¸ì‚¬ë¥¼ ê³µìœ í•  ìˆ˜ ìžˆìŠµë‹ˆë‹¤. ìš°ë¦¬ ê³ì„ ë– ë‚œ ì´ë“¤ì„ ìœ„í•œ ì˜¤ëž˜ ë‚¨ëŠ” ì¶”ëª¨ë¥¼ ë§Œë“¤ ìˆ˜ ìžˆëŠ” ì•„ë¦„ë‹¤ìš´ ë°©ë²•ìž…ë‹ˆë‹¤.</value>
   </data>
   <data name="FindFarewellPage" xml:space="preserve">
-    <value>추모 페이지 찾기</value>
+    <value>ì¶”ëª¨ íŽ˜ì´ì§€ ì°¾ê¸°</value>
   </data>
   <data name="SearchOrCreate" xml:space="preserve">
-    <value>누군가의 추모 페이지를 검색하거나 새로 만들기</value>
+    <value>ëˆ„êµ°ê°€ì˜ ì¶”ëª¨ íŽ˜ì´ì§€ë¥¼ ê²€ìƒ‰í•˜ê±°ë‚˜ ìƒˆë¡œ ë§Œë“¤ê¸°</value>
   </data>
   <data name="SearchPlaceholder" xml:space="preserve">
-    <value>이름을 입력하여 검색...</value>
+    <value>ì´ë¦„ì„ ìž…ë ¥í•˜ì—¬ ê²€ìƒ‰...</value>
   </data>
   <data name="Search" xml:space="preserve">
-    <value>검색</value>
+    <value>ê²€ìƒ‰</value>
   </data>
   <data name="NotFinding" xml:space="preserve">
-    <value>원하는 결과가 없나요?</value>
+    <value>찾는 추모 페이지가 없으신가요?</value>
   </data>
   <data name="CantFindCreate" xml:space="preserve">
-    <value>찾는 추모 페이지가 없다면, 새 페이지를 만들어 사랑하는 이를 기리고 그들의 이야기를 다른 사람들과 나눌 수 있습니다. 페이지는 즉시 생성되어 누구나 추억을 공유하고 삶을 기릴 수 있습니다.</value>
+    <value>원하는 추모 페이지가 없다면 새로운 공간을 만들어 사랑하는 이를 기리고 함께 추억을 모아 보세요.</value>
   </data>
   <data name="CreateNewFarewellPage" xml:space="preserve">
-    <value>새 추모 페이지 만들기</value>
+    <value>ìƒˆ ì¶”ëª¨ íŽ˜ì´ì§€ ë§Œë“¤ê¸°</value>
+  </data>
+  <data name="HomeMetaTitle" xml:space="preserve">
+    <value>FarewellMyBeloved | 추모 페이지를 만들고 추억을 나누세요</value>
+  </data>
+  <data name="HomeMetaDescription" xml:space="preserve">
+    <value>FarewellMyBeloved에서 추모 페이지를 만들어 사랑하는 이를 기리고, 작별의 추억을 나누며, 가족과 지인의 따뜻한 트리뷰트를 모아 보세요.</value>
+  </data>
+  <data name="HomeMetaKeywords" xml:space="preserve">
+    <value>추모 페이지 만들기, 추억 나누기, 사랑하는 이를 기리다</value>
+  </data>
+  <data name="HomeStepsHeading" xml:space="preserve">
+    <value>추모 페이지를 만들고 공유하기</value>
+  </data>
+  <data name="HomeStepsIntro" xml:space="preserve">
+    <value>추모 페이지를 만들고, 트리뷰트를 초대하며, 작별의 추억을 오래도록 지키는 방법을 단계별로 안내합니다.</value>
+  </data>
+  <data name="HomeStepsCreateHeading" xml:space="preserve">
+    <value>추모 페이지 만들기</value>
+  </data>
+  <data name="HomeStepsCreateCopy" xml:space="preserve">
+    <value>이야기와 사진, 작별 인사로 사랑하는 이를 기리는 전용 추모 페이지를 시작하세요.</value>
+  </data>
+  <data name="HomeStepsCreateLink" xml:space="preserve">
+    <value>추모 페이지 만들기</value>
+  </data>
+  <data name="HomeStepsShareHeading" xml:space="preserve">
+    <value>함께 추억 나누기</value>
+  </data>
+  <data name="HomeStepsShareCopy" xml:space="preserve">
+    <value>추모 페이지 링크를 공유하여 가족과 친구가 추억과 작별 메시지를 올릴 수 있도록 해주세요.</value>
+  </data>
+  <data name="HomeStepsShareLink" xml:space="preserve">
+    <value>추모 페이지 검색</value>
+  </data>
+  <data name="HomeStepsRememberHeading" xml:space="preserve">
+    <value>모든 기억을 지키기</value>
+  </data>
+  <data name="HomeStepsRememberCopy" xml:space="preserve">
+    <value>FarewellMyBeloved가 추모 페이지를 안전하게 보존해 언제든지 추억을 되새길 수 있도록 돕습니다.</value>
+  </data>
+  <data name="HomeStepsRememberLink" xml:space="preserve">
+    <value>우리의 미션 알아보기</value>
+  </data>
+  <data name="HomeSupportHeading" xml:space="preserve">
+    <value>추모 여정을 위한 지원</value>
+  </data>
+  <data name="HomeSupportIntro" xml:space="preserve">
+    <value>추모 페이지를 만들고 공유하는 과정에서 도움이 되는 신뢰할 수 있는 애도 상담 자료를 확인하세요.</value>
+  </data>
+  <data name="HomeSupportLinkText" xml:space="preserve">
+    <value>HelpGuide의 애도와 상실 극복 안내 읽기</value>
+  </data>
+  <data name="HomeCreateMemorialHeading" xml:space="preserve">
+    <value>지금 바로 새로운 추모 페이지를 만들어 보세요</value>
   </data>
 </root>
 

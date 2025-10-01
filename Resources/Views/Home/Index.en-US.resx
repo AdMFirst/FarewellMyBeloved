@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
@@ -44,7 +44,7 @@
     <value>Home</value>
   </data>
   <data name="WelcomeHeading" xml:space="preserve">
-    <value>{0} to FarewellMyBeloved</value>
+    <value>{0} to FarewellMyBeloved Memorial Pages</value>
   </data>
   <data name="IntroLead" xml:space="preserve">
     <value>A digital space to honor and remember our beloved ones who have passed away. Create and share farewell messages, memories, and tributes to celebrate their lives and keep their spirits alive in our hearts.</value>
@@ -65,12 +65,67 @@
     <value>Search</value>
   </data>
   <data name="NotFinding" xml:space="preserve">
-    <value>Not finding what you're looking for?</value>
+    <value>Not finding the memorial page you need?</value>
   </data>
   <data name="CantFindCreate" xml:space="preserve">
-    <value>If you can't find a memorial page, you can create a new one to honor your loved one and share their legacy with others. The page will be set up right away so you and others can start sharing memories and paying tribute to their life.</value>
+    <value>If you cannot locate an existing memorial page, create a new space to honor your loved one and collect shared memories instantly.</value>
   </data>
   <data name="CreateNewFarewellPage" xml:space="preserve">
     <value>Create New Memorial Page</value>
   </data>
+  <data name="HomeMetaTitle" xml:space="preserve">
+    <value>FarewellMyBeloved | Create Memorial Pages &amp; Share Farewell Memories</value>
+  </data>
+  <data name="HomeMetaDescription" xml:space="preserve">
+    <value>Create a memorial page to honor loved ones, share farewell memories, and invite family to contribute heartfelt tributes on FarewellMyBeloved.</value>
+  </data>
+  <data name="HomeMetaKeywords" xml:space="preserve">
+    <value>create memorial page, share farewell memories, honor loved ones</value>
+  </data>
+  <data name="HomeStepsHeading" xml:space="preserve">
+    <value>Create and Share Memorial Pages</value>
+  </data>
+  <data name="HomeStepsIntro" xml:space="preserve">
+    <value>Follow each step to build a memorial page, invite tributes, and keep farewell memories alive.</value>
+  </data>
+  <data name="HomeStepsCreateHeading" xml:space="preserve">
+    <value>Create a memorial page</value>
+  </data>
+  <data name="HomeStepsCreateCopy" xml:space="preserve">
+    <value>Start a dedicated memorial page with stories, photos, and farewell messages to honor your loved one.</value>
+  </data>
+  <data name="HomeStepsCreateLink" xml:space="preserve">
+    <value>Create your memorial page</value>
+  </data>
+  <data name="HomeStepsShareHeading" xml:space="preserve">
+    <value>Share memories together</value>
+  </data>
+  <data name="HomeStepsShareCopy" xml:space="preserve">
+    <value>Share the memorial page link so friends and family can post memories and farewell messages.</value>
+  </data>
+  <data name="HomeStepsShareLink" xml:space="preserve">
+    <value>Find memorial pages</value>
+  </data>
+  <data name="HomeStepsRememberHeading" xml:space="preserve">
+    <value>Honor every remembrance</value>
+  </data>
+  <data name="HomeStepsRememberCopy" xml:space="preserve">
+    <value>Learn how FarewellMyBeloved safeguards your memorial pages so memories remain accessible.</value>
+  </data>
+  <data name="HomeStepsRememberLink" xml:space="preserve">
+    <value>Discover our mission</value>
+  </data>
+  <data name="HomeSupportHeading" xml:space="preserve">
+    <value>Support for your memorial journey</value>
+  </data>
+  <data name="HomeSupportIntro" xml:space="preserve">
+    <value>Explore trusted grief counseling resources to help while you create and share memorial pages.</value>
+  </data>
+  <data name="HomeSupportLinkText" xml:space="preserve">
+    <value>Read HelpGuide advice on coping with grief and loss</value>
+  </data>
+  <data name="HomeCreateMemorialHeading" xml:space="preserve">
+    <value>Create a new memorial page today</value>
+  </data>
 </root>
+

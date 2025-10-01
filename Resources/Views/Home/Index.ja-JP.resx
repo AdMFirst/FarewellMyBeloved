@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
@@ -40,15 +40,92 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="HomeTitle" xml:space="preserve"><value>ホーム</value></data>
-  <data name="WelcomeHeading" xml:space="preserve"><value>{0} - FarewellMyBeloved へようこそ</value></data>
-  <data name="IntroLead" xml:space="preserve"><value>大切な方を偲び、思い出を残すための場所です。メッセージや思い出、追悼の言葉を分かち合い、その生涯を讃えましょう。</value></data>
-  <data name="IntroP2" xml:space="preserve"><value>それぞれの方に専用のページ（メモリアルページ）があり、家族や友人が想いを共有できます。美しい追悼の場を一緒に作りましょう。</value></data>
-  <data name="FindFarewellPage" xml:space="preserve"><value>メモリアルページを探す</value></data>
-  <data name="SearchOrCreate" xml:space="preserve"><value>誰かのメモリアルページを検索、または新規作成</value></data>
-  <data name="SearchPlaceholder" xml:space="preserve"><value>名前を入力して検索...</value></data>
-  <data name="Search" xml:space="preserve"><value>検索</value></data>
-  <data name="NotFinding" xml:space="preserve"><value>お探しのページが見つかりませんか？</value></data>
-  <data name="CantFindCreate" xml:space="preserve"><value>見つからない場合は、新しいメモリアルページを作成して大切な方を称え、その軌跡を共有できます。ページはすぐに作成され、思い出や追悼の言葉を寄せられます。</value></data>
-  <data name="CreateNewFarewellPage" xml:space="preserve"><value>新しいメモリアルページを作成</value></data>
+  <data name="HomeTitle" xml:space="preserve">
+    <value>ãƒ›ãƒ¼ãƒ </value>
+  </data>
+  <data name="WelcomeHeading" xml:space="preserve">
+    <value>{0} FarewellMyBelovedメモリアルページへ</value>
+  </data>
+  <data name="IntroLead" xml:space="preserve">
+    <value>å¤§åˆ‡ãªæ–¹ã‚’å²ã³ã€æ€ã„å‡ºã‚’æ®‹ã™ãŸã‚ã®å ´æ‰€ã§ã™ã€‚ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚„æ€ã„å‡ºã€è¿½æ‚¼ã®è¨€è‘‰ã‚’åˆ†ã‹ã¡åˆã„ã€ãã®ç”Ÿæ¶¯ã‚’è®ƒãˆã¾ã—ã‚‡ã†ã€‚</value>
+  </data>
+  <data name="IntroP2" xml:space="preserve">
+    <value>ãã‚Œãžã‚Œã®æ–¹ã«å°‚ç”¨ã®ãƒšãƒ¼ã‚¸ï¼ˆãƒ¡ãƒ¢ãƒªã‚¢ãƒ«ãƒšãƒ¼ã‚¸ï¼‰ãŒã‚ã‚Šã€å®¶æ—ã‚„å‹äººãŒæƒ³ã„ã‚’å…±æœ‰ã§ãã¾ã™ã€‚ç¾Žã—ã„è¿½æ‚¼ã®å ´ã‚’ä¸€ç·’ã«ä½œã‚Šã¾ã—ã‚‡ã†ã€‚</value>
+  </data>
+  <data name="FindFarewellPage" xml:space="preserve">
+    <value>ãƒ¡ãƒ¢ãƒªã‚¢ãƒ«ãƒšãƒ¼ã‚¸ã‚’æŽ¢ã™</value>
+  </data>
+  <data name="SearchOrCreate" xml:space="preserve">
+    <value>èª°ã‹ã®ãƒ¡ãƒ¢ãƒªã‚¢ãƒ«ãƒšãƒ¼ã‚¸ã‚’æ¤œç´¢ã€ã¾ãŸã¯æ–°è¦ä½œæˆ</value>
+  </data>
+  <data name="SearchPlaceholder" xml:space="preserve">
+    <value>åå‰ã‚’å…¥åŠ›ã—ã¦æ¤œç´¢...</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>æ¤œç´¢</value>
+  </data>
+  <data name="NotFinding" xml:space="preserve">
+    <value>お探しのメモリアルページが見つかりませんか？</value>
+  </data>
+  <data name="CantFindCreate" xml:space="preserve">
+    <value>該当するメモリアルページがない場合は、新しいページを作成して大切な人を称え、皆で想い出をすぐに集めましょう。</value>
+  </data>
+  <data name="CreateNewFarewellPage" xml:space="preserve">
+    <value>æ–°ã—ã„ãƒ¡ãƒ¢ãƒªã‚¢ãƒ«ãƒšãƒ¼ã‚¸ã‚’ä½œæˆ</value>
+  </data>
+  <data name="HomeMetaTitle" xml:space="preserve">
+    <value>FarewellMyBeloved | メモリアルページを作成して想い出を分かち合う</value>
+  </data>
+  <data name="HomeMetaDescription" xml:space="preserve">
+    <value>FarewellMyBelovedでメモリアルページを作成し、大切な人を偲ぶメッセージや想い出を共有しながら、ご家族やご友人の心温まるトリビュートを募りましょう。</value>
+  </data>
+  <data name="HomeMetaKeywords" xml:space="preserve">
+    <value>メモリアルページ作成, 想い出を共有, 大切な人を偲ぶ</value>
+  </data>
+  <data name="HomeStepsHeading" xml:space="preserve">
+    <value>メモリアルページを作り、想い出を共有する</value>
+  </data>
+  <data name="HomeStepsIntro" xml:space="preserve">
+    <value>メモリアルページを作成し、トリビュートを招待し、別れの想い出を未来へつなぐための手順をご紹介します。</value>
+  </data>
+  <data name="HomeStepsCreateHeading" xml:space="preserve">
+    <value>メモリアルページを作成</value>
+  </data>
+  <data name="HomeStepsCreateCopy" xml:space="preserve">
+    <value>ストーリーや写真、別れのメッセージで大切な人を称える専用のメモリアルページを作りましょう。</value>
+  </data>
+  <data name="HomeStepsCreateLink" xml:space="preserve">
+    <value>メモリアルページを作成する</value>
+  </data>
+  <data name="HomeStepsShareHeading" xml:space="preserve">
+    <value>想い出をみんなで共有</value>
+  </data>
+  <data name="HomeStepsShareCopy" xml:space="preserve">
+    <value>メモリアルページのリンクを届けて、ご家族や友人に想い出や別れのメッセージを投稿してもらいましょう。</value>
+  </data>
+  <data name="HomeStepsShareLink" xml:space="preserve">
+    <value>メモリアルページを検索</value>
+  </data>
+  <data name="HomeStepsRememberHeading" xml:space="preserve">
+    <value>すべての想い出を守る</value>
+  </data>
+  <data name="HomeStepsRememberCopy" xml:space="preserve">
+    <value>FarewellMyBelovedがメモリアルページを守り、想い出をいつでも振り返れるよう支える仕組みをご紹介します。</value>
+  </data>
+  <data name="HomeStepsRememberLink" xml:space="preserve">
+    <value>私たちのミッションを見る</value>
+  </data>
+  <data name="HomeSupportHeading" xml:space="preserve">
+    <value>メモリアルづくりを支えるサポート</value>
+  </data>
+  <data name="HomeSupportIntro" xml:space="preserve">
+    <value>メモリアルページを作成・共有する過程で役立つ信頼できるグリーフケアの情報をご覧ください。</value>
+  </data>
+  <data name="HomeSupportLinkText" xml:space="preserve">
+    <value>HelpGuideの悲嘆と喪失への向き合い方を読む</value>
+  </data>
+  <data name="HomeCreateMemorialHeading" xml:space="preserve">
+    <value>今すぐ新しいメモリアルページを作成しましょう</value>
+  </data>
 </root>
+
